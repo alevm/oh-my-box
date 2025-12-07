@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Oh My Box</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header with Mode Toggle -->
+        <header class="header">
+            <div class="header-left">
+                <h1>Oh My Box</h1>
+                <div class="mode-toggle">
+                    <button class="mode-btn active" data-mode="orchestrate">ORCH</button>
+                    <button class="mode-btn" data-mode="perform">PERF</button>
+                </div>
+            </div>
+            <div class="gps-status" id="gpsStatus">
+                <span class="gps-icon">📍</span>
+                <span id="gpsCoords">GPS: waiting...</span>
+            </div>
+        </header>
+
+        <!-- Main Transport -->
+        <div class="transport">
+            <button id="btnPlay" class="transport-btn play-btn">
+                <span class="btn-icon">▶</span>
+                <span class="btn-label">PLAY</span>
+            </button>
+            <button id="btnStop" class="transport-btn stop-btn">
+                <span class="btn-icon">⏹</span>
+                <span class="btn-label">STOP</span>
+            </button>
+            <button id="btnRecord" class="transport-btn record-btn">
+                <span class="btn-icon">⏺</span>
+                <span class="btn-label">REC</span>
+            </button>
+            <div class="tempo-display">
+                <span id="tempoValue">120</span>
+                <span class="tempo-label">BPM</span>
+            </div>
+            <div class="time-display" id="timeDisplay">00:00</div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <nav class="tabs">
+            <button class="tab active" data-tab="mixer">Mix</button>
+            <button class="tab" data-tab="seq">Seq</button>
+            <button class="tab" data-tab="pads">Pads</button>
+            <button class="tab" data-tab="fx">FX</button>
+            <button class="tab" data-tab="ai">AI</button>
+            <button class="tab" data-tab="radio">Radio</button>
+            <button class="tab" data-tab="recordings">Files</button>
+        </nav>
+
+        <!-- Tab Content -->
+        <main class="content">
+            <!-- Mixer Tab -->
+            <section id="tab-mixer" class="tab-content active">
+                <div class="scene-bar">
+                    <span class="scene-label">Scene:</span>
+                    <button class="scene-btn active" data-scene="0">A</button>
+                    <button class="scene-btn" data-scene="1">B</button>
+                    <button class="scene-btn" data-scene="2">C</button>
+                    <button class="scene-btn" data-scene="3">D</button>
+                    <div class="scene-save-group">
+                        <span class="save-label">Save to:</span>
+                        <button class="scene-save-slot" data-scene="0">A</button>
+                        <button class="scene-save-slot" data-scene="1">B</button>
+                        <button class="scene-save-slot" data-scene="2">C</button>
+                        <button class="scene-save-slot" data-scene="3">D</button>
+                    </div>
+                </div>
+
+                <!-- Arrangement (Scene Sequencing) -->
+                <div class="arrangement-section">
+                    <div class="arrangement-header">
+                        <span class="arr-label">Arrangement:</span>
+                        <span class="arr-position" id="arrangementPosition">0 blocks</span>
+                        <div class="arr-controls">
+                            <button class="arr-play" id="arrPlay">Play</button>
+                            <button class="arr-stop" id="arrStop">Stop</button>
+                            <button class="arr-clear" id="arrClear">Clear</button>
+                        </div>
+                    </div>
+                    <div class="arrangement-blocks" id="arrangementBlocks">
+                        <div class="arr-empty">Add scenes to build arrangement</div>
+                    </div>
+                    <div class="arrangement-add">
+                        <span class="arr-add-label">Add:</span>
+                        <button class="arr-add-btn" data-scene="0">+A</button>
+                        <button class="arr-add-btn" data-scene="1">+B</button>
+                        <button class="arr-add-btn" data-scene="2">+C</button>
+                        <button class="arr-add-btn" data-scene="3">+D</button>
+                        <label class="arr-bars-label">
+                            Bars:
+                            <input type="number" id="arrBars" min="1" max="32" value="4">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mixer">
+                    <div class="channel" data-channel="mic">
+                        <div class="channel-label">MIC</div>
+                        <div class="meter" id="meterMic"><div class="meter-fill"></div></div>
+                        <input type="range" class="fader" id="faderMic" min="0" max="100" value="80" orient="vertical">
+                        <button class="mute-btn" id="muteMic">M</button>
+                    </div>
+                    <div class="channel" data-channel="samples">
+                        <div class="channel-label">SAMP</div>
+                        <div class="meter" id="meterSamples"><div class="meter-fill"></div></div>
+                        <input type="range" class="fader" id="faderSamples" min="0" max="100" value="80" orient="vertical">
+                        <button class="mute-btn" id="muteSamples">M</button>
+                    </div>
+                    <div class="channel" data-channel="synth">
+                        <div class="channel-label">SYNTH</div>
+                        <div class="meter" id="meterSynth"><div class="meter-fill"></div></div>
+                        <input type="range" class="fader" id="faderSynth" min="0" max="100" value="80" orient="vertical">
+                        <button class="mute-btn" id="muteSynth">M</button>
+                    </div>
+                    <div class="channel" data-channel="radio">
+                        <div class="channel-label">RADIO</div>
+                        <div class="meter" id="meterRadio"><div class="meter-fill"></div></div>
+                        <input type="range" class="fader" id="faderRadio" min="0" max="100" value="80" orient="vertical">
+                        <button class="mute-btn" id="muteRadio">M</button>
+                    </div>
+                    <div class="channel master" data-channel="master">
+                        <div class="channel-label">MAIN</div>
+                        <div class="meter" id="meterMaster"><div class="meter-fill"></div></div>
+                        <input type="range" class="fader" id="faderMaster" min="0" max="100" value="90" orient="vertical">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sequencer Tab -->
+            <section id="tab-seq" class="tab-content">
+                <div class="seq-controls">
+                    <div class="seq-track-select">
+                        <label>Track:</label>
+                        <select id="seqTrack">
+                            <option value="0">1 - Kick</option>
+                            <option value="1">2 - Snare</option>
+                            <option value="2">3 - HiHat</option>
+                            <option value="3">4 - Clap</option>
+                            <option value="4">5 - Tom</option>
+                            <option value="5">6 - Rim</option>
+                            <option value="6">7 - Shaker</option>
+                            <option value="7">8 - Cowbell</option>
+                        </select>
+                    </div>
+                    <div class="seq-source-select">
+                        <label>Source:</label>
+                        <select id="seqSource">
+                            <option value="sampler">Sampler</option>
+                            <option value="radio">Radio</option>
+                            <option value="mic">Mic</option>
+                            <option value="synth">Synth</option>
+                        </select>
+                    </div>
+                    <div class="seq-tempo">
+                        <label>Tempo:</label>
+                        <input type="range" id="seqTempo" min="60" max="200" value="120">
+                        <span id="seqTempoDisplay">120</span>
+                    </div>
+                </div>
+
+                <!-- Source routing overview -->
+                <div class="source-routing" id="sourceRouting">
+                    <div class="routing-row"><span class="routing-num">1</span><span class="routing-source" data-track="0">Sampler</span></div>
+                    <div class="routing-row"><span class="routing-num">2</span><span class="routing-source" data-track="1">Sampler</span></div>
+                    <div class="routing-row"><span class="routing-num">3</span><span class="routing-source" data-track="2">Sampler</span></div>
+                    <div class="routing-row"><span class="routing-num">4</span><span class="routing-source" data-track="3">Sampler</span></div>
+                    <div class="routing-row"><span class="routing-num">5</span><span class="routing-source" data-track="4">Sampler</span></div>
+                    <div class="routing-row"><span class="routing-num">6</span><span class="routing-source" data-track="5">Sampler</span></div>
+                    <div class="routing-row"><span class="routing-num">7</span><span class="routing-source" data-track="6">Sampler</span></div>
+                    <div class="routing-row"><span class="routing-num">8</span><span class="routing-source" data-track="7">Sampler</span></div>
+                </div>
+
+                <!-- Step position indicator -->
+                <div class="seq-position-bar">
+                    <span class="seq-pos-label">Step:</span>
+                    <span class="seq-pos-value" id="seqPosValue">--</span>
+                    <span class="seq-pos-bar-wrap">
+                        <span class="seq-pos-fill" id="seqPosFill"></span>
+                    </span>
+                </div>
+
+                <!-- 16-step grid -->
+                <div class="seq-grid" id="seqGrid">
+                    <!-- Steps will be generated by JS -->
+                </div>
+
+                <!-- Track overview (8 rows) -->
+                <div class="seq-overview" id="seqOverview">
+                    <!-- Track rows will be generated by JS -->
+                </div>
+
+                <div class="seq-tools">
+                    <div class="euclidean-gen">
+                        <h4>Euclidean Generator</h4>
+                        <div class="euclidean-controls">
+                            <label>
+                                <span>Hits:</span>
+                                <input type="number" id="eucHits" min="1" max="16" value="4">
+                            </label>
+                            <label>
+                                <span>Steps:</span>
+                                <input type="number" id="eucSteps" min="1" max="16" value="16">
+                            </label>
+                            <label>
+                                <span>Rotate:</span>
+                                <input type="number" id="eucRotate" min="0" max="15" value="0">
+                            </label>
+                            <button id="eucGenerate" class="gen-btn">Generate</button>
+                        </div>
+                    </div>
+                    <div class="probability-control">
+                        <label>
+                            <span>Probability:</span>
+                            <input type="range" id="seqProb" min="0" max="100" value="100">
+                            <span id="seqProbDisplay">100%</span>
+                        </label>
+                    </div>
+                    <div class="seq-actions">
+                        <button id="seqClear">Clear Track</button>
+                        <button id="seqRandom">Random</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pads Tab -->
+            <section id="tab-pads" class="tab-content">
+                <div class="pad-grid">
+                    <button class="pad" data-pad="0">1</button>
+                    <button class="pad" data-pad="1">2</button>
+                    <button class="pad" data-pad="2">3</button>
+                    <button class="pad" data-pad="3">4</button>
+                    <button class="pad" data-pad="4">5</button>
+                    <button class="pad" data-pad="5">6</button>
+                    <button class="pad" data-pad="6">7</button>
+                    <button class="pad" data-pad="7">8</button>
+                </div>
+                <div class="pad-controls">
+                    <label>
+                        <span>Sample Bank:</span>
+                        <select id="sampleBank">
+                            <option value="kit1">Kit 1 - Percussion</option>
+                            <option value="kit2">Kit 2 - Textures</option>
+                            <option value="kit3">Kit 3 - Tones</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="synth-section">
+                    <h3>Quick Synth</h3>
+                    <label>
+                        <span>Waveform:</span>
+                        <select id="synthWaveform">
+                            <option value="sine">Sine</option>
+                            <option value="triangle">Triangle</option>
+                            <option value="sawtooth">Sawtooth</option>
+                            <option value="square">Square</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Frequency: <span id="freqDisplay">220</span> Hz</span>
+                        <input type="range" id="synthFreq" min="20" max="2000" value="220">
+                    </label>
+                    <button id="synthToggle" class="synth-toggle">START SYNTH</button>
+                </div>
+            </section>
+
+            <!-- FX/Mangle Tab -->
+            <section id="tab-fx" class="tab-content">
+                <div class="fx-controls">
+                    <div class="fx-section">
+                        <h3>Bit Crusher</h3>
+                        <label>
+                            <span>Bits: <span id="crushBitsDisplay">16</span></span>
+                            <input type="range" id="crushBits" min="1" max="16" value="16">
+                        </label>
+                        <label>
+                            <span>Sample Rate: <span id="crushRateDisplay">44100</span></span>
+                            <input type="range" id="crushRate" min="100" max="44100" value="44100">
+                        </label>
+                        <button id="crushToggle" class="fx-toggle">OFF</button>
+                    </div>
+
+                    <div class="fx-section">
+                        <h3>Glitch</h3>
+                        <label>
+                            <span>Probability: <span id="glitchProbDisplay">0</span>%</span>
+                            <input type="range" id="glitchProb" min="0" max="100" value="0">
+                        </label>
+                        <label>
+                            <span>Slice Size: <span id="glitchSizeDisplay">100</span>ms</span>
+                            <input type="range" id="glitchSize" min="10" max="500" value="100">
+                        </label>
+                        <div class="glitch-modes">
+                            <button class="glitch-mode active" data-mode="stutter">Stutter</button>
+                            <button class="glitch-mode" data-mode="reverse">Reverse</button>
+                            <button class="glitch-mode" data-mode="jump">Jump</button>
+                        </div>
+                    </div>
+
+                    <div class="fx-section">
+                        <h3>Grain Cloud</h3>
+                        <label>
+                            <span>Density: <span id="grainDensityDisplay">0</span></span>
+                            <input type="range" id="grainDensity" min="0" max="100" value="0">
+                        </label>
+                        <label>
+                            <span>Size: <span id="grainSizeDisplay">50</span>ms</span>
+                            <input type="range" id="grainSize" min="10" max="500" value="50">
+                        </label>
+                        <label>
+                            <span>Pitch: <span id="grainPitchDisplay">0</span></span>
+                            <input type="range" id="grainPitch" min="-12" max="12" value="0">
+                        </label>
+                        <button id="grainFreeze" class="fx-toggle">FREEZE</button>
+                    </div>
+
+                    <div class="fx-section">
+                        <h3>Delay</h3>
+                        <label>
+                            <span>Time: <span id="delayTimeDisplay">250</span>ms</span>
+                            <input type="range" id="delayTime" min="50" max="1000" value="250">
+                        </label>
+                        <label>
+                            <span>Feedback: <span id="delayFeedbackDisplay">30</span>%</span>
+                            <input type="range" id="delayFeedback" min="0" max="95" value="30">
+                        </label>
+                        <label>
+                            <span>Mix: <span id="delayMixDisplay">0</span>%</span>
+                            <input type="range" id="delayMix" min="0" max="100" value="0">
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Tab -->
+            <section id="tab-ai" class="tab-content">
+                <div class="ai-controls">
+                    <div class="ai-context">
+                        <h3>Context</h3>
+                        <div class="context-info">
+                            <div class="context-row">
+                                <span class="context-label">Location:</span>
+                                <span class="context-value" id="aiLocation">Unknown</span>
+                            </div>
+                            <div class="context-row">
+                                <span class="context-label">Time:</span>
+                                <span class="context-value" id="aiTime">--:--</span>
+                            </div>
+                            <div class="context-row">
+                                <span class="context-label">Vibe:</span>
+                                <span class="context-value" id="aiVibe">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ai-generate">
+                        <h3>AI Rhythm Generator</h3>
+                        <div class="vibe-selector">
+                            <label>Vibe:</label>
+                            <div class="vibe-buttons">
+                                <button class="vibe-btn active" data-vibe="calm">Calm</button>
+                                <button class="vibe-btn" data-vibe="urban">Urban</button>
+                                <button class="vibe-btn" data-vibe="nature">Nature</button>
+                                <button class="vibe-btn" data-vibe="chaos">Chaos</button>
+                            </div>
+                        </div>
+                        <div class="density-control">
+                            <label>
+                                <span>Density: <span id="aiDensityDisplay">50</span>%</span>
+                                <input type="range" id="aiDensity" min="10" max="100" value="50">
+                            </label>
+                        </div>
+                        <div class="complexity-control">
+                            <label>
+                                <span>Complexity: <span id="aiComplexityDisplay">50</span>%</span>
+                                <input type="range" id="aiComplexity" min="10" max="100" value="50">
+                            </label>
+                        </div>
+                        <button id="aiGenerate" class="ai-generate-btn">Generate Rhythm</button>
+                        <button id="aiSurprise" class="ai-surprise-btn">Surprise Me</button>
+                        <button id="aiArrangement" class="ai-arrangement-btn">Build Full Arrangement</button>
+                    </div>
+
+                    <div class="ai-suggestions" id="aiSuggestions">
+                        <h3>Suggestions</h3>
+                        <div class="suggestion-list" id="suggestionList">
+                            <p class="placeholder">Generate a rhythm to see AI suggestions</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Radio Tab -->
+            <section id="tab-radio" class="tab-content">
+                <div class="radio-controls">
+                    <div class="radio-search">
+                        <input type="text" id="radioSearch" placeholder="Search stations...">
+                        <button id="radioSearchBtn">Search</button>
+                    </div>
+                    <div class="radio-filters">
+                        <select id="radioCountry">
+                            <option value="">All Countries</option>
+                            <option value="ES">Spain</option>
+                            <option value="FR">France</option>
+                            <option value="DE">Germany</option>
+                            <option value="GB">United Kingdom</option>
+                            <option value="US">United States</option>
+                            <option value="IT">Italy</option>
+                        </select>
+                        <select id="radioGenre">
+                            <option value="">All Genres</option>
+                            <option value="ambient">Ambient</option>
+                            <option value="electronic">Electronic</option>
+                            <option value="jazz">Jazz</option>
+                            <option value="classical">Classical</option>
+                            <option value="news">News</option>
+                            <option value="local">Local</option>
+                        </select>
+                    </div>
+                    <div class="station-list" id="stationList">
+                        <p class="placeholder">Search for stations or select filters</p>
+                    </div>
+                    <div class="now-playing" id="nowPlaying">
+                        <span class="np-label">Now Playing:</span>
+                        <span class="np-station" id="currentStation">None</span>
+                        <button id="radioStop" class="radio-stop-btn" disabled>Stop</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recordings Tab -->
+            <section id="tab-recordings" class="tab-content">
+                <div class="recordings-list" id="recordingsList">
+                    <p class="placeholder">No recordings yet. Hit REC to start!</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- PERFORM Mode View (One-Pager) -->
+        <div id="performView" class="perform-view hidden">
+            <div class="perf-header">
+                <div class="perf-position">
+                    <span class="perf-scene" id="perfScene">A</span>
+                    <span class="perf-step" id="perfStep">--</span>
+                    <span class="perf-tempo" id="perfTempo">120 BPM</span>
+                </div>
+            </div>
+
+            <!-- Scene Recall (no save in PERF) -->
+            <div class="perf-scenes">
+                <button class="perf-scene-btn active" data-scene="0">A</button>
+                <button class="perf-scene-btn" data-scene="1">B</button>
+                <button class="perf-scene-btn" data-scene="2">C</button>
+                <button class="perf-scene-btn" data-scene="3">D</button>
+            </div>
+
+            <!-- Step Position Visual -->
+            <div class="perf-steps" id="perfSteps">
+                <div class="perf-step-dot" data-step="0"></div>
+                <div class="perf-step-dot" data-step="1"></div>
+                <div class="perf-step-dot" data-step="2"></div>
+                <div class="perf-step-dot" data-step="3"></div>
+                <div class="perf-step-dot beat" data-step="4"></div>
+                <div class="perf-step-dot" data-step="5"></div>
+                <div class="perf-step-dot" data-step="6"></div>
+                <div class="perf-step-dot" data-step="7"></div>
+                <div class="perf-step-dot beat" data-step="8"></div>
+                <div class="perf-step-dot" data-step="9"></div>
+                <div class="perf-step-dot" data-step="10"></div>
+                <div class="perf-step-dot" data-step="11"></div>
+                <div class="perf-step-dot beat" data-step="12"></div>
+                <div class="perf-step-dot" data-step="13"></div>
+                <div class="perf-step-dot" data-step="14"></div>
+                <div class="perf-step-dot" data-step="15"></div>
+            </div>
+
+            <!-- Quick Mixer -->
+            <div class="perf-mixer">
+                <div class="perf-fader">
+                    <span>MIC</span>
+                    <input type="range" id="perfFaderMic" min="0" max="100" value="80">
+                </div>
+                <div class="perf-fader">
+                    <span>SAMP</span>
+                    <input type="range" id="perfFaderSamples" min="0" max="100" value="80">
+                </div>
+                <div class="perf-fader">
+                    <span>SYN</span>
+                    <input type="range" id="perfFaderSynth" min="0" max="100" value="80">
+                </div>
+                <div class="perf-fader">
+                    <span>RAD</span>
+                    <input type="range" id="perfFaderRadio" min="0" max="100" value="80">
+                </div>
+            </div>
+
+            <!-- Trigger Pads -->
+            <div class="perf-pads">
+                <button class="perf-pad" data-pad="0">1</button>
+                <button class="perf-pad" data-pad="1">2</button>
+                <button class="perf-pad" data-pad="2">3</button>
+                <button class="perf-pad" data-pad="3">4</button>
+                <button class="perf-pad" data-pad="4">5</button>
+                <button class="perf-pad" data-pad="5">6</button>
+                <button class="perf-pad" data-pad="6">7</button>
+                <button class="perf-pad" data-pad="7">8</button>
+            </div>
+
+            <!-- Quick FX -->
+            <div class="perf-fx">
+                <div class="perf-fx-control">
+                    <span>DELAY</span>
+                    <input type="range" id="perfDelayMix" min="0" max="100" value="0">
+                </div>
+                <div class="perf-fx-control">
+                    <span>GLITCH</span>
+                    <input type="range" id="perfGlitch" min="0" max="100" value="0">
+                </div>
+                <div class="perf-fx-control">
+                    <span>CRUSH</span>
+                    <input type="range" id="perfCrush" min="1" max="16" value="16">
+                </div>
+            </div>
+
+            <!-- Synth Quick Control -->
+            <div class="perf-synth">
+                <button class="perf-synth-toggle" id="perfSynthToggle">SYNTH</button>
+                <input type="range" id="perfSynthFreq" min="50" max="1000" value="220">
+            </div>
+        </div>
+
+        <!-- Init Overlay (required for audio context) -->
+        <div id="initOverlay" class="overlay">
+            <div class="overlay-content">
+                <h2>Oh My Box</h2>
+                <p>ORCHESTRATE → CAPTURE → PERFORM</p>
+                <button id="btnInit" class="init-btn">TAP TO START</button>
+                <p class="small">Microphone & location access required</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/gps.js"></script>
+    <script src="js/audio-engine.js"></script>
+    <script src="js/mic-input.js"></script>
+    <script src="js/sampler.js"></script>
+    <script src="js/synth.js"></script>
+    <script src="js/radio.js"></script>
+    <script src="js/recorder.js"></script>
+    <script src="js/sequencer.js"></script>
+    <script src="js/mangle.js"></script>
+    <script src="js/scenes.js"></script>
+    <script src="js/arrangement.js"></script>
+    <script src="js/ai-composer.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
