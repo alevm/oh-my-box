@@ -1,4 +1,4 @@
-/* Oh My Box v0.7.14 - pads back to 4 columns */
+/* Oh My Box v0.7.15 - pads span bottom of 3 columns */
 
 * {
     margin: 0;
@@ -95,20 +95,23 @@ html, body {
 .admin-btn { width: 24px; height: 24px; border: 1px solid var(--border); border-radius: 4px; background: var(--cream); cursor: pointer; }
 .version { font-size: 9px; color: var(--text-light); margin-left: auto; }
 
-/* ===== 4-COLUMN LAYOUT ===== */
+/* ===== GRID LAYOUT ===== */
 .device {
     flex: 1;
-    display: flex;
+    display: grid;
+    grid-template-columns: 70px 1fr 1fr 1fr;
+    grid-template-rows: 1fr auto;
     gap: 6px;
     padding: 6px;
     min-height: 0;
 }
 
-.col { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.col-mixer { flex: 0.75; }
-.col-seq { flex: 1; }
-.col-mid { flex: 0.9; }
-.col-right { flex: 0.9; }
+.col { display: flex; flex-direction: column; gap: 6px; }
+.col-mixer { grid-row: 1 / 3; }
+.col-seq { }
+.col-mid { }
+.col-right { }
+.pads-section { grid-column: 2 / 5; }
 
 .panel {
     background: var(--panel);
@@ -187,11 +190,11 @@ html, body {
 .trig-cond input { width: 32px; height: 18px; font-size: 8px; text-align: center; }
 
 /* PADS */
-.pads-panel { flex: 1; }
+.pads-panel { }
 .pads-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .pads-header select { height: 18px; font-size: 8px; border: 1px solid var(--border); border-radius: 3px; }
-.pads-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
-.pad { width: 100%; aspect-ratio: 1; border: none; border-radius: 4px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%); color: #fff; font-size: 10px; font-weight: 700; cursor: pointer; }
+.pads-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+.pad { width: 100%; aspect-ratio: 1; border: none; border-radius: 6px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
 .pad:nth-child(odd) { background: linear-gradient(135deg, #9b59b6 0%, #7d3c98 100%); }
 .pad:active { transform: scale(0.95); }
 
