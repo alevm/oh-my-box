@@ -179,8 +179,8 @@ class SceneManager {
             }
             // Notify app to update UI
             if (window.app) {
-                window.app.updateSeqGrid();
-                window.app.updateSeqOverview();
+                window.app.updateStepGrid();
+                window.app.updateTrackOverview();
             }
         }
 

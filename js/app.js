@@ -502,10 +502,21 @@ class App {
     // GPS
     updateGPS() {
         const text = document.getElementById('gpsText');
+        const seqPanel = document.querySelector('.seq-panel');
+
         if (text) {
             const pos = window.gpsTracker.getPosition();
             if (pos) {
                 text.textContent = pos.formatted;
+
+                // Set map background on sequencer panel
+                if (seqPanel) {
+                    const mapUrl = window.gpsTracker.getMapImageUrl(600, 400);
+                    if (mapUrl) {
+                        seqPanel.style.backgroundImage = `url(${mapUrl})`;
+                        seqPanel.classList.add('has-map');
+                    }
+                }
             } else {
                 const err = window.gpsTracker.getError();
                 text.textContent = err || '--';
