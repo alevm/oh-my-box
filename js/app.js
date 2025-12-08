@@ -939,11 +939,17 @@ class App {
     }
 }
 
-// Initialize on page load
+// Initialize on page load - auto start
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new App();
 
-    document.getElementById('btnInit').addEventListener('click', () => {
+    // Auto-init on first user interaction (required for audio context)
+    const autoInit = () => {
         window.app.init();
-    });
+        document.removeEventListener('click', autoInit);
+        document.removeEventListener('touchstart', autoInit);
+    };
+
+    document.addEventListener('click', autoInit);
+    document.addEventListener('touchstart', autoInit);
 });

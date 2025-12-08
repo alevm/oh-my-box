@@ -1273,17 +1273,18 @@ body.perf-mode .perform-view {
 }
 
 .version-badge {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    padding: 6px 14px;
-    background: rgba(233, 69, 96, 0.2);
-    border: 1px solid var(--accent);
+    position: fixed;
+    bottom: 8px;
+    right: 8px;
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border);
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 10px;
     font-weight: 700;
     font-family: monospace;
-    color: var(--accent);
+    color: var(--text-dim);
+    z-index: 1000;
 }
 
 /* Scrollbar */
