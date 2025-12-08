@@ -1,4 +1,4 @@
-/* Oh My Box v0.7.3 - Fixed layout + Vin Mariani background */
+/* Oh My Box v0.7.4 - Fixed layout + Vin Mariani background */
 
 * {
     margin: 0;
@@ -275,29 +275,27 @@ html, body {
     color: var(--green);
 }
 
-/* ===== CENTER: SEQUENCER (Ultra-compact Octatrack-style) ===== */
+/* ===== CENTER: SEQUENCER (Compact Octatrack-style) ===== */
 .seq-panel {
     display: flex;
     flex-direction: column;
-    min-height: 0;
-    flex: 0 0 auto;
 }
 
 .seq-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 
 .seq-controls {
     display: flex;
-    gap: 2px;
+    gap: 3px;
 }
 
 .seq-controls select {
-    height: 18px;
-    padding: 0 3px;
+    height: 20px;
+    padding: 0 4px;
     border: 1px solid var(--border);
     border-radius: 3px;
     background: var(--panel);
@@ -305,7 +303,7 @@ html, body {
 }
 
 .seq-btn {
-    height: 18px;
+    height: 20px;
     padding: 0 6px;
     border: 1px solid var(--border);
     border-radius: 3px;
@@ -316,8 +314,8 @@ html, body {
 }
 
 .seq-btn.mini {
-    padding: 0 4px;
-    font-size: 7px;
+    padding: 0 5px;
+    font-size: 8px;
 }
 
 .seq-btn:active {
@@ -325,41 +323,36 @@ html, body {
     color: #fff;
 }
 
-/* Octatrack-style track strips - super compact */
+/* Octatrack-style track strips */
 .oct-tracks {
-    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 1px;
-    min-height: 0;
-    overflow: hidden;
+    gap: 2px;
 }
 
 .oct-track {
-    flex: 1;
     display: flex;
     align-items: center;
-    gap: 2px;
-    min-height: 12px;
-    max-height: 16px;
-    padding: 1px 2px;
+    gap: 4px;
+    height: 18px;
+    padding: 2px 4px;
     background: rgba(0,0,0,0.03);
-    border-radius: 2px;
+    border-radius: 3px;
     cursor: pointer;
 }
 
 .oct-track.selected {
     background: rgba(233, 69, 96, 0.15);
     border: 1px solid var(--accent);
-    padding: 0 1px;
 }
 
 .oct-track-num {
-    width: 10px;
-    font-size: 7px;
+    width: 12px;
+    font-size: 8px;
     font-weight: 700;
     color: var(--text-light);
     text-align: center;
+    flex-shrink: 0;
 }
 
 .oct-track.selected .oct-track-num {
@@ -367,23 +360,25 @@ html, body {
 }
 
 .oct-track-src {
-    font-size: 6px;
+    font-size: 7px;
     color: var(--text-light);
-    width: 16px;
+    width: 22px;
+    flex-shrink: 0;
 }
 
 .oct-steps {
     flex: 1;
     display: flex;
-    gap: 1px;
-    height: 100%;
+    gap: 2px;
+    height: 14px;
 }
 
 .oct-step {
     flex: 1;
+    height: 100%;
     background: var(--panel-alt);
-    border-radius: 1px;
-    min-width: 3px;
+    border-radius: 2px;
+    min-width: 6px;
     transition: background 0.05s;
 }
 
@@ -556,51 +551,44 @@ html, body {
 
 /* ===== PADS + KNOBS ===== */
 .pads-panel {
-    flex: 1 1 auto;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
+    margin-top: 8px;
 }
 
 .pads-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 3px;
+    margin-bottom: 6px;
 }
 
 .pads-header select {
-    height: 18px;
-    padding: 0 3px;
+    height: 20px;
+    padding: 0 4px;
     border: 1px solid var(--border);
     border-radius: 3px;
-    font-size: 8px;
+    font-size: 9px;
 }
 
 .pads-row {
     display: flex;
-    gap: 6px;
+    gap: 10px;
     align-items: center;
-    flex: 1;
 }
 
 .pads-grid {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
-    gap: 4px;
-    flex: 1;
-    align-content: center;
+    gap: 6px;
 }
 
 .pad {
-    aspect-ratio: 1;
-    width: 100%;
-    max-width: 60px;
+    width: 44px;
+    height: 44px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
     color: #fff;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     cursor: pointer;
     transition: transform 0.1s;
@@ -617,9 +605,7 @@ html, body {
 /* ===== KNOBS ===== */
 .quick-knobs {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-    justify-content: center;
+    gap: 8px;
 }
 
 .knob-group {
@@ -630,13 +616,13 @@ html, body {
 }
 
 .knob-group span {
-    font-size: 7px;
+    font-size: 8px;
     color: var(--text-light);
 }
 
 .knob {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
     border: 2px solid var(--border);
@@ -651,10 +637,10 @@ html, body {
     top: 4px;
     left: 50%;
     width: 2px;
-    height: 9px;
+    height: 10px;
     background: var(--accent);
     transform: translateX(-50%) rotate(var(--rotation, 0deg));
-    transform-origin: center 12px;
+    transform-origin: center 14px;
     border-radius: 1px;
 }
 

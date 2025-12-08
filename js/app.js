@@ -103,7 +103,7 @@ class App {
         this.applySettings();
 
         this.initialized = true;
-        console.log('App v0.7.3 initialized');
+        console.log('App v0.7.4 initialized');
     }
 
     applySettings() {
