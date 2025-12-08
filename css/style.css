@@ -252,6 +252,7 @@ body {
     border-radius: 8px;
     margin: 8px;
     box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+    min-height: 0; /* Allow flex shrinking for scroll */
 }
 
 /* Tabs */
@@ -1679,36 +1680,37 @@ body.perf-mode .perform-view {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 12px 16px;
+    padding: 8px 16px;
     background: rgba(0, 0, 0, 0.4);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
 }
 
 .position-display {
     display: flex;
     align-items: baseline;
     gap: 4px;
-    padding: 8px 20px;
+    padding: 6px 16px;
     background: rgba(0, 0, 0, 0.4);
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .scene-letter {
-    font-size: 28px;
+    font-size: 22px;
     font-weight: 700;
     color: var(--accent);
     font-family: 'SF Mono', 'Monaco', monospace;
 }
 
 .position-sep {
-    font-size: 20px;
+    font-size: 16px;
     color: var(--text-dim);
-    margin: 0 4px;
+    margin: 0 2px;
 }
 
 .step-number {
-    font-size: 28px;
+    font-size: 22px;
     font-weight: 700;
     color: var(--success);
     font-family: 'SF Mono', 'Monaco', monospace;
@@ -1718,23 +1720,24 @@ body.perf-mode .perform-view {
 
 /* Sequencer Steps */
 .perf-sequencer {
-    padding: 16px;
+    padding: 8px 12px;
     background: rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
 }
 
 .perf-steps {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    padding: 16px;
+    gap: 5px;
+    padding: 10px;
     background: rgba(0, 0, 0, 0.3);
-    border-radius: 12px;
+    border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .perf-step-dot {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: var(--bg-tertiary);
     border: 2px solid var(--border);
@@ -1762,32 +1765,33 @@ body.perf-mode .perform-view {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
-    padding: 16px;
+    gap: 12px;
+    padding: 10px 16px;
     background: rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
 }
 
 .scenes-label {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 700;
     color: var(--text-dim);
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 }
 
 .scenes-grid {
     display: flex;
-    gap: 12px;
+    gap: 8px;
 }
 
 .perf-scene-btn {
-    width: 70px;
-    height: 60px;
-    border: 3px solid var(--border);
-    border-radius: 12px;
+    width: 50px;
+    height: 44px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
     background: var(--bg-secondary);
     color: var(--text-primary);
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 800;
     cursor: pointer;
     transition: all 0.15s ease;
@@ -1810,34 +1814,35 @@ body.perf-mode .perform-view {
 
 /* Section Titles */
 .section-title {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     color: var(--text-dim);
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
 }
 
 /* Main Controls Grid */
 .perf-main-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    padding: 16px;
+    gap: 10px;
+    padding: 10px;
+    flex-shrink: 0;
 }
 
 /* Mixer Section */
 .perf-mixer-section {
     background: rgba(0, 0, 0, 0.3);
-    border-radius: 12px;
-    padding: 16px;
+    border-radius: 10px;
+    padding: 10px;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .perf-mixer {
     display: flex;
     justify-content: space-around;
-    height: 160px;
+    height: 120px;
 }
 
 .perf-channel {
@@ -1858,8 +1863,8 @@ body.perf-mode .perform-view {
 .channel-fader {
     -webkit-appearance: slider-vertical;
     appearance: slider-vertical;
-    width: 40px;
-    height: 100px;
+    width: 36px;
+    height: 80px;
     background: transparent;
     cursor: pointer;
 }
@@ -1892,15 +1897,15 @@ body.perf-mode .perform-view {
 /* FX Section */
 .perf-fx-section {
     background: rgba(0, 0, 0, 0.3);
-    border-radius: 12px;
-    padding: 16px;
+    border-radius: 10px;
+    padding: 10px;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .perf-fx {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 10px;
 }
 
 .fx-knob-group {
@@ -1918,10 +1923,10 @@ body.perf-mode .perform-view {
 
 .fx-knob input[type="range"] {
     flex: 1;
-    height: 28px;
+    height: 24px;
     -webkit-appearance: none;
     background: var(--bg-tertiary);
-    border-radius: 14px;
+    border-radius: 12px;
     padding: 0 4px;
 }
 
@@ -1955,28 +1960,29 @@ body.perf-mode .perform-view {
 
 /* Pads Section */
 .perf-pads-section {
-    padding: 16px;
+    padding: 10px;
     background: rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
 }
 
 .perf-pads {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 6px;
 }
 
 .perf-pad {
     aspect-ratio: 1;
-    min-height: 70px;
+    min-height: 40px;
     border: none;
-    border-radius: 12px;
+    border-radius: 8px;
     background: linear-gradient(135deg, var(--accent) 0%, #c0392b 100%);
     color: white;
-    font-size: 22px;
+    font-size: 14px;
     font-weight: 800;
     cursor: pointer;
     transition: all 0.1s ease;
-    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
 }
 
 .perf-pad:active {
@@ -1996,18 +2002,19 @@ body.perf-mode .perform-view {
 
 /* Synth Section */
 .perf-synth-section {
-    margin: 16px;
+    margin: 10px;
     background: rgba(0, 0, 0, 0.3);
-    border-radius: 16px;
-    padding: 20px;
+    border-radius: 12px;
+    padding: 12px;
     border: 1px solid rgba(155, 89, 182, 0.3);
+    flex-shrink: 0;
 }
 
 .synth-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .synth-header .section-title {
@@ -2018,13 +2025,13 @@ body.perf-mode .perform-view {
 .synth-power {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 24px;
+    gap: 8px;
+    padding: 8px 16px;
     border: 2px solid #9b59b6;
-    border-radius: 8px;
+    border-radius: 6px;
     background: transparent;
     color: #9b59b6;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -2057,8 +2064,8 @@ body.perf-mode .perform-view {
 .synth-controls {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
 .synth-param {
@@ -2139,33 +2146,33 @@ body.perf-mode .perform-view {
 .synth-keyboard {
     display: flex;
     justify-content: center;
-    gap: 3px;
-    height: 100px;
+    gap: 2px;
+    height: 60px;
     position: relative;
-    padding: 0 10px;
+    padding: 0 6px;
 }
 
 .synth-key {
     border: none;
     cursor: pointer;
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 700;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    padding-bottom: 8px;
+    padding-bottom: 4px;
     transition: all 0.08s ease;
 }
 
 .synth-key.white {
     flex: 1;
-    max-width: 50px;
-    height: 100px;
+    max-width: 36px;
+    height: 60px;
     background: linear-gradient(180deg, #ffffff 0%, #e8e8e8 100%);
     color: #333;
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 6px 6px;
     z-index: 1;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .synth-key.white:active {
@@ -2175,14 +2182,14 @@ body.perf-mode .perform-view {
 }
 
 .synth-key.black {
-    width: 32px;
-    height: 65px;
+    width: 22px;
+    height: 38px;
     background: linear-gradient(180deg, #444 0%, #111 100%);
-    color: #888;
-    border-radius: 0 0 6px 6px;
-    margin: 0 -16px;
+    color: #666;
+    border-radius: 0 0 4px 4px;
+    margin: 0 -11px;
     z-index: 2;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
 .synth-key.black:active {
