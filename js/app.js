@@ -304,14 +304,32 @@ class App {
                 this.stopTimeDisplay();
             }
 
-            // Stop synth and radio
+            // Stop synth
             window.synth.stop();
+
+            // Stop radio
             window.radioPlayer.stop();
+
+            // Stop all samples
             window.sampler.stopAll();
 
-            // Update UI
-            document.getElementById('synthToggle').classList.remove('active');
-            document.getElementById('synthToggle').textContent = 'START SYNTH';
+            // Update ORCH synth UI
+            const orchSynthToggle = document.getElementById('synthToggle');
+            if (orchSynthToggle) {
+                orchSynthToggle.classList.remove('active');
+                const led = orchSynthToggle.querySelector('.led');
+                if (led) led.classList.add('off');
+            }
+
+            // Update PERF synth UI
+            const perfSynthToggle = document.getElementById('perfSynthToggle');
+            if (perfSynthToggle) {
+                perfSynthToggle.classList.remove('active');
+                const powerText = perfSynthToggle.querySelector('.power-text');
+                if (powerText) powerText.textContent = 'OFF';
+            }
+
+            // Update radio UI
             document.getElementById('radioStop').disabled = true;
             document.getElementById('currentStation').textContent = 'None';
         });
