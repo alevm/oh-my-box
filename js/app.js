@@ -41,14 +41,16 @@ class App {
         this.setupFX();
         this.setupAI();
         this.setupRadio();
+        this.setupRecordings();
 
         // GPS display
         window.gpsTracker.addListener(() => this.updateGPS());
         this.updateGPS();
 
         // Recording handler
-        window.sessionRecorder.onRecordingComplete = () => {
+        window.sessionRecorder.onRecordingComplete = (recording) => {
             console.log('Recording saved');
+            this.updateRecordingsList();
         };
 
         this.initialized = true;
@@ -496,6 +498,60 @@ class App {
             window.radioPlayer.stop();
             stopBtn.disabled = true;
             stationList.querySelectorAll('.station-item').forEach(i => i.classList.remove('playing'));
+        });
+    }
+
+    // Recordings
+    setupRecordings() {
+        const listBtn = document.getElementById('recListBtn');
+        const recList = document.getElementById('recList');
+
+        if (listBtn) {
+            listBtn.addEventListener('click', () => {
+                this.updateRecordingsList();
+            });
+        }
+    }
+
+    updateRecordingsList() {
+        const recList = document.getElementById('recList');
+        if (!recList) return;
+
+        const recordings = window.sessionRecorder.getRecordings();
+
+        if (!recordings || recordings.length === 0) {
+            recList.innerHTML = '<div style="color:#888;font-size:9px;padding:4px;">No recordings yet</div>';
+            return;
+        }
+
+        recList.innerHTML = recordings.map((rec) => `
+            <div class="rec-item" data-id="${rec.id}">
+                <span class="rec-item-name">${rec.name || 'Recording'}</span>
+                ${rec.url ? `<button class="rec-item-play" data-id="${rec.id}">▶</button>` : ''}
+                ${rec.blob ? `<button class="rec-item-dl" data-id="${rec.id}">DL</button>` : '<span style="color:#999;font-size:8px;">expired</span>'}
+            </div>
+        `).join('');
+
+        // Play buttons
+        recList.querySelectorAll('.rec-item-play').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.dataset.id;
+                const rec = recordings.find(r => r.id === id);
+                if (rec && rec.url) {
+                    const audio = new Audio(rec.url);
+                    audio.play();
+                }
+            });
+        });
+
+        // Download buttons
+        recList.querySelectorAll('.rec-item-dl').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.dataset.id;
+                window.sessionRecorder.downloadRecording(id);
+            });
         });
     }
 
