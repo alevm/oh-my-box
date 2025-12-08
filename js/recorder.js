@@ -134,6 +134,16 @@ class SessionRecorder {
         const now = new Date();
         const date = now.toISOString().split('T')[0];
         const time = now.toTimeString().split(' ')[0].replace(/:/g, '-');
+
+        // Include GPS in filename if available
+        const gps = window.gpsTracker?.getPosition();
+        if (gps) {
+            // Format: lat_lon with 4 decimal places, replace dots and minus signs for filename safety
+            const lat = gps.latitude.toFixed(4).replace('.', 'd').replace('-', 'n');
+            const lon = gps.longitude.toFixed(4).replace('.', 'd').replace('-', 'n');
+            return `ohmybox_${date}_${time}_${lat}_${lon}`;
+        }
+
         return `ohmybox_${date}_${time}`;
     }
 

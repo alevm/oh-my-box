@@ -171,7 +171,90 @@ class App {
         });
 
         document.getElementById('perfSynthFreq').addEventListener('input', (e) => {
-            window.synth.setFrequency(parseInt(e.target.value));
+            const freq = parseInt(e.target.value);
+            window.synth.setFrequency(freq);
+            document.getElementById('perfFreqVal').textContent = freq;
+        });
+
+        // Back button
+        document.getElementById('perfBack').addEventListener('click', () => {
+            document.getElementById('performView').classList.add('hidden');
+            document.body.classList.remove('perf-mode');
+            document.querySelectorAll('.mode-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.mode === 'orchestrate');
+            });
+            this.mode = 'orchestrate';
+        });
+
+        // PERF transport
+        document.getElementById('perfPlay').addEventListener('click', () => {
+            if (window.sequencer.isPlaying()) {
+                window.sequencer.stop();
+                document.getElementById('perfPlay').classList.remove('active');
+                document.getElementById('btnPlay').classList.remove('active');
+            } else {
+                window.sequencer.play();
+                document.getElementById('perfPlay').classList.add('active');
+                document.getElementById('btnPlay').classList.add('active');
+            }
+        });
+
+        document.getElementById('perfStop').addEventListener('click', () => {
+            window.sequencer.stop();
+            window.arrangement.stop();
+            document.getElementById('perfPlay').classList.remove('active');
+            document.getElementById('btnPlay').classList.remove('active');
+        });
+
+        document.getElementById('perfRec').addEventListener('click', () => {
+            if (window.sessionRecorder.isRecording()) {
+                window.sessionRecorder.stop();
+                document.getElementById('perfRec').classList.remove('active');
+                document.getElementById('btnRecord').classList.remove('active');
+            } else {
+                window.sessionRecorder.start();
+                document.getElementById('perfRec').classList.add('active');
+                document.getElementById('btnRecord').classList.add('active');
+            }
+        });
+
+        // Synth wave selector
+        document.getElementById('perfSynthWave').addEventListener('change', (e) => {
+            window.synth.setWaveform(e.target.value);
+        });
+
+        // Filter controls
+        document.getElementById('perfSynthFilter').addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            window.synth.setFilterCutoff(val);
+            document.getElementById('perfFilterVal').textContent = val >= 1000 ? (val/1000).toFixed(1) + 'k' : val;
+        });
+
+        document.getElementById('perfSynthRes').addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            window.synth.setFilterResonance(val);
+            document.getElementById('perfResVal').textContent = val;
+        });
+
+        // Keyboard
+        document.querySelectorAll('.patch-keyboard .key').forEach(key => {
+            key.addEventListener('mousedown', () => {
+                const note = parseInt(key.dataset.note);
+                window.synth.triggerNote(note, 0.3);
+            });
+            key.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const note = parseInt(key.dataset.note);
+                window.synth.triggerNote(note, 0.3);
+            });
+        });
+
+        // GPS update for PERF mode
+        window.gpsTracker.addListener(() => {
+            const pos = window.gpsTracker.getPosition();
+            if (pos) {
+                document.getElementById('perfGpsCoords').textContent = pos.formatted || `${pos.lat.toFixed(4)}, ${pos.lng.toFixed(4)}`;
+            }
         });
     }
 

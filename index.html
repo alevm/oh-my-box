@@ -448,11 +448,21 @@
         <!-- PERFORM Mode View (One-Pager) -->
         <div id="performView" class="perform-view hidden">
             <div class="perf-header">
+                <button class="perf-back" id="perfBack">← ORCH</button>
                 <div class="perf-position">
                     <span class="perf-scene" id="perfScene">A</span>
                     <span class="perf-step" id="perfStep">--</span>
                     <span class="perf-tempo" id="perfTempo">120 BPM</span>
                 </div>
+                <div class="perf-transport">
+                    <button class="perf-play" id="perfPlay">▶</button>
+                    <button class="perf-stop" id="perfStop">⏹</button>
+                    <button class="perf-rec" id="perfRec">⏺</button>
+                </div>
+            </div>
+            <div class="perf-gps">
+                <span class="gps-icon">📍</span>
+                <span class="perf-gps-coords" id="perfGpsCoords">Locating...</span>
             </div>
 
             <!-- Scene Recall (no save in PERF) -->
@@ -531,10 +541,52 @@
                 </div>
             </div>
 
-            <!-- Synth Quick Control -->
-            <div class="perf-synth">
-                <button class="perf-synth-toggle" id="perfSynthToggle">SYNTH</button>
-                <input type="range" id="perfSynthFreq" min="50" max="1000" value="220">
+            <!-- Patch-style Synth -->
+            <div class="perf-synth-patch">
+                <div class="patch-header">
+                    <span>SYNTH</span>
+                    <button class="patch-toggle" id="perfSynthToggle">OFF</button>
+                </div>
+                <div class="patch-controls">
+                    <div class="patch-knob">
+                        <label>FREQ</label>
+                        <input type="range" id="perfSynthFreq" min="50" max="1000" value="220">
+                        <span id="perfFreqVal">220</span>
+                    </div>
+                    <div class="patch-knob">
+                        <label>WAVE</label>
+                        <select id="perfSynthWave">
+                            <option value="sine">Sine</option>
+                            <option value="triangle">Tri</option>
+                            <option value="sawtooth">Saw</option>
+                            <option value="square">Sqr</option>
+                        </select>
+                    </div>
+                    <div class="patch-knob">
+                        <label>FILTER</label>
+                        <input type="range" id="perfSynthFilter" min="100" max="5000" value="2000">
+                        <span id="perfFilterVal">2k</span>
+                    </div>
+                    <div class="patch-knob">
+                        <label>RES</label>
+                        <input type="range" id="perfSynthRes" min="0" max="20" value="1">
+                        <span id="perfResVal">1</span>
+                    </div>
+                </div>
+                <div class="patch-keyboard">
+                    <button class="key white" data-note="261">C</button>
+                    <button class="key black" data-note="277">C#</button>
+                    <button class="key white" data-note="293">D</button>
+                    <button class="key black" data-note="311">D#</button>
+                    <button class="key white" data-note="329">E</button>
+                    <button class="key white" data-note="349">F</button>
+                    <button class="key black" data-note="369">F#</button>
+                    <button class="key white" data-note="392">G</button>
+                    <button class="key black" data-note="415">G#</button>
+                    <button class="key white" data-note="440">A</button>
+                    <button class="key black" data-note="466">A#</button>
+                    <button class="key white" data-note="493">B</button>
+                </div>
             </div>
         </div>
 

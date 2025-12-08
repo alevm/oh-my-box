@@ -1512,10 +1512,61 @@ body {
 }
 
 .perf-header {
-    text-align: center;
-    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
     border-bottom: 1px solid var(--border);
     margin-bottom: 10px;
+}
+
+.perf-back {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.perf-back:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.perf-transport {
+    display: flex;
+    gap: 6px;
+}
+
+.perf-play, .perf-stop, .perf-rec {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.perf-play:hover, .perf-play.active { border-color: var(--success); color: var(--success); }
+.perf-stop:hover { border-color: var(--text-secondary); }
+.perf-rec:hover, .perf-rec.active { border-color: var(--accent); color: var(--accent); }
+
+.perf-gps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: var(--bg-secondary);
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-size: 11px;
+    color: var(--success);
 }
 
 .perf-position {
@@ -1764,4 +1815,134 @@ body {
 body.perf-mode .tabs,
 body.perf-mode .content {
     display: none;
+}
+
+/* Patch-style Synth */
+.perf-synth-patch {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid var(--border);
+}
+
+.patch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.patch-header span {
+    font-size: 12px;
+    font-weight: 700;
+    color: #9b59b6;
+}
+
+.patch-toggle {
+    padding: 6px 16px;
+    border: 2px solid #9b59b6;
+    border-radius: 4px;
+    background: none;
+    color: #9b59b6;
+    font-weight: 700;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.patch-toggle.active {
+    background: #9b59b6;
+    color: white;
+}
+
+.patch-controls {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.patch-knob {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.patch-knob label {
+    font-size: 9px;
+    color: var(--text-dim);
+    font-weight: 600;
+}
+
+.patch-knob input[type="range"] {
+    width: 50px;
+    height: 6px;
+    -webkit-appearance: none;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+}
+
+.patch-knob input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #9b59b6;
+    cursor: pointer;
+}
+
+.patch-knob select {
+    padding: 4px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: 10px;
+}
+
+.patch-knob span {
+    font-size: 10px;
+    color: #9b59b6;
+}
+
+.patch-keyboard {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    height: 60px;
+    position: relative;
+}
+
+.patch-keyboard .key {
+    border: none;
+    cursor: pointer;
+    font-size: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 4px;
+}
+
+.patch-keyboard .key.white {
+    width: 28px;
+    height: 60px;
+    background: linear-gradient(to bottom, #f5f5f5, #e0e0e0);
+    color: #333;
+    border-radius: 0 0 4px 4px;
+    z-index: 1;
+}
+
+.patch-keyboard .key.black {
+    width: 20px;
+    height: 38px;
+    background: linear-gradient(to bottom, #333, #111);
+    color: #aaa;
+    border-radius: 0 0 3px 3px;
+    margin: 0 -10px;
+    z-index: 2;
+}
+
+.patch-keyboard .key:active {
+    filter: brightness(0.9);
+    transform: translateY(1px);
 }
