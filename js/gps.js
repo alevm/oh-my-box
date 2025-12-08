@@ -146,15 +146,24 @@ class GPSTracker {
     }
 
     // Get static map image URL
-    getMapImageUrl(width = 400, height = 100) {
+    getMapImageUrl(width = 400, height = 300) {
         if (!this.currentPosition) return null;
 
         const lat = this.currentPosition.latitude;
         const lon = this.currentPosition.longitude;
-        const zoom = 14;
+        const zoom = 15;
 
-        // Using OpenStreetMap static map service
-        return `https://staticmap.openstreetmap.de/staticmap.php?center=${lat},${lon}&zoom=${zoom}&size=${width}x${height}&maptype=mapnik&markers=${lat},${lon},red`;
+        // Using geoapify static maps API (free tier, no key needed for basic usage)
+        // return `https://maps.geoapify.com/v1/staticmap?style=osm-bright&width=${width}&height=${height}&center=lonlat:${lon},${lat}&zoom=${zoom}`;
+
+        // Alternative: Use OpenStreetMap tile directly as background
+        // Calculate tile coordinates
+        const n = Math.pow(2, zoom);
+        const xtile = Math.floor((lon + 180) / 360 * n);
+        const ytile = Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * n);
+
+        // Return OSM tile URL
+        return `https://tile.openstreetmap.org/${zoom}/${xtile}/${ytile}.png`;
     }
 
     // Update location display

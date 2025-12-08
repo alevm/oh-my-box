@@ -560,20 +560,24 @@ class App {
         const text = document.getElementById('gpsText');
         const seqPanel = document.querySelector('.seq-panel');
 
-        if (text) {
-            const pos = window.gpsTracker.getPosition();
-            if (pos) {
-                text.textContent = pos.formatted;
+        const pos = window.gpsTracker.getPosition();
 
-                // Set map background on sequencer panel
-                if (seqPanel) {
-                    const mapUrl = window.gpsTracker.getMapImageUrl(600, 400);
-                    if (mapUrl) {
-                        seqPanel.style.backgroundImage = `url(${mapUrl})`;
-                        seqPanel.classList.add('has-map');
-                    }
+        if (pos) {
+            if (text) {
+                text.textContent = pos.formatted;
+            }
+
+            // Set map background on sequencer panel
+            if (seqPanel && !seqPanel.classList.contains('has-map')) {
+                const mapUrl = window.gpsTracker.getMapImageUrl();
+                if (mapUrl) {
+                    console.log('Setting map background:', mapUrl);
+                    seqPanel.style.backgroundImage = `url("${mapUrl}")`;
+                    seqPanel.classList.add('has-map');
                 }
-            } else {
+            }
+        } else {
+            if (text) {
                 const err = window.gpsTracker.getError();
                 text.textContent = err || '--';
             }
