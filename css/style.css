@@ -744,6 +744,21 @@ body {
     margin-bottom: 0;
 }
 
+.version-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 6px 14px;
+    background: rgba(233, 69, 96, 0.2);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    color: var(--accent);
+    letter-spacing: 1px;
+}
+
 .init-btn {
     padding: 20px 48px;
     font-size: 18px;
