@@ -144,6 +144,55 @@ class GPSTracker {
             listener(this.currentPosition, this.error);
         }
     }
+
+    // Get static map image URL (OpenStreetMap based)
+    getMapImageUrl(width = 400, height = 80) {
+        if (!this.currentPosition) return null;
+
+        const lat = this.currentPosition.latitude;
+        const lon = this.currentPosition.longitude;
+        const zoom = 15;
+
+        // Using OpenStreetMap static map service
+        // Alternative: use a local tile or custom service
+        return `https://staticmap.openstreetmap.de/staticmap.php?center=${lat},${lon}&zoom=${zoom}&size=${width}x${height}&maptype=mapnik`;
+    }
+
+    // Update location image element
+    updateLocationImage() {
+        // Update both ORCH and PERF mode location banners
+        const elements = [
+            { image: 'locationImage', coords: 'locationCoords' },
+            { image: 'perfLocationImage', coords: 'perfLocationCoords' }
+        ];
+
+        elements.forEach(({ image, coords }) => {
+            const imageEl = document.getElementById(image);
+            const coordsEl = document.getElementById(coords);
+
+            if (!imageEl) return;
+
+            if (this.currentPosition) {
+                const imageUrl = this.getMapImageUrl();
+                if (imageUrl) {
+                    imageEl.style.backgroundImage = `url('${imageUrl}')`;
+                    imageEl.classList.add('has-image');
+                }
+
+                if (coordsEl) {
+                    coordsEl.textContent = this.currentPosition.formatted;
+                }
+            } else if (this.error) {
+                const placeholder = imageEl.querySelector('.location-text');
+                if (placeholder) {
+                    placeholder.textContent = this.error;
+                }
+                if (coordsEl) {
+                    coordsEl.textContent = this.error;
+                }
+            }
+        });
+    }
 }
 
 // Global instance

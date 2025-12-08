@@ -46,9 +46,13 @@ class App {
         this.setupRadio();
         this.setupRecordingsList();
 
-        // Setup GPS display
-        window.gpsTracker.addListener(() => this.updateGPSDisplay());
+        // Setup GPS display and location image
+        window.gpsTracker.addListener(() => {
+            this.updateGPSDisplay();
+            window.gpsTracker.updateLocationImage();
+        });
         this.updateGPSDisplay();
+        window.gpsTracker.updateLocationImage();
 
         // Start meter updates
         this.startMeters();
@@ -152,15 +156,21 @@ class App {
 
         // FX controls
         document.getElementById('perfDelayMix').addEventListener('input', (e) => {
-            window.mangleEngine.setDelayMix(parseInt(e.target.value));
+            const val = parseInt(e.target.value);
+            window.mangleEngine.setDelayMix(val);
+            document.getElementById('delayValue').textContent = val;
         });
 
         document.getElementById('perfGlitch').addEventListener('input', (e) => {
-            window.mangleEngine.setGlitch(parseInt(e.target.value), 100, 'stutter');
+            const val = parseInt(e.target.value);
+            window.mangleEngine.setGlitch(val, 100, 'stutter');
+            document.getElementById('glitchValue').textContent = val;
         });
 
         document.getElementById('perfCrush').addEventListener('input', (e) => {
-            window.mangleEngine.setBitDepth(parseInt(e.target.value));
+            const val = parseInt(e.target.value);
+            window.mangleEngine.setBitDepth(val);
+            document.getElementById('crushValue').textContent = val;
         });
 
         // Synth toggle
@@ -168,66 +178,34 @@ class App {
         synthToggle.addEventListener('click', () => {
             const playing = window.synth.toggle();
             synthToggle.classList.toggle('active', playing);
+            synthToggle.querySelector('.power-text').textContent = playing ? 'ON' : 'OFF';
         });
 
         document.getElementById('perfSynthFreq').addEventListener('input', (e) => {
             const freq = parseInt(e.target.value);
             window.synth.setFrequency(freq);
-            document.getElementById('perfFreqVal').textContent = freq;
+            document.getElementById('perfFreqVal').textContent = freq + ' Hz';
         });
 
-        // Back button
-        document.getElementById('perfBack').addEventListener('click', () => {
-            document.getElementById('performView').classList.add('hidden');
-            document.body.classList.remove('perf-mode');
-            document.querySelectorAll('.mode-btn').forEach(b => {
-                b.classList.toggle('active', b.dataset.mode === 'orchestrate');
+        // Transport is now shared - no separate perf transport handlers needed
+        // The main transport buttons (btnPlay, btnStop, btnRecord) work in both modes
+
+        // Synth wave selector - button-based
+        document.querySelectorAll('.wave-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const wave = btn.dataset.wave;
+                window.synth.setWaveform(wave);
+                document.getElementById('perfSynthWave').value = wave;
+                document.querySelectorAll('.wave-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
             });
-            this.mode = 'orchestrate';
-        });
-
-        // PERF transport
-        document.getElementById('perfPlay').addEventListener('click', () => {
-            if (window.sequencer.isPlaying()) {
-                window.sequencer.stop();
-                document.getElementById('perfPlay').classList.remove('active');
-                document.getElementById('btnPlay').classList.remove('active');
-            } else {
-                window.sequencer.play();
-                document.getElementById('perfPlay').classList.add('active');
-                document.getElementById('btnPlay').classList.add('active');
-            }
-        });
-
-        document.getElementById('perfStop').addEventListener('click', () => {
-            window.sequencer.stop();
-            window.arrangement.stop();
-            document.getElementById('perfPlay').classList.remove('active');
-            document.getElementById('btnPlay').classList.remove('active');
-        });
-
-        document.getElementById('perfRec').addEventListener('click', () => {
-            if (window.sessionRecorder.isRecording()) {
-                window.sessionRecorder.stop();
-                document.getElementById('perfRec').classList.remove('active');
-                document.getElementById('btnRecord').classList.remove('active');
-            } else {
-                window.sessionRecorder.start();
-                document.getElementById('perfRec').classList.add('active');
-                document.getElementById('btnRecord').classList.add('active');
-            }
-        });
-
-        // Synth wave selector
-        document.getElementById('perfSynthWave').addEventListener('change', (e) => {
-            window.synth.setWaveform(e.target.value);
         });
 
         // Filter controls
         document.getElementById('perfSynthFilter').addEventListener('input', (e) => {
             const val = parseInt(e.target.value);
             window.synth.setFilterCutoff(val);
-            document.getElementById('perfFilterVal').textContent = val >= 1000 ? (val/1000).toFixed(1) + 'k' : val;
+            document.getElementById('perfFilterVal').textContent = (val >= 1000 ? (val/1000).toFixed(1) + 'k' : val) + ' Hz';
         });
 
         document.getElementById('perfSynthRes').addEventListener('input', (e) => {
@@ -237,7 +215,7 @@ class App {
         });
 
         // Keyboard
-        document.querySelectorAll('.patch-keyboard .key').forEach(key => {
+        document.querySelectorAll('.synth-keyboard .synth-key').forEach(key => {
             key.addEventListener('mousedown', () => {
                 const note = parseInt(key.dataset.note);
                 window.synth.triggerNote(note, 0.3);
@@ -719,31 +697,210 @@ class App {
         });
     }
 
-    // Synth
+    // Synth - Eurorack Style
     setupSynth() {
         const toggle = document.getElementById('synthToggle');
         const waveform = document.getElementById('synthWaveform');
         const freq = document.getElementById('synthFreq');
 
+        // Power toggle with LED
         toggle.addEventListener('click', () => {
             const playing = window.synth.toggle();
             toggle.classList.toggle('active', playing);
-            toggle.textContent = playing ? 'STOP SYNTH' : 'START SYNTH';
+            const led = toggle.querySelector('.led');
+            const label = toggle.querySelector('.power-label');
+            if (led) led.classList.toggle('on', playing);
+            if (label) label.textContent = playing ? 'ON' : 'OFF';
         });
 
-        waveform.addEventListener('change', (e) => {
-            window.synth.setWaveform(e.target.value);
+        // Waveform selector buttons (Eurorack style)
+        document.querySelectorAll('.wave-select-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const wave = btn.dataset.wave;
+                window.synth.setWaveform(wave);
+                document.getElementById('synthWaveform').value = wave;
+                document.querySelectorAll('.wave-select-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
         });
 
+        // Frequency knob
         freq.addEventListener('input', (e) => {
             const value = parseFloat(e.target.value);
             window.synth.setFrequency(value);
             document.getElementById('freqDisplay').textContent = Math.round(value);
+            this.updateKnobRotation(e.target);
+        });
+
+        // Detune knob
+        const detune = document.getElementById('synthDetune');
+        if (detune) {
+            detune.addEventListener('input', (e) => {
+                const value = parseInt(e.target.value);
+                window.synth.setDetune(value);
+                document.getElementById('detuneDisplay').textContent = value;
+                this.updateKnobRotation(e.target);
+            });
+        }
+
+        // Filter cutoff
+        const filterCutoff = document.getElementById('orchFilterCutoff');
+        if (filterCutoff) {
+            filterCutoff.addEventListener('input', (e) => {
+                const value = parseInt(e.target.value);
+                window.synth.setFilterCutoff(value);
+                const display = value >= 1000 ? (value / 1000).toFixed(1) + 'k' : value;
+                document.getElementById('orchFilterDisplay').textContent = display;
+                this.updateKnobRotation(e.target);
+            });
+        }
+
+        // Filter resonance
+        const filterRes = document.getElementById('orchFilterRes');
+        if (filterRes) {
+            filterRes.addEventListener('input', (e) => {
+                const value = parseInt(e.target.value);
+                window.synth.setFilterResonance(value);
+                document.getElementById('orchResDisplay').textContent = value;
+                this.updateKnobRotation(e.target);
+            });
+        }
+
+        // Noise level
+        const noise = document.getElementById('orchNoise');
+        if (noise) {
+            noise.addEventListener('input', (e) => {
+                const value = parseInt(e.target.value);
+                window.synth.setNoiseLevel(value);
+                document.getElementById('orchNoiseDisplay').textContent = value + '%';
+                this.updateKnobRotation(e.target);
+            });
+        }
+
+        // Noise type buttons
+        document.querySelectorAll('.noise-type-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const type = btn.dataset.type;
+                window.synth.setNoiseType(type);
+                document.querySelectorAll('.noise-type-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Volume/Output level
+        const volume = document.getElementById('synthVolume');
+        if (volume) {
+            volume.addEventListener('input', (e) => {
+                const value = parseInt(e.target.value);
+                // Set synth channel volume
+                if (window.audioEngine) {
+                    window.audioEngine.setChannelGain('synth', value / 100);
+                }
+                document.getElementById('synthVolumeDisplay').textContent = value + '%';
+                this.updateKnobRotation(e.target);
+            });
+        }
+
+        // Octave controls
+        this.currentOctave = 4;
+        const octaveUp = document.getElementById('octaveUp');
+        const octaveDown = document.getElementById('octaveDown');
+        const octaveDisplay = document.getElementById('octaveDisplay');
+
+        if (octaveUp) {
+            octaveUp.addEventListener('click', () => {
+                if (this.currentOctave < 7) {
+                    this.currentOctave++;
+                    octaveDisplay.textContent = this.currentOctave;
+                }
+            });
+        }
+
+        if (octaveDown) {
+            octaveDown.addEventListener('click', () => {
+                if (this.currentOctave > 1) {
+                    this.currentOctave--;
+                    octaveDisplay.textContent = this.currentOctave;
+                }
+            });
+        }
+
+        // Keyboard - plays notes based on current octave
+        document.querySelectorAll('.euro-key').forEach(key => {
+            const noteIndex = parseInt(key.dataset.note);
+
+            const playNote = () => {
+                // Calculate frequency: A4 = 440Hz
+                // MIDI note = 12 * octave + noteIndex (where C = 0)
+                const midiNote = 12 * this.currentOctave + noteIndex;
+                const frequency = 440 * Math.pow(2, (midiNote - 69) / 12);
+                window.synth.triggerNote(frequency, 0.3);
+                key.classList.add('pressed');
+            };
+
+            const releaseNote = () => {
+                key.classList.remove('pressed');
+            };
+
+            key.addEventListener('mousedown', playNote);
+            key.addEventListener('mouseup', releaseNote);
+            key.addEventListener('mouseleave', releaseNote);
+            key.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                playNote();
+            });
+            key.addEventListener('touchend', releaseNote);
+        });
+
+        // Initialize all knob positions
+        this.initializeKnobs();
+    }
+
+    // Update knob rotation based on slider value
+    updateKnobRotation(input) {
+        const knob = input.closest('.euro-knob');
+        if (!knob) return;
+
+        const min = parseFloat(input.min);
+        const max = parseFloat(input.max);
+        const value = parseFloat(input.value);
+        const percent = (value - min) / (max - min);
+        const rotation = -135 + (percent * 270); // -135deg to +135deg
+
+        const indicator = knob.querySelector('.knob-indicator');
+        if (indicator) {
+            indicator.style.transform = `translate(-50%, -100%) rotate(${rotation}deg)`;
+        }
+    }
+
+    // Initialize all knobs to their current positions
+    initializeKnobs() {
+        document.querySelectorAll('.euro-knob input[type="range"]').forEach(input => {
+            this.updateKnobRotation(input);
         });
     }
 
     // FX
     setupFX() {
+        // FX Routing
+        this.fxRoute = 'master'; // default
+        const routingBtns = document.querySelectorAll('.routing-btn');
+
+        routingBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const route = btn.dataset.route;
+                this.fxRoute = route;
+                routingBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Update mangle engine routing if it supports it
+                if (window.mangleEngine && window.mangleEngine.setRoute) {
+                    window.mangleEngine.setRoute(route);
+                }
+                console.log('FX routing set to:', route);
+            });
+        });
+
         // Bit Crusher
         const crushBits = document.getElementById('crushBits');
         const crushRate = document.getElementById('crushRate');

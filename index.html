@@ -10,6 +10,19 @@
 </head>
 <body>
     <div id="app">
+        <!-- Location Image Banner -->
+        <div class="location-banner" id="locationBanner">
+            <div class="location-image" id="locationImage">
+                <div class="location-placeholder">
+                    <span class="location-icon">🌍</span>
+                    <span class="location-text">Acquiring location...</span>
+                </div>
+            </div>
+            <div class="location-overlay">
+                <span class="location-coords" id="locationCoords">--</span>
+            </div>
+        </div>
+
         <!-- Header with Mode Toggle -->
         <header class="header">
             <div class="header-left">
@@ -46,19 +59,22 @@
             <div class="time-display" id="timeDisplay">00:00</div>
         </div>
 
-        <!-- Tab Navigation -->
-        <nav class="tabs">
-            <button class="tab active" data-tab="mixer">Mix</button>
-            <button class="tab" data-tab="seq">Seq</button>
-            <button class="tab" data-tab="pads">Pads</button>
-            <button class="tab" data-tab="fx">FX</button>
-            <button class="tab" data-tab="ai">AI</button>
-            <button class="tab" data-tab="radio">Radio</button>
-            <button class="tab" data-tab="recordings">Files</button>
-        </nav>
+        <!-- SCREEN AREA - Contains swappable content (ORCH tabs or PERF view) -->
+        <div class="screen-area">
+            <!-- Tab Navigation (ORCH mode) -->
+            <nav class="tabs">
+                <button class="tab active" data-tab="mixer">Mix</button>
+                <button class="tab" data-tab="seq">Seq</button>
+                <button class="tab" data-tab="pads">Pads</button>
+                <button class="tab" data-tab="synth">Synth</button>
+                <button class="tab" data-tab="fx">FX</button>
+                <button class="tab" data-tab="ai">AI</button>
+                <button class="tab" data-tab="radio">Radio</button>
+                <button class="tab" data-tab="recordings">Files</button>
+            </nav>
 
-        <!-- Tab Content -->
-        <main class="content">
+            <!-- Tab Content (ORCH mode) -->
+            <main class="content">
             <!-- Mixer Tab -->
             <section id="tab-mixer" class="tab-content active">
                 <div class="scene-bar">
@@ -254,27 +270,164 @@
                         </select>
                     </label>
                 </div>
-                <div class="synth-section">
-                    <h3>Quick Synth</h3>
-                    <label>
-                        <span>Waveform:</span>
-                        <select id="synthWaveform">
-                            <option value="sine">Sine</option>
-                            <option value="triangle">Triangle</option>
-                            <option value="sawtooth">Sawtooth</option>
-                            <option value="square">Square</option>
-                        </select>
-                    </label>
-                    <label>
-                        <span>Frequency: <span id="freqDisplay">220</span> Hz</span>
-                        <input type="range" id="synthFreq" min="20" max="2000" value="220">
-                    </label>
-                    <button id="synthToggle" class="synth-toggle">START SYNTH</button>
+            </section>
+
+            <!-- Synth Tab - Eurorack Style -->
+            <section id="tab-synth" class="tab-content">
+                <div class="eurorack-synth">
+                    <!-- Module 1: VCO (Voltage Controlled Oscillator) -->
+                    <div class="euro-module vco-module">
+                        <div class="module-header">
+                            <span class="module-name">VCO</span>
+                            <button id="synthToggle" class="module-power">
+                                <span class="led off"></span>
+                            </button>
+                        </div>
+                        <div class="module-controls">
+                            <div class="euro-knob-group">
+                                <div class="euro-knob" data-param="freq">
+                                    <input type="range" id="synthFreq" min="20" max="2000" value="220">
+                                    <div class="knob-indicator"></div>
+                                </div>
+                                <span class="knob-label">FREQ</span>
+                                <span class="knob-value" id="freqDisplay">220</span>
+                            </div>
+                            <div class="euro-knob-group">
+                                <div class="euro-knob" data-param="detune">
+                                    <input type="range" id="synthDetune" min="-100" max="100" value="0">
+                                    <div class="knob-indicator"></div>
+                                </div>
+                                <span class="knob-label">DETUNE</span>
+                                <span class="knob-value" id="detuneDisplay">0</span>
+                            </div>
+                        </div>
+                        <div class="wave-selector">
+                            <button class="wave-select-btn active" data-wave="sine" title="Sine">
+                                <svg viewBox="0 0 24 12"><path d="M0,6 Q6,0 12,6 Q18,12 24,6" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+                            </button>
+                            <button class="wave-select-btn" data-wave="triangle" title="Triangle">
+                                <svg viewBox="0 0 24 12"><path d="M0,6 L6,0 L12,6 L18,12 L24,6" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+                            </button>
+                            <button class="wave-select-btn" data-wave="sawtooth" title="Sawtooth">
+                                <svg viewBox="0 0 24 12"><path d="M0,12 L12,0 L12,12 L24,0" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+                            </button>
+                            <button class="wave-select-btn" data-wave="square" title="Square">
+                                <svg viewBox="0 0 24 12"><path d="M0,12 L0,0 L12,0 L12,12 L24,12 L24,0" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+                            </button>
+                        </div>
+                        <input type="hidden" id="synthWaveform" value="sine">
+                    </div>
+
+                    <!-- Module 2: VCF (Voltage Controlled Filter) -->
+                    <div class="euro-module vcf-module">
+                        <div class="module-header">
+                            <span class="module-name">VCF</span>
+                            <span class="module-type">LP</span>
+                        </div>
+                        <div class="module-controls">
+                            <div class="euro-knob-group">
+                                <div class="euro-knob large" data-param="cutoff">
+                                    <input type="range" id="orchFilterCutoff" min="20" max="8000" value="4000">
+                                    <div class="knob-indicator"></div>
+                                </div>
+                                <span class="knob-label">CUTOFF</span>
+                                <span class="knob-value" id="orchFilterDisplay">4k</span>
+                            </div>
+                            <div class="euro-knob-group">
+                                <div class="euro-knob" data-param="res">
+                                    <input type="range" id="orchFilterRes" min="0" max="25" value="1">
+                                    <div class="knob-indicator"></div>
+                                </div>
+                                <span class="knob-label">RES</span>
+                                <span class="knob-value" id="orchResDisplay">1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 3: Noise Generator -->
+                    <div class="euro-module noise-module">
+                        <div class="module-header">
+                            <span class="module-name">NOISE</span>
+                        </div>
+                        <div class="module-controls">
+                            <div class="euro-knob-group">
+                                <div class="euro-knob" data-param="noise">
+                                    <input type="range" id="orchNoise" min="0" max="100" value="0">
+                                    <div class="knob-indicator"></div>
+                                </div>
+                                <span class="knob-label">LEVEL</span>
+                                <span class="knob-value" id="orchNoiseDisplay">0%</span>
+                            </div>
+                        </div>
+                        <div class="noise-type-selector">
+                            <button class="noise-type-btn active" data-type="white">WHITE</button>
+                            <button class="noise-type-btn" data-type="pink">PINK</button>
+                        </div>
+                    </div>
+
+                    <!-- Module 4: Output / VCA -->
+                    <div class="euro-module vca-module">
+                        <div class="module-header">
+                            <span class="module-name">OUT</span>
+                        </div>
+                        <div class="module-controls">
+                            <div class="euro-knob-group">
+                                <div class="euro-knob large" data-param="volume">
+                                    <input type="range" id="synthVolume" min="0" max="100" value="70">
+                                    <div class="knob-indicator"></div>
+                                </div>
+                                <span class="knob-label">LEVEL</span>
+                                <span class="knob-value" id="synthVolumeDisplay">70%</span>
+                            </div>
+                        </div>
+                        <div class="output-meter">
+                            <div class="meter-bar" id="synthMeter"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Keyboard Section -->
+                <div class="euro-keyboard-section">
+                    <div class="keyboard-header">
+                        <span class="keyboard-title">KEYBOARD</span>
+                        <div class="octave-controls">
+                            <button class="octave-btn" id="octaveDown">-</button>
+                            <span class="octave-display" id="octaveDisplay">4</span>
+                            <button class="octave-btn" id="octaveUp">+</button>
+                        </div>
+                    </div>
+                    <div class="euro-keyboard">
+                        <button class="euro-key white" data-note="0">C</button>
+                        <button class="euro-key black" data-note="1">C#</button>
+                        <button class="euro-key white" data-note="2">D</button>
+                        <button class="euro-key black" data-note="3">D#</button>
+                        <button class="euro-key white" data-note="4">E</button>
+                        <button class="euro-key white" data-note="5">F</button>
+                        <button class="euro-key black" data-note="6">F#</button>
+                        <button class="euro-key white" data-note="7">G</button>
+                        <button class="euro-key black" data-note="8">G#</button>
+                        <button class="euro-key white" data-note="9">A</button>
+                        <button class="euro-key black" data-note="10">A#</button>
+                        <button class="euro-key white" data-note="11">B</button>
+                        <button class="euro-key white" data-note="12">C</button>
+                    </div>
                 </div>
             </section>
 
             <!-- FX/Mangle Tab -->
             <section id="tab-fx" class="tab-content">
+                <!-- FX Routing Section -->
+                <div class="fx-routing">
+                    <span class="routing-label">APPLY FX TO:</span>
+                    <div class="routing-buttons">
+                        <button class="routing-btn active" data-route="master">MASTER</button>
+                        <button class="routing-btn" data-route="mic">MIC</button>
+                        <button class="routing-btn" data-route="samples">SAMP</button>
+                        <button class="routing-btn" data-route="synth">SYNTH</button>
+                        <button class="routing-btn" data-route="radio">RADIO</button>
+                    </div>
+                </div>
+
                 <div class="fx-controls">
                     <div class="fx-section">
                         <h3>Bit Crusher</h3>
@@ -443,152 +596,178 @@
                     <p class="placeholder">No recordings yet. Hit REC to start!</p>
                 </div>
             </section>
-        </main>
+            </main>
 
-        <!-- PERFORM Mode View (One-Pager) -->
-        <div id="performView" class="perform-view hidden">
-            <div class="perf-header">
-                <button class="perf-back" id="perfBack">← ORCH</button>
-                <div class="perf-position">
-                    <span class="perf-scene" id="perfScene">A</span>
-                    <span class="perf-step" id="perfStep">--</span>
-                    <span class="perf-tempo" id="perfTempo">120 BPM</span>
-                </div>
-                <div class="perf-transport">
-                    <button class="perf-play" id="perfPlay">▶</button>
-                    <button class="perf-stop" id="perfStop">⏹</button>
-                    <button class="perf-rec" id="perfRec">⏺</button>
+            <!-- PERFORM Mode View (inside screen-area, same as tabs/content) -->
+            <div id="performView" class="perform-view hidden">
+            <!-- Position Info Bar -->
+            <div class="perf-position-bar">
+                <div class="position-display">
+                    <span class="scene-letter" id="perfScene">A</span>
+                    <span class="position-sep">/</span>
+                    <span class="step-number" id="perfStep">01</span>
                 </div>
             </div>
-            <div class="perf-gps">
-                <span class="gps-icon">📍</span>
-                <span class="perf-gps-coords" id="perfGpsCoords">Locating...</span>
+
+            <!-- Step Sequencer Visual -->
+            <div class="perf-sequencer">
+                <div class="perf-steps" id="perfSteps">
+                    <div class="perf-step-dot" data-step="0"></div>
+                    <div class="perf-step-dot" data-step="1"></div>
+                    <div class="perf-step-dot" data-step="2"></div>
+                    <div class="perf-step-dot" data-step="3"></div>
+                    <div class="perf-step-dot beat" data-step="4"></div>
+                    <div class="perf-step-dot" data-step="5"></div>
+                    <div class="perf-step-dot" data-step="6"></div>
+                    <div class="perf-step-dot" data-step="7"></div>
+                    <div class="perf-step-dot beat" data-step="8"></div>
+                    <div class="perf-step-dot" data-step="9"></div>
+                    <div class="perf-step-dot" data-step="10"></div>
+                    <div class="perf-step-dot" data-step="11"></div>
+                    <div class="perf-step-dot beat" data-step="12"></div>
+                    <div class="perf-step-dot" data-step="13"></div>
+                    <div class="perf-step-dot" data-step="14"></div>
+                    <div class="perf-step-dot" data-step="15"></div>
+                </div>
             </div>
 
-            <!-- Scene Recall (no save in PERF) -->
+            <!-- Scene Selection -->
             <div class="perf-scenes">
-                <button class="perf-scene-btn active" data-scene="0">A</button>
-                <button class="perf-scene-btn" data-scene="1">B</button>
-                <button class="perf-scene-btn" data-scene="2">C</button>
-                <button class="perf-scene-btn" data-scene="3">D</button>
-            </div>
-
-            <!-- Step Position Visual -->
-            <div class="perf-steps" id="perfSteps">
-                <div class="perf-step-dot" data-step="0"></div>
-                <div class="perf-step-dot" data-step="1"></div>
-                <div class="perf-step-dot" data-step="2"></div>
-                <div class="perf-step-dot" data-step="3"></div>
-                <div class="perf-step-dot beat" data-step="4"></div>
-                <div class="perf-step-dot" data-step="5"></div>
-                <div class="perf-step-dot" data-step="6"></div>
-                <div class="perf-step-dot" data-step="7"></div>
-                <div class="perf-step-dot beat" data-step="8"></div>
-                <div class="perf-step-dot" data-step="9"></div>
-                <div class="perf-step-dot" data-step="10"></div>
-                <div class="perf-step-dot" data-step="11"></div>
-                <div class="perf-step-dot beat" data-step="12"></div>
-                <div class="perf-step-dot" data-step="13"></div>
-                <div class="perf-step-dot" data-step="14"></div>
-                <div class="perf-step-dot" data-step="15"></div>
-            </div>
-
-            <!-- Quick Mixer -->
-            <div class="perf-mixer">
-                <div class="perf-fader">
-                    <span>MIC</span>
-                    <input type="range" id="perfFaderMic" min="0" max="100" value="80">
-                </div>
-                <div class="perf-fader">
-                    <span>SAMP</span>
-                    <input type="range" id="perfFaderSamples" min="0" max="100" value="80">
-                </div>
-                <div class="perf-fader">
-                    <span>SYN</span>
-                    <input type="range" id="perfFaderSynth" min="0" max="100" value="80">
-                </div>
-                <div class="perf-fader">
-                    <span>RAD</span>
-                    <input type="range" id="perfFaderRadio" min="0" max="100" value="80">
+                <span class="scenes-label">SCENE</span>
+                <div class="scenes-grid">
+                    <button class="perf-scene-btn active" data-scene="0">A</button>
+                    <button class="perf-scene-btn" data-scene="1">B</button>
+                    <button class="perf-scene-btn" data-scene="2">C</button>
+                    <button class="perf-scene-btn" data-scene="3">D</button>
                 </div>
             </div>
 
-            <!-- Trigger Pads -->
-            <div class="perf-pads">
-                <button class="perf-pad" data-pad="0">1</button>
-                <button class="perf-pad" data-pad="1">2</button>
-                <button class="perf-pad" data-pad="2">3</button>
-                <button class="perf-pad" data-pad="3">4</button>
-                <button class="perf-pad" data-pad="4">5</button>
-                <button class="perf-pad" data-pad="5">6</button>
-                <button class="perf-pad" data-pad="6">7</button>
-                <button class="perf-pad" data-pad="7">8</button>
+            <!-- Main Controls Grid -->
+            <div class="perf-main-grid">
+                <!-- Left Column: Mixer -->
+                <div class="perf-mixer-section">
+                    <div class="section-title">MIXER</div>
+                    <div class="perf-mixer">
+                        <div class="perf-channel">
+                            <div class="channel-meter" id="meterMic"></div>
+                            <input type="range" class="channel-fader" id="perfFaderMic" min="0" max="100" value="80" orient="vertical">
+                            <span class="channel-label">MIC</span>
+                        </div>
+                        <div class="perf-channel">
+                            <div class="channel-meter" id="meterSamp"></div>
+                            <input type="range" class="channel-fader" id="perfFaderSamples" min="0" max="100" value="80" orient="vertical">
+                            <span class="channel-label">SAMP</span>
+                        </div>
+                        <div class="perf-channel">
+                            <div class="channel-meter" id="meterSyn"></div>
+                            <input type="range" class="channel-fader" id="perfFaderSynth" min="0" max="100" value="80" orient="vertical">
+                            <span class="channel-label">SYN</span>
+                        </div>
+                        <div class="perf-channel">
+                            <div class="channel-meter" id="meterRad"></div>
+                            <input type="range" class="channel-fader" id="perfFaderRadio" min="0" max="100" value="80" orient="vertical">
+                            <span class="channel-label">RAD</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: FX -->
+                <div class="perf-fx-section">
+                    <div class="section-title">FX</div>
+                    <div class="perf-fx">
+                        <div class="fx-knob-group">
+                            <div class="fx-knob">
+                                <input type="range" id="perfDelayMix" min="0" max="100" value="0">
+                                <div class="knob-value" id="delayValue">0</div>
+                            </div>
+                            <span class="fx-label">DELAY</span>
+                        </div>
+                        <div class="fx-knob-group">
+                            <div class="fx-knob">
+                                <input type="range" id="perfGlitch" min="0" max="100" value="0">
+                                <div class="knob-value" id="glitchValue">0</div>
+                            </div>
+                            <span class="fx-label">GLITCH</span>
+                        </div>
+                        <div class="fx-knob-group">
+                            <div class="fx-knob">
+                                <input type="range" id="perfCrush" min="1" max="16" value="16">
+                                <div class="knob-value" id="crushValue">16</div>
+                            </div>
+                            <span class="fx-label">CRUSH</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Quick FX -->
-            <div class="perf-fx">
-                <div class="perf-fx-control">
-                    <span>DELAY</span>
-                    <input type="range" id="perfDelayMix" min="0" max="100" value="0">
-                </div>
-                <div class="perf-fx-control">
-                    <span>GLITCH</span>
-                    <input type="range" id="perfGlitch" min="0" max="100" value="0">
-                </div>
-                <div class="perf-fx-control">
-                    <span>CRUSH</span>
-                    <input type="range" id="perfCrush" min="1" max="16" value="16">
+            <!-- Sample Pads -->
+            <div class="perf-pads-section">
+                <div class="section-title">PADS</div>
+                <div class="perf-pads">
+                    <button class="perf-pad" data-pad="0">1</button>
+                    <button class="perf-pad" data-pad="1">2</button>
+                    <button class="perf-pad" data-pad="2">3</button>
+                    <button class="perf-pad" data-pad="3">4</button>
+                    <button class="perf-pad" data-pad="4">5</button>
+                    <button class="perf-pad" data-pad="5">6</button>
+                    <button class="perf-pad" data-pad="6">7</button>
+                    <button class="perf-pad" data-pad="7">8</button>
                 </div>
             </div>
 
-            <!-- Patch-style Synth -->
-            <div class="perf-synth-patch">
-                <div class="patch-header">
-                    <span>SYNTH</span>
-                    <button class="patch-toggle" id="perfSynthToggle">OFF</button>
+            <!-- Synth Section -->
+            <div class="perf-synth-section">
+                <div class="synth-header">
+                    <div class="section-title">SYNTH</div>
+                    <button class="synth-power" id="perfSynthToggle">
+                        <span class="power-indicator"></span>
+                        <span class="power-text">OFF</span>
+                    </button>
                 </div>
-                <div class="patch-controls">
-                    <div class="patch-knob">
+                <div class="synth-controls">
+                    <div class="synth-param">
                         <label>FREQ</label>
                         <input type="range" id="perfSynthFreq" min="50" max="1000" value="220">
-                        <span id="perfFreqVal">220</span>
+                        <span class="param-value" id="perfFreqVal">220 Hz</span>
                     </div>
-                    <div class="patch-knob">
+                    <div class="synth-param wave-select">
                         <label>WAVE</label>
-                        <select id="perfSynthWave">
-                            <option value="sine">Sine</option>
-                            <option value="triangle">Tri</option>
-                            <option value="sawtooth">Saw</option>
-                            <option value="square">Sqr</option>
-                        </select>
+                        <div class="wave-buttons">
+                            <button class="wave-btn active" data-wave="sine" title="Sine">~</button>
+                            <button class="wave-btn" data-wave="triangle" title="Triangle">/\</button>
+                            <button class="wave-btn" data-wave="sawtooth" title="Sawtooth">/|</button>
+                            <button class="wave-btn" data-wave="square" title="Square">[]</button>
+                        </div>
+                        <input type="hidden" id="perfSynthWave" value="sine">
                     </div>
-                    <div class="patch-knob">
+                    <div class="synth-param">
                         <label>FILTER</label>
                         <input type="range" id="perfSynthFilter" min="100" max="5000" value="2000">
-                        <span id="perfFilterVal">2k</span>
+                        <span class="param-value" id="perfFilterVal">2k Hz</span>
                     </div>
-                    <div class="patch-knob">
+                    <div class="synth-param">
                         <label>RES</label>
                         <input type="range" id="perfSynthRes" min="0" max="20" value="1">
-                        <span id="perfResVal">1</span>
+                        <span class="param-value" id="perfResVal">1</span>
                     </div>
                 </div>
-                <div class="patch-keyboard">
-                    <button class="key white" data-note="261">C</button>
-                    <button class="key black" data-note="277">C#</button>
-                    <button class="key white" data-note="293">D</button>
-                    <button class="key black" data-note="311">D#</button>
-                    <button class="key white" data-note="329">E</button>
-                    <button class="key white" data-note="349">F</button>
-                    <button class="key black" data-note="369">F#</button>
-                    <button class="key white" data-note="392">G</button>
-                    <button class="key black" data-note="415">G#</button>
-                    <button class="key white" data-note="440">A</button>
-                    <button class="key black" data-note="466">A#</button>
-                    <button class="key white" data-note="493">B</button>
+                <div class="synth-keyboard">
+                    <button class="synth-key white" data-note="261">C</button>
+                    <button class="synth-key black" data-note="277">C#</button>
+                    <button class="synth-key white" data-note="293">D</button>
+                    <button class="synth-key black" data-note="311">D#</button>
+                    <button class="synth-key white" data-note="329">E</button>
+                    <button class="synth-key white" data-note="349">F</button>
+                    <button class="synth-key black" data-note="369">F#</button>
+                    <button class="synth-key white" data-note="392">G</button>
+                    <button class="synth-key black" data-note="415">G#</button>
+                    <button class="synth-key white" data-note="440">A</button>
+                    <button class="synth-key black" data-note="466">A#</button>
+                    <button class="synth-key white" data-note="493">B</button>
                 </div>
             </div>
         </div>
+        </div><!-- end screen-area -->
 
         <!-- Init Overlay (required for audio context) -->
         <div id="initOverlay" class="overlay">
