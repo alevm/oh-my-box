@@ -33,25 +33,32 @@ html, body {
 #app {
     width: 100%;
     height: 100%;
+    max-width: 800px;
+    max-height: 500px;
+    margin: auto;
     display: flex;
     flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
 /* ===== TOP BAR ===== */
 .top-bar {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 8px 12px;
+    gap: 10px;
+    padding: 6px 10px;
     background: var(--panel);
     border-bottom: 2px solid var(--border);
-    height: 50px;
+    height: 42px;
     flex-shrink: 0;
 }
 
 .logo {
     font-weight: 800;
-    font-size: 16px;
+    font-size: 14px;
     color: var(--accent);
     letter-spacing: 1px;
 }
@@ -62,13 +69,13 @@ html, body {
 }
 
 .tr-btn {
-    width: 44px;
-    height: 36px;
+    width: 36px;
+    height: 30px;
     border: 2px solid var(--border);
-    border-radius: 6px;
+    border-radius: 5px;
     background: var(--panel);
     color: var(--text);
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -90,18 +97,17 @@ html, body {
 .tempo-box {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 0 8px;
+    gap: 6px;
 }
 
 .tempo-box input {
-    width: 80px;
+    width: 60px;
 }
 
 .tempo-box span {
     font-weight: 700;
-    font-size: 16px;
-    min-width: 32px;
+    font-size: 13px;
+    min-width: 28px;
 }
 
 .gps-box {
@@ -116,7 +122,7 @@ html, body {
 
 .time-box {
     font-weight: 700;
-    font-size: 16px;
+    font-size: 13px;
     color: var(--accent);
     font-family: monospace;
 }
@@ -132,15 +138,15 @@ html, body {
     flex: 1;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    gap: 8px;
-    padding: 8px;
+    gap: 6px;
+    padding: 6px;
     min-height: 0;
 }
 
 .col {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     min-height: 0;
 }
 
@@ -148,17 +154,17 @@ html, body {
 .panel {
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px;
+    border-radius: 6px;
+    padding: 8px;
 }
 
 .panel-title {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     color: var(--accent);
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
 }
 
 /* ===== LEFT: MIXER + SCENES ===== */
@@ -168,8 +174,8 @@ html, body {
 
 .mixer-channels {
     display: flex;
-    gap: 6px;
-    height: calc(100% - 24px);
+    gap: 4px;
+    height: calc(100% - 20px);
 }
 
 .ch {
@@ -177,11 +183,11 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 }
 
 .ch-name {
-    font-size: 10px;
+    font-size: 8px;
     font-weight: 700;
     color: var(--text-light);
 }
@@ -196,11 +202,11 @@ html, body {
 
 .mute {
     width: 100%;
-    height: 28px;
+    height: 22px;
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: 3px;
     background: var(--panel-alt);
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
     cursor: pointer;
 }
@@ -223,16 +229,16 @@ html, body {
 .scene-btns {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
-    margin-bottom: 8px;
+    gap: 4px;
+    margin-bottom: 6px;
 }
 
 .scene-btn {
-    height: 40px;
+    height: 32px;
     border: 2px solid var(--border);
-    border-radius: 6px;
+    border-radius: 5px;
     background: var(--panel-alt);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     cursor: pointer;
 }
@@ -249,12 +255,12 @@ html, body {
 
 .save-btn {
     width: 100%;
-    height: 36px;
+    height: 28px;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
     background: var(--green);
     color: #fff;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 700;
     cursor: pointer;
 }
@@ -270,30 +276,30 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .seq-controls {
     display: flex;
-    gap: 6px;
+    gap: 4px;
 }
 
 .seq-controls select {
-    height: 32px;
-    padding: 0 8px;
+    height: 26px;
+    padding: 0 6px;
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: 3px;
     background: var(--panel);
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .seq-btn {
-    height: 32px;
-    padding: 0 12px;
+    height: 26px;
+    padding: 0 10px;
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: 3px;
     background: var(--panel-alt);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     cursor: pointer;
 }
@@ -306,15 +312,15 @@ html, body {
 .step-grid {
     display: grid;
     grid-template-columns: repeat(16, 1fr);
-    gap: 4px;
-    margin-bottom: 8px;
+    gap: 3px;
+    margin-bottom: 6px;
 }
 
 .step {
     aspect-ratio: 1;
-    min-height: 32px;
+    min-height: 24px;
     border: 2px solid var(--border);
-    border-radius: 4px;
+    border-radius: 3px;
     background: var(--panel-alt);
     cursor: pointer;
 }
@@ -337,20 +343,20 @@ html, body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    min-height: 60px;
+    gap: 2px;
+    min-height: 48px;
 }
 
 .track-row {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
 }
 
 .track-label {
-    width: 20px;
-    font-size: 11px;
+    width: 16px;
+    font-size: 9px;
     font-weight: 600;
     color: var(--text-light);
     text-align: center;
@@ -388,26 +394,26 @@ html, body {
 .euc-row {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding-top: 8px;
+    gap: 6px;
+    padding-top: 6px;
     border-top: 1px solid var(--border);
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .euc-row label {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
 }
 
 .euc-row input[type="number"] {
-    width: 44px;
-    height: 28px;
-    padding: 0 4px;
+    width: 36px;
+    height: 22px;
+    padding: 0 3px;
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: 3px;
     text-align: center;
-    font-size: 12px;
+    font-size: 10px;
 }
 
 /* Pads */
@@ -419,31 +425,31 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .pads-header select {
-    height: 28px;
-    padding: 0 8px;
+    height: 22px;
+    padding: 0 6px;
     border: 1px solid var(--border);
-    border-radius: 4px;
-    font-size: 12px;
+    border-radius: 3px;
+    font-size: 10px;
 }
 
 .pads-grid {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
-    gap: 6px;
+    gap: 4px;
 }
 
 .pad {
     aspect-ratio: 1;
-    min-height: 44px;
+    min-height: 36px;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
     color: #fff;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     cursor: pointer;
     transition: transform 0.1s;
@@ -466,15 +472,15 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .power-btn {
-    padding: 6px 16px;
+    padding: 4px 12px;
     border: 2px solid var(--border);
-    border-radius: 6px;
+    border-radius: 4px;
     background: var(--panel-alt);
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 700;
     cursor: pointer;
 }
@@ -487,8 +493,8 @@ html, body {
 
 .synth-params {
     display: flex;
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: 6px;
+    margin-bottom: 6px;
 }
 
 .param {
@@ -497,9 +503,9 @@ html, body {
 
 .param span {
     display: block;
-    font-size: 10px;
+    font-size: 8px;
     color: var(--text-light);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .param input {
@@ -509,15 +515,15 @@ html, body {
 .wave-btns {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 4px;
+    gap: 3px;
 }
 
 .wave-btn {
-    height: 32px;
+    height: 24px;
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: 3px;
     background: var(--panel-alt);
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
     cursor: pointer;
 }
@@ -536,14 +542,14 @@ html, body {
 .fx-params {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 6px;
 }
 
 .fx-param span {
     display: block;
-    font-size: 10px;
+    font-size: 8px;
     color: var(--text-light);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .fx-param input {
@@ -558,16 +564,16 @@ html, body {
 .vibe-btns {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 4px;
-    margin-bottom: 8px;
+    gap: 3px;
+    margin-bottom: 6px;
 }
 
 .vibe-btn {
-    height: 32px;
+    height: 24px;
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: 3px;
     background: var(--panel-alt);
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 600;
     cursor: pointer;
 }
@@ -581,16 +587,16 @@ html, body {
 .ai-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6px;
+    gap: 4px;
 }
 
 .ai-btn {
-    height: 36px;
+    height: 28px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     background: var(--green);
     color: #fff;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     cursor: pointer;
 }
@@ -605,9 +611,9 @@ html, body {
 
 .radio-row {
     display: flex;
-    gap: 4px;
+    gap: 3px;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .radio-row .panel-title {
@@ -617,21 +623,21 @@ html, body {
 
 .radio-row input {
     flex: 1;
-    height: 32px;
-    padding: 0 8px;
+    height: 24px;
+    padding: 0 6px;
     border: 1px solid var(--border);
-    border-radius: 4px;
-    font-size: 12px;
+    border-radius: 3px;
+    font-size: 10px;
     min-width: 0;
 }
 
 .radio-row button {
-    height: 32px;
-    padding: 0 12px;
+    height: 24px;
+    padding: 0 8px;
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: 3px;
     background: var(--panel-alt);
-    font-size: 12px;
+    font-size: 10px;
     cursor: pointer;
 }
 
@@ -645,10 +651,10 @@ html, body {
 }
 
 .station-item {
-    padding: 8px;
-    border-radius: 4px;
+    padding: 5px 6px;
+    border-radius: 3px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .station-item:hover {
@@ -663,24 +669,24 @@ html, body {
 /* ===== RANGE INPUTS ===== */
 input[type="range"] {
     -webkit-appearance: none;
-    height: 8px;
+    height: 6px;
     background: var(--panel-alt);
-    border-radius: 4px;
+    border-radius: 3px;
     border: 1px solid var(--border);
 }
 
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 14px;
+    height: 14px;
     background: var(--accent);
     border-radius: 50%;
     cursor: pointer;
 }
 
 input[type="range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
+    width: 14px;
+    height: 14px;
     background: var(--accent);
     border-radius: 50%;
     cursor: pointer;
