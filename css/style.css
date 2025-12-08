@@ -1,4 +1,4 @@
-/* Oh My Box v0.7.11 - equal columns, 75% screen width */
+/* Oh My Box v0.7.12 - adjusted column sizes, bigger pads */
 
 * {
     margin: 0;
@@ -105,10 +105,10 @@ html, body {
 }
 
 .col { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.col-mixer { }
-.col-seq { }
-.col-mid { }
-.col-right { }
+.col-mixer { flex: 0.75; }
+.col-seq { flex: 1; }
+.col-mid { flex: 0.9; }
+.col-right { flex: 0.9; }
 
 .panel {
     background: var(--panel);
@@ -148,7 +148,7 @@ html, body {
 .ch.master .ch-name { color: var(--green); }
 
 /* ===== COL 2: SEQUENCER ===== */
-.seq-panel { flex: 1; display: flex; flex-direction: column; }
+.seq-panel { flex: 0.75; display: flex; flex-direction: column; }
 .seq-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .seq-controls { display: flex; gap: 2px; }
 .seq-controls select { height: 18px; font-size: 8px; border: 1px solid var(--border); border-radius: 3px; }
@@ -187,11 +187,11 @@ html, body {
 .trig-cond input { width: 32px; height: 18px; font-size: 8px; text-align: center; }
 
 /* PADS */
-.pads-panel { }
+.pads-panel { flex: 1; }
 .pads-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .pads-header select { height: 18px; font-size: 8px; border: 1px solid var(--border); border-radius: 3px; }
-.pads-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; max-width: 120px; }
-.pad { width: 100%; aspect-ratio: 1; max-width: 28px; border: none; border-radius: 3px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%); color: #fff; font-size: 8px; font-weight: 700; cursor: pointer; }
+.pads-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.pad { width: 100%; aspect-ratio: 1; border: none; border-radius: 4px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%); color: #fff; font-size: 10px; font-weight: 700; cursor: pointer; }
 .pad:nth-child(odd) { background: linear-gradient(135deg, #9b59b6 0%, #7d3c98 100%); }
 .pad:active { transform: scale(0.95); }
 
