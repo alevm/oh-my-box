@@ -1,4 +1,4 @@
-/* Oh My Box v0.7.9 - seq/pads 50% smaller, right cols 25% bigger */
+/* Oh My Box v0.7.10 - full width layout, right column expands */
 
 * {
     margin: 0;
@@ -50,7 +50,6 @@ html, body {
     z-index: 1;
     width: 100%;
     height: 100%;
-    max-width: 1210px;
     max-height: 572px;
     margin: auto;
     display: flex;
@@ -109,7 +108,7 @@ html, body {
 .col-mixer { width: 90px; flex-shrink: 0; }
 .col-seq { flex: 0 0 auto; width: 140px; }
 .col-mid { width: 275px; flex-shrink: 0; }
-.col-right { width: 350px; flex-shrink: 0; }
+.col-right { flex: 1; min-width: 350px; }
 
 .panel {
     background: var(--panel);
