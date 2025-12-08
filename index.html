@@ -7,9 +7,12 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="screen-orientation" content="landscape">
     <title>Oh My Box</title>
-    <link rel="stylesheet" href="css/style.css?v=064">
+    <link rel="stylesheet" href="css/style.css?v=070">
 </head>
 <body>
+    <!-- Full-page map background -->
+    <div id="mapBackground" class="map-bg"></div>
+
     <div id="app">
         <!-- Top Bar: Transport + Info -->
         <header class="top-bar">
@@ -28,13 +31,14 @@
                 <span id="gpsText">--</span>
             </div>
             <div class="time-box" id="timeDisplay">00:00</div>
-            <div class="version">v0.6.4</div>
+            <button id="btnAdmin" class="admin-btn" title="Settings">⚙</button>
+            <div class="version">v0.7.0</div>
         </header>
 
         <!-- Main Device Area - 3 columns -->
         <main class="device">
 
-            <!-- LEFT COLUMN: Mixer + Scenes -->
+            <!-- LEFT COLUMN: Mixer -->
             <section class="col col-left">
                 <div class="panel mixer-panel">
                     <div class="panel-title">MIXER</div>
@@ -65,60 +69,31 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel scenes-panel">
-                    <div class="panel-title">SCENES</div>
-                    <div class="scene-btns">
-                        <button class="scene-btn active" data-scene="0">A</button>
-                        <button class="scene-btn" data-scene="1">B</button>
-                        <button class="scene-btn" data-scene="2">C</button>
-                        <button class="scene-btn" data-scene="3">D</button>
-                    </div>
-                    <button class="save-btn" id="saveScene">SAVE</button>
-                </div>
             </section>
 
-            <!-- CENTER COLUMN: Sequencer + Pads -->
+            <!-- CENTER COLUMN: Sequencer (Octatrack-style compact) + Pads -->
             <section class="col col-center">
-                <!-- Sequencer -->
+                <!-- Sequencer - Compact Octatrack style -->
                 <div class="panel seq-panel">
                     <div class="seq-header">
-                        <span class="panel-title">SEQUENCER</span>
+                        <span class="panel-title">SEQ</span>
                         <div class="seq-controls">
-                            <select id="seqTrack">
-                                <option value="0">T1</option>
-                                <option value="1">T2</option>
-                                <option value="2">T3</option>
-                                <option value="3">T4</option>
-                                <option value="4">T5</option>
-                                <option value="5">T6</option>
-                                <option value="6">T7</option>
-                                <option value="7">T8</option>
-                            </select>
                             <select id="seqSource">
                                 <option value="sampler">SMP</option>
                                 <option value="synth">SYN</option>
                                 <option value="radio">RAD</option>
                                 <option value="mic">MIC</option>
                             </select>
-                            <button id="seqRandom" class="seq-btn">RND</button>
-                            <button id="seqClear" class="seq-btn">CLR</button>
+                            <button id="seqRandom" class="seq-btn mini">RND</button>
+                            <button id="seqClear" class="seq-btn mini">CLR</button>
+                            <button id="eucGen" class="seq-btn mini" title="Euclidean">EUC</button>
                         </div>
                     </div>
-                    <!-- 16 step buttons for selected track -->
-                    <div class="step-grid" id="stepGrid"></div>
-                    <!-- 8-track overview -->
-                    <div class="track-overview" id="trackOverview"></div>
-                    <!-- Euclidean -->
-                    <div class="euc-row">
-                        <span>EUCLID</span>
-                        <label>H<input type="number" id="eucHits" min="1" max="16" value="4"></label>
-                        <label>S<input type="number" id="eucSteps" min="1" max="16" value="16"></label>
-                        <label>R<input type="number" id="eucRotate" min="0" max="15" value="0"></label>
-                        <button id="eucGen" class="seq-btn">GEN</button>
-                    </div>
+                    <!-- Octatrack-style: 8 horizontal track strips -->
+                    <div class="oct-tracks" id="octTracks"></div>
                 </div>
 
-                <!-- Pads -->
+                <!-- Pads + Knobs row -->
                 <div class="panel pads-panel">
                     <div class="pads-header">
                         <span class="panel-title">PADS</span>
@@ -128,104 +103,178 @@
                             <option value="kit3">Kit3</option>
                         </select>
                     </div>
-                    <div class="pads-grid">
-                        <button class="pad" data-pad="0">1</button>
-                        <button class="pad" data-pad="1">2</button>
-                        <button class="pad" data-pad="2">3</button>
-                        <button class="pad" data-pad="3">4</button>
-                        <button class="pad" data-pad="4">5</button>
-                        <button class="pad" data-pad="5">6</button>
-                        <button class="pad" data-pad="6">7</button>
-                        <button class="pad" data-pad="7">8</button>
+                    <div class="pads-row">
+                        <div class="pads-grid">
+                            <button class="pad" data-pad="0">1</button>
+                            <button class="pad" data-pad="1">2</button>
+                            <button class="pad" data-pad="2">3</button>
+                            <button class="pad" data-pad="3">4</button>
+                            <button class="pad" data-pad="4">5</button>
+                            <button class="pad" data-pad="5">6</button>
+                            <button class="pad" data-pad="6">7</button>
+                            <button class="pad" data-pad="7">8</button>
+                        </div>
+                        <!-- Knobs for quick parameter access -->
+                        <div class="quick-knobs">
+                            <div class="knob-group">
+                                <div class="knob" id="knobFreq" data-param="freq" data-min="20" data-max="2000" data-value="220"></div>
+                                <span>FREQ</span>
+                            </div>
+                            <div class="knob-group">
+                                <div class="knob" id="knobFilter" data-param="filter" data-min="20" data-max="8000" data-value="4000"></div>
+                                <span>FILT</span>
+                            </div>
+                            <div class="knob-group">
+                                <div class="knob" id="knobDelay" data-param="delay" data-min="0" data-max="100" data-value="0"></div>
+                                <span>DLY</span>
+                            </div>
+                            <div class="knob-group">
+                                <div class="knob" id="knobGrain" data-param="grain" data-min="0" data-max="100" data-value="0"></div>
+                                <span>GRN</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- RIGHT COLUMN: Synth + FX + AI -->
+            <!-- RIGHT COLUMN: Synth Matrix + Scenes/FX -->
             <section class="col col-right">
-                <!-- Synth -->
+                <!-- Synth - Matrix Routing Style -->
                 <div class="panel synth-panel">
                     <div class="synth-header">
                         <span class="panel-title">SYNTH</span>
                         <button id="synthToggle" class="power-btn">OFF</button>
                     </div>
-                    <div class="synth-params">
-                        <div class="param">
-                            <span>FREQ</span>
-                            <input type="range" id="synthFreq" min="20" max="2000" value="220">
+                    <!-- Matrix routing grid: sources vs destinations -->
+                    <div class="synth-matrix">
+                        <div class="matrix-header">
+                            <span></span>
+                            <span>OSC</span>
+                            <span>NSE</span>
+                            <span>FLT</span>
+                            <span>OUT</span>
                         </div>
-                        <div class="param">
-                            <span>FILT</span>
-                            <input type="range" id="synthFilter" min="20" max="8000" value="4000">
+                        <div class="matrix-row" data-source="osc">
+                            <span>OSC</span>
+                            <div class="matrix-cell" data-src="osc" data-dst="osc"></div>
+                            <div class="matrix-cell" data-src="osc" data-dst="noise"></div>
+                            <div class="matrix-cell active" data-src="osc" data-dst="filter"></div>
+                            <div class="matrix-cell" data-src="osc" data-dst="out"></div>
                         </div>
-                        <div class="param">
-                            <span>RES</span>
-                            <input type="range" id="synthRes" min="0" max="25" value="1">
+                        <div class="matrix-row" data-source="noise">
+                            <span>NSE</span>
+                            <div class="matrix-cell" data-src="noise" data-dst="osc"></div>
+                            <div class="matrix-cell" data-src="noise" data-dst="noise"></div>
+                            <div class="matrix-cell" data-src="noise" data-dst="filter"></div>
+                            <div class="matrix-cell" data-src="noise" data-dst="out"></div>
+                        </div>
+                        <div class="matrix-row" data-source="filter">
+                            <span>FLT</span>
+                            <div class="matrix-cell" data-src="filter" data-dst="osc"></div>
+                            <div class="matrix-cell" data-src="filter" data-dst="noise"></div>
+                            <div class="matrix-cell" data-src="filter" data-dst="filter"></div>
+                            <div class="matrix-cell active" data-src="filter" data-dst="out"></div>
                         </div>
                     </div>
-                    <div class="wave-btns">
-                        <button class="wave-btn active" data-wave="sine">SIN</button>
-                        <button class="wave-btn" data-wave="triangle">TRI</button>
-                        <button class="wave-btn" data-wave="sawtooth">SAW</button>
-                        <button class="wave-btn" data-wave="square">SQR</button>
+                    <!-- Compact wave selector + params -->
+                    <div class="synth-compact">
+                        <div class="wave-btns">
+                            <button class="wave-btn active" data-wave="sine">SIN</button>
+                            <button class="wave-btn" data-wave="triangle">TRI</button>
+                            <button class="wave-btn" data-wave="sawtooth">SAW</button>
+                            <button class="wave-btn" data-wave="square">SQR</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- FX -->
+                <!-- Scenes with Crossfader -->
+                <div class="panel scenes-xfade-panel">
+                    <div class="panel-title">SCENES</div>
+                    <div class="scene-row">
+                        <button class="scene-btn active" data-scene="0">A</button>
+                        <button class="scene-btn" data-scene="1">B</button>
+                        <button class="scene-btn" data-scene="2">C</button>
+                        <button class="scene-btn" data-scene="3">D</button>
+                    </div>
+                    <div class="xfade-row">
+                        <span class="xfade-label" id="xfadeLeft">A</span>
+                        <input type="range" id="sceneCrossfader" class="xfader" min="0" max="100" value="0">
+                        <span class="xfade-label" id="xfadeRight">B</span>
+                    </div>
+                    <div class="scene-actions">
+                        <button class="scene-action-btn" id="saveScene">SAVE</button>
+                        <select id="sceneScope" class="scene-scope">
+                            <option value="all">ALL</option>
+                            <option value="mixer">MIX</option>
+                            <option value="seq">SEQ</option>
+                            <option value="fx">FX</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- FX Presets -->
                 <div class="panel fx-panel">
-                    <div class="panel-title">FX</div>
-                    <div class="fx-params">
-                        <div class="fx-param">
+                    <div class="fx-header">
+                        <span class="panel-title">FX</span>
+                        <select id="fxPreset" class="fx-preset-select">
+                            <option value="0">--</option>
+                            <option value="1">FX1</option>
+                            <option value="2">FX2</option>
+                            <option value="3">FX3</option>
+                            <option value="4">FX4</option>
+                        </select>
+                        <button id="saveFx" class="fx-save-btn">+</button>
+                    </div>
+                    <div class="fx-mini-params">
+                        <div class="fx-mini">
                             <span>DLY</span>
                             <input type="range" id="fxDelay" min="0" max="100" value="0">
                         </div>
-                        <div class="fx-param">
-                            <span>CRU</span>
-                            <input type="range" id="fxCrush" min="1" max="16" value="16">
-                        </div>
-                        <div class="fx-param">
-                            <span>GLI</span>
-                            <input type="range" id="fxGlitch" min="0" max="100" value="0">
-                        </div>
-                        <div class="fx-param">
+                        <div class="fx-mini">
                             <span>GRN</span>
                             <input type="range" id="fxGrain" min="0" max="100" value="0">
                         </div>
+                        <div class="fx-mini">
+                            <span>GLI</span>
+                            <input type="range" id="fxGlitch" min="0" max="100" value="0">
+                        </div>
+                        <div class="fx-mini">
+                            <span>CRU</span>
+                            <input type="range" id="fxCrush" min="1" max="16" value="16">
+                        </div>
                     </div>
                 </div>
 
-                <!-- AI / Radio -->
+                <!-- AI Generate (compact) -->
                 <div class="panel ai-panel">
-                    <div class="ai-header">
-                        <span class="panel-title">GENERATE</span>
-                    </div>
-                    <div class="vibe-btns">
-                        <button class="vibe-btn active" data-vibe="calm">CALM</button>
-                        <button class="vibe-btn" data-vibe="urban">URBAN</button>
-                        <button class="vibe-btn" data-vibe="nature">NATURE</button>
-                        <button class="vibe-btn" data-vibe="chaos">CHAOS</button>
-                    </div>
-                    <div class="ai-actions">
-                        <button id="aiGenerate" class="ai-btn">GENERATE</button>
-                        <button id="aiSurprise" class="ai-btn">SURPRISE</button>
+                    <div class="ai-row">
+                        <span class="panel-title">AI</span>
+                        <div class="vibe-btns mini">
+                            <button class="vibe-btn active" data-vibe="calm">C</button>
+                            <button class="vibe-btn" data-vibe="urban">U</button>
+                            <button class="vibe-btn" data-vibe="nature">N</button>
+                            <button class="vibe-btn" data-vibe="chaos">X</button>
+                        </div>
+                        <button id="aiGenerate" class="ai-btn mini">GEN</button>
                     </div>
                 </div>
 
-                <!-- Radio (compact) -->
+                <!-- Radio (ultra compact) -->
                 <div class="panel radio-panel">
                     <div class="radio-row">
                         <span class="panel-title">RADIO</span>
                         <input type="text" id="radioSearch" placeholder="Search...">
-                        <button id="radioGo">GO</button>
-                        <button id="radioStop" disabled>X</button>
+                        <button id="radioGo">▶</button>
+                        <button id="radioStop" disabled>■</button>
                     </div>
                     <div class="station-list" id="stationList"></div>
                 </div>
 
-                <!-- Recordings -->
+                <!-- Recordings (minimal) -->
                 <div class="panel rec-panel">
-                    <div class="rec-header">
-                        <span class="panel-title">RECORDINGS</span>
+                    <div class="rec-row">
+                        <span class="panel-title">REC</span>
+                        <span id="recCount">0</span>
                         <button id="recListBtn" class="rec-list-btn">LIST</button>
                     </div>
                     <div class="rec-list" id="recList"></div>
@@ -233,6 +282,99 @@
             </section>
 
         </main>
+    </div>
+
+    <!-- Admin Settings Modal -->
+    <div id="adminModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">SETTINGS</span>
+                <button id="closeAdmin" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- Sample Kits -->
+                <div class="settings-section">
+                    <div class="settings-title">SAMPLE KITS</div>
+                    <div class="kit-list" id="kitList">
+                        <div class="kit-item active" data-kit="kit1">Kit 1 (Default)</div>
+                        <div class="kit-item" data-kit="kit2">Kit 2 (Electronic)</div>
+                        <div class="kit-item" data-kit="kit3">Kit 3 (Acoustic)</div>
+                    </div>
+                    <div class="kit-upload">
+                        <input type="file" id="uploadKit" accept="audio/*" multiple hidden>
+                        <button id="uploadKitBtn" class="settings-btn">Upload Kit</button>
+                    </div>
+                </div>
+
+                <!-- Synth Presets -->
+                <div class="settings-section">
+                    <div class="settings-title">SYNTH PRESETS</div>
+                    <div class="synth-presets" id="synthPresets">
+                        <div class="preset-item active" data-preset="default">Default</div>
+                        <div class="preset-item" data-preset="bass">Bass</div>
+                        <div class="preset-item" data-preset="lead">Lead</div>
+                        <div class="preset-item" data-preset="pad">Pad</div>
+                    </div>
+                </div>
+
+                <!-- Recording Settings -->
+                <div class="settings-section">
+                    <div class="settings-title">RECORDING</div>
+                    <div class="settings-row">
+                        <span>Format:</span>
+                        <select id="recFormat">
+                            <option value="webm">WebM (default)</option>
+                            <option value="wav">WAV</option>
+                            <option value="mp3">MP3</option>
+                        </select>
+                    </div>
+                    <div class="settings-row">
+                        <span>Auto-save:</span>
+                        <select id="recAutoSave">
+                            <option value="off">Off</option>
+                            <option value="local">Local Storage</option>
+                            <option value="download">Auto Download</option>
+                        </select>
+                    </div>
+                    <div class="settings-row">
+                        <span>GPS embed:</span>
+                        <input type="checkbox" id="recGpsEmbed" checked>
+                    </div>
+                </div>
+
+                <!-- Sequencer Settings -->
+                <div class="settings-section">
+                    <div class="settings-title">SEQUENCER</div>
+                    <div class="settings-row">
+                        <span>Tracks:</span>
+                        <select id="seqTracks">
+                            <option value="4">4 tracks</option>
+                            <option value="8" selected>8 tracks</option>
+                            <option value="16">16 tracks</option>
+                        </select>
+                    </div>
+                    <div class="settings-row">
+                        <span>Steps:</span>
+                        <select id="seqSteps">
+                            <option value="8">8 steps</option>
+                            <option value="16" selected>16 steps</option>
+                            <option value="32">32 steps</option>
+                            <option value="64">64 steps</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Theme -->
+                <div class="settings-section">
+                    <div class="settings-title">THEME</div>
+                    <div class="theme-options">
+                        <button class="theme-btn" data-theme="mariani">Vin Mariani</button>
+                        <button class="theme-btn active" data-theme="map">Location Map</button>
+                        <button class="theme-btn" data-theme="dark">Dark</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="js/gps.js"></script>
