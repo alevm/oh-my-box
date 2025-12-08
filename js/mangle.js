@@ -215,6 +215,22 @@ class MangleEngine {
         }
     }
 
+    // Set FX routing target
+    setRoute(route) {
+        this.currentRoute = route;
+        console.log('FX routing set to:', route);
+        // The actual routing happens at the channel level
+        // This just tracks which channel the FX controls affect
+    }
+
+    // Set bit depth for crusher
+    setBitDepth(bits) {
+        this.effects.crusher.bits = bits;
+        this.effects.crusher.enabled = bits < 16;
+        // Note: True bit crushing requires AudioWorklet
+        console.log('Crusher bits:', bits);
+    }
+
     // Get current effect states
     getState() {
         return { ...this.effects };
