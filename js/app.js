@@ -69,27 +69,16 @@ class App {
         console.log('App initialized');
     }
 
-    // Tab Navigation
+    // Tab Navigation (deprecated - now single scrollable page)
     setupTabs() {
-        const tabs = document.querySelectorAll('.tab');
-        const contents = document.querySelectorAll('.tab-content');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const target = tab.dataset.tab;
-
-                tabs.forEach(t => t.classList.remove('active'));
-                contents.forEach(c => c.classList.remove('active'));
-
-                tab.classList.add('active');
-                document.getElementById(`tab-${target}`).classList.add('active');
-            });
-        });
+        // No longer using tabs - ORCH is a single scrollable page
+        // This method kept for compatibility but does nothing
     }
 
     // Mode Toggle (Orchestrate/Perform)
     setupModeToggle() {
         const modeBtns = document.querySelectorAll('.mode-btn');
+        const orchView = document.getElementById('orchView');
         const perfView = document.getElementById('performView');
 
         modeBtns.forEach(btn => {
@@ -98,12 +87,14 @@ class App {
                 btn.classList.add('active');
                 this.mode = btn.dataset.mode;
 
-                // Toggle PERF view
+                // Toggle views
                 if (this.mode === 'perform') {
+                    orchView.classList.add('hidden');
                     perfView.classList.remove('hidden');
                     document.body.classList.add('perf-mode');
                     this.syncPerfView();
                 } else {
+                    orchView.classList.remove('hidden');
                     perfView.classList.add('hidden');
                     document.body.classList.remove('perf-mode');
                 }
@@ -118,135 +109,108 @@ class App {
 
     // PERF Mode Controls
     setupPerfMode() {
+        // Generate step ring dots
+        const stepRing = document.getElementById('perfStepRing');
+        if (stepRing) {
+            for (let i = 0; i < 16; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'ring-dot';
+                dot.dataset.step = i;
+                // Position dots in a circle
+                const angle = (i / 16) * 2 * Math.PI - Math.PI / 2;
+                const radius = 90;
+                const x = 100 + radius * Math.cos(angle);
+                const y = 100 + radius * Math.sin(angle);
+                dot.style.left = `${x}px`;
+                dot.style.top = `${y}px`;
+                stepRing.appendChild(dot);
+            }
+        }
+
         // Scene buttons (recall only)
         document.querySelectorAll('.perf-scene-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const idx = parseInt(btn.dataset.scene);
                 if (window.sceneManager.hasScene(idx)) {
                     window.sceneManager.recallScene(idx);
-                    document.querySelectorAll('.perf-scene-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    document.getElementById('perfScene').textContent = ['A', 'B', 'C', 'D'][idx];
                 }
-            });
-        });
-
-        // Mixer faders
-        ['Mic', 'Samples', 'Synth', 'Radio'].forEach(ch => {
-            const fader = document.getElementById(`perfFader${ch}`);
-            if (fader) {
-                fader.addEventListener('input', () => {
-                    const level = fader.value / 100;
-                    window.audioEngine.setChannelLevel(ch.toLowerCase(), level);
-                    // Sync with main fader
-                    document.getElementById(`fader${ch}`).value = fader.value;
-                });
-            }
-        });
-
-        // Pads
-        document.querySelectorAll('.perf-pad').forEach(pad => {
-            pad.addEventListener('click', () => {
-                const idx = parseInt(pad.dataset.pad);
-                if (window.sampler) {
-                    window.sampler.trigger(idx);
-                }
-            });
-        });
-
-        // FX controls
-        document.getElementById('perfDelayMix').addEventListener('input', (e) => {
-            const val = parseInt(e.target.value);
-            window.mangleEngine.setDelayMix(val);
-            document.getElementById('delayValue').textContent = val;
-        });
-
-        document.getElementById('perfGlitch').addEventListener('input', (e) => {
-            const val = parseInt(e.target.value);
-            window.mangleEngine.setGlitch(val, 100, 'stutter');
-            document.getElementById('glitchValue').textContent = val;
-        });
-
-        document.getElementById('perfCrush').addEventListener('input', (e) => {
-            const val = parseInt(e.target.value);
-            window.mangleEngine.setBitDepth(val);
-            document.getElementById('crushValue').textContent = val;
-        });
-
-        // Synth toggle
-        const synthToggle = document.getElementById('perfSynthToggle');
-        synthToggle.addEventListener('click', () => {
-            const playing = window.synth.toggle();
-            synthToggle.classList.toggle('active', playing);
-            synthToggle.querySelector('.power-text').textContent = playing ? 'ON' : 'OFF';
-        });
-
-        document.getElementById('perfSynthFreq').addEventListener('input', (e) => {
-            const freq = parseInt(e.target.value);
-            window.synth.setFrequency(freq);
-            document.getElementById('perfFreqVal').textContent = freq + ' Hz';
-        });
-
-        // Transport is now shared - no separate perf transport handlers needed
-        // The main transport buttons (btnPlay, btnStop, btnRecord) work in both modes
-
-        // Synth wave selector - button-based
-        document.querySelectorAll('.wave-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const wave = btn.dataset.wave;
-                window.synth.setWaveform(wave);
-                document.getElementById('perfSynthWave').value = wave;
-                document.querySelectorAll('.wave-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.perf-scene-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+
+                // Update big scene letter
+                const letter = document.getElementById('perfSceneLetter');
+                if (letter) letter.textContent = ['A', 'B', 'C', 'D'][idx];
             });
         });
 
-        // Filter controls
-        document.getElementById('perfSynthFilter').addEventListener('input', (e) => {
-            const val = parseInt(e.target.value);
-            window.synth.setFilterCutoff(val);
-            document.getElementById('perfFilterVal').textContent = (val >= 1000 ? (val/1000).toFixed(1) + 'k' : val) + ' Hz';
-        });
-
-        document.getElementById('perfSynthRes').addEventListener('input', (e) => {
-            const val = parseInt(e.target.value);
-            window.synth.setFilterResonance(val);
-            document.getElementById('perfResVal').textContent = val;
-        });
-
-        // Keyboard
-        document.querySelectorAll('.synth-keyboard .synth-key').forEach(key => {
-            key.addEventListener('mousedown', () => {
-                const note = parseInt(key.dataset.note);
-                window.synth.triggerNote(note, 0.3);
+        // Live controls - Filter
+        const perfFilter = document.getElementById('perfFilter');
+        if (perfFilter) {
+            perfFilter.addEventListener('input', (e) => {
+                const val = parseInt(e.target.value);
+                window.synth.setFilterCutoff(val);
+                // Also update ORCH filter if present
+                const orchFilter = document.getElementById('orchFilterCutoff');
+                if (orchFilter) orchFilter.value = val;
             });
-            key.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                const note = parseInt(key.dataset.note);
-                window.synth.triggerNote(note, 0.3);
-            });
-        });
+        }
 
-        // GPS update for PERF mode
-        window.gpsTracker.addListener(() => {
-            const pos = window.gpsTracker.getPosition();
-            if (pos) {
-                document.getElementById('perfGpsCoords').textContent = pos.formatted || `${pos.lat.toFixed(4)}, ${pos.lng.toFixed(4)}`;
+        // Live controls - FX Mix
+        const perfFxMix = document.getElementById('perfFxMix');
+        if (perfFxMix) {
+            perfFxMix.addEventListener('input', (e) => {
+                const val = parseInt(e.target.value);
+                window.mangleEngine.setDelayMix(val);
+            });
+        }
+
+        // Mic reactive toggle
+        const micReactiveToggle = document.getElementById('micReactiveToggle');
+        if (micReactiveToggle) {
+            micReactiveToggle.addEventListener('click', () => {
+                const active = !micReactiveToggle.classList.contains('active');
+                micReactiveToggle.classList.toggle('active', active);
+                micReactiveToggle.textContent = active ? 'ON' : 'OFF';
+                this.micReactive = active;
+                if (active) {
+                    this.startMicReactivity();
+                } else {
+                    this.stopMicReactivity();
+                }
+            });
+        }
+
+        // Start mic meter updates
+        this.startPerfMicMeter();
+    }
+
+    // Mic level meter for PERF mode
+    startPerfMicMeter() {
+        setInterval(() => {
+            if (this.mode === 'perform') {
+                const level = window.audioEngine.getMeterLevel('mic');
+                const fill = document.getElementById('perfMicFill');
+                if (fill) fill.style.width = `${level}%`;
+
+                // Mic reactivity - modulate synth based on mic level
+                if (this.micReactive && level > 10) {
+                    const filterVal = 500 + (level * 50); // 500-5500 Hz based on mic
+                    window.synth.setFilterCutoff(filterVal);
+                }
             }
-        });
+        }, 50);
+    }
+
+    startMicReactivity() {
+        console.log('Mic reactivity enabled');
+    }
+
+    stopMicReactivity() {
+        console.log('Mic reactivity disabled');
     }
 
     // Sync PERF view with current state
     syncPerfView() {
-        // Sync faders
-        ['Mic', 'Samples', 'Synth', 'Radio'].forEach(ch => {
-            const mainFader = document.getElementById(`fader${ch}`);
-            const perfFader = document.getElementById(`perfFader${ch}`);
-            if (mainFader && perfFader) {
-                perfFader.value = mainFader.value;
-            }
-        });
-
         // Sync scene buttons
         document.querySelectorAll('.perf-scene-btn').forEach(btn => {
             const idx = parseInt(btn.dataset.scene);
@@ -258,10 +222,18 @@ class App {
         document.querySelectorAll('.perf-scene-btn').forEach(btn => {
             btn.classList.toggle('active', parseInt(btn.dataset.scene) === currentScene);
         });
-        document.getElementById('perfScene').textContent = ['A', 'B', 'C', 'D'][currentScene];
 
-        // Sync tempo
-        document.getElementById('perfTempo').textContent = `${window.sequencer.getTempo()} BPM`;
+        const letter = document.getElementById('perfSceneLetter');
+        if (letter) letter.textContent = ['A', 'B', 'C', 'D'][currentScene];
+
+        // Sync tempo and status
+        const perfBpm = document.getElementById('perfBpm');
+        if (perfBpm) perfBpm.textContent = `${window.sequencer.getTempo()} BPM`;
+
+        const perfStatus = document.getElementById('perfStatus');
+        if (perfStatus) {
+            perfStatus.textContent = window.sequencer.isPlaying() ? 'PLAYING' : 'READY';
+        }
     }
 
     // Transport Controls
@@ -317,16 +289,7 @@ class App {
             const orchSynthToggle = document.getElementById('synthToggle');
             if (orchSynthToggle) {
                 orchSynthToggle.classList.remove('active');
-                const led = orchSynthToggle.querySelector('.led');
-                if (led) led.classList.add('off');
-            }
-
-            // Update PERF synth UI
-            const perfSynthToggle = document.getElementById('perfSynthToggle');
-            if (perfSynthToggle) {
-                perfSynthToggle.classList.remove('active');
-                const powerText = perfSynthToggle.querySelector('.power-text');
-                if (powerText) powerText.textContent = 'OFF';
+                orchSynthToggle.textContent = 'OFF';
             }
 
             // Update radio UI
@@ -378,15 +341,15 @@ class App {
 
     // Scenes
     setupScenes() {
-        const sceneBtns = document.querySelectorAll('.scene-btn');
-        const saveBtns = document.querySelectorAll('.scene-save-slot');
+        const sceneBtns = document.querySelectorAll('.orch-scene-bar .scene-btn');
+        const saveBtn = document.getElementById('saveScene');
 
         // Recall buttons
         sceneBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const sceneIndex = parseInt(btn.dataset.scene);
 
-                // If shift/long-press: morph, else: instant recall
+                // Recall if has data
                 if (window.sceneManager.hasScene(sceneIndex)) {
                     window.sceneManager.recallScene(sceneIndex);
                 }
@@ -396,76 +359,29 @@ class App {
             });
         });
 
-        // Independent save slots (A, B, C, D)
-        saveBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent any parent handlers
-                const sceneIndex = parseInt(btn.dataset.scene);
-                console.log('Save button clicked, index:', sceneIndex);
-                window.sceneManager.saveScene(sceneIndex);
+        // Single save button - saves to currently selected scene
+        if (saveBtn) {
+            saveBtn.addEventListener('click', () => {
+                const activeBtn = document.querySelector('.orch-scene-bar .scene-btn.active');
+                if (activeBtn) {
+                    const sceneIndex = parseInt(activeBtn.dataset.scene);
+                    window.sceneManager.saveScene(sceneIndex);
 
-                // Visual feedback
-                btn.classList.add('saved');
-                setTimeout(() => btn.classList.remove('saved'), 500);
+                    // Visual feedback
+                    saveBtn.classList.add('saved');
+                    activeBtn.classList.add('has-data');
+                    setTimeout(() => saveBtn.classList.remove('saved'), 500);
 
-                // Mark scene buttons that have data
-                document.querySelectorAll('.scene-btn').forEach(sceneBtn => {
-                    const idx = parseInt(sceneBtn.dataset.scene);
-                    sceneBtn.classList.toggle('has-data', window.sceneManager.hasScene(idx));
-                });
+                    console.log('Saved scene', ['A', 'B', 'C', 'D'][sceneIndex]);
+                }
             });
-        });
+        }
     }
 
-    // Arrangement
+    // Arrangement (simplified - uses scenes directly)
     setupArrangement() {
-        const playBtn = document.getElementById('arrPlay');
-        const stopBtn = document.getElementById('arrStop');
-        const clearBtn = document.getElementById('arrClear');
-        const barsInput = document.getElementById('arrBars');
-        const addBtns = document.querySelectorAll('.arr-add-btn');
-
-        playBtn.addEventListener('click', () => {
-            if (window.arrangement.playing) {
-                window.arrangement.stop();
-                playBtn.classList.remove('active');
-                playBtn.textContent = 'Play';
-            } else {
-                window.arrangement.play();
-                playBtn.classList.add('active');
-                playBtn.textContent = 'Playing';
-            }
-        });
-
-        stopBtn.addEventListener('click', () => {
-            window.arrangement.stop();
-            window.sequencer.stop();
-            playBtn.classList.remove('active');
-            playBtn.textContent = 'Play';
-            document.getElementById('btnPlay').classList.remove('active');
-        });
-
-        clearBtn.addEventListener('click', () => {
-            window.arrangement.clear();
-        });
-
-        addBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const sceneIndex = parseInt(btn.dataset.scene);
-                const bars = parseInt(barsInput.value) || 4;
-
-                // Check if scene has data
-                if (!window.sceneManager.hasScene(sceneIndex)) {
-                    console.log(`Scene ${['A', 'B', 'C', 'D'][sceneIndex]} is empty - save it first`);
-                    return;
-                }
-
-                window.arrangement.addBlock(sceneIndex, bars);
-            });
-        });
-
-        // Initial UI update
-        window.arrangement.updateUI();
+        // Arrangement is now handled through scene switching
+        // The play button starts the sequencer, scenes can be switched live
     }
 
     // Sequencer
@@ -715,49 +631,36 @@ class App {
         });
     }
 
-    // Synth - Eurorack Style
+    // Synth
     setupSynth() {
         const toggle = document.getElementById('synthToggle');
-        const waveform = document.getElementById('synthWaveform');
         const freq = document.getElementById('synthFreq');
 
-        // Power toggle with LED
-        toggle.addEventListener('click', () => {
-            const playing = window.synth.toggle();
-            toggle.classList.toggle('active', playing);
-            const led = toggle.querySelector('.led');
-            const label = toggle.querySelector('.power-label');
-            if (led) led.classList.toggle('on', playing);
-            if (label) label.textContent = playing ? 'ON' : 'OFF';
-        });
+        // Power toggle
+        if (toggle) {
+            toggle.addEventListener('click', () => {
+                const playing = window.synth.toggle();
+                toggle.classList.toggle('active', playing);
+                toggle.textContent = playing ? 'ON' : 'OFF';
+            });
+        }
 
-        // Waveform selector buttons (Eurorack style)
-        document.querySelectorAll('.wave-select-btn').forEach(btn => {
+        // Waveform selector buttons
+        document.querySelectorAll('.wave-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const wave = btn.dataset.wave;
                 window.synth.setWaveform(wave);
-                document.getElementById('synthWaveform').value = wave;
-                document.querySelectorAll('.wave-select-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.wave-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
             });
         });
 
-        // Frequency knob
-        freq.addEventListener('input', (e) => {
-            const value = parseFloat(e.target.value);
-            window.synth.setFrequency(value);
-            document.getElementById('freqDisplay').textContent = Math.round(value);
-            this.updateKnobRotation(e.target);
-        });
-
-        // Detune knob
-        const detune = document.getElementById('synthDetune');
-        if (detune) {
-            detune.addEventListener('input', (e) => {
-                const value = parseInt(e.target.value);
-                window.synth.setDetune(value);
-                document.getElementById('detuneDisplay').textContent = value;
-                this.updateKnobRotation(e.target);
+        // Frequency
+        if (freq) {
+            freq.addEventListener('input', (e) => {
+                const value = parseFloat(e.target.value);
+                window.synth.setFrequency(value);
+                document.getElementById('freqDisplay').textContent = Math.round(value);
             });
         }
 
@@ -769,7 +672,6 @@ class App {
                 window.synth.setFilterCutoff(value);
                 const display = value >= 1000 ? (value / 1000).toFixed(1) + 'k' : value;
                 document.getElementById('orchFilterDisplay').textContent = display;
-                this.updateKnobRotation(e.target);
             });
         }
 
@@ -780,76 +682,16 @@ class App {
                 const value = parseInt(e.target.value);
                 window.synth.setFilterResonance(value);
                 document.getElementById('orchResDisplay').textContent = value;
-                this.updateKnobRotation(e.target);
             });
         }
 
-        // Noise level
-        const noise = document.getElementById('orchNoise');
-        if (noise) {
-            noise.addEventListener('input', (e) => {
-                const value = parseInt(e.target.value);
-                window.synth.setNoiseLevel(value);
-                document.getElementById('orchNoiseDisplay').textContent = value + '%';
-                this.updateKnobRotation(e.target);
-            });
-        }
-
-        // Noise type buttons
-        document.querySelectorAll('.noise-type-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const type = btn.dataset.type;
-                window.synth.setNoiseType(type);
-                document.querySelectorAll('.noise-type-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-
-        // Volume/Output level
-        const volume = document.getElementById('synthVolume');
-        if (volume) {
-            volume.addEventListener('input', (e) => {
-                const value = parseInt(e.target.value);
-                // Set synth channel volume
-                if (window.audioEngine) {
-                    window.audioEngine.setChannelGain('synth', value / 100);
-                }
-                document.getElementById('synthVolumeDisplay').textContent = value + '%';
-                this.updateKnobRotation(e.target);
-            });
-        }
-
-        // Octave controls
+        // Keyboard - mini version
         this.currentOctave = 4;
-        const octaveUp = document.getElementById('octaveUp');
-        const octaveDown = document.getElementById('octaveDown');
-        const octaveDisplay = document.getElementById('octaveDisplay');
-
-        if (octaveUp) {
-            octaveUp.addEventListener('click', () => {
-                if (this.currentOctave < 7) {
-                    this.currentOctave++;
-                    octaveDisplay.textContent = this.currentOctave;
-                }
-            });
-        }
-
-        if (octaveDown) {
-            octaveDown.addEventListener('click', () => {
-                if (this.currentOctave > 1) {
-                    this.currentOctave--;
-                    octaveDisplay.textContent = this.currentOctave;
-                }
-            });
-        }
-
-        // Keyboard - plays notes based on current octave
-        document.querySelectorAll('.euro-key').forEach(key => {
+        document.querySelectorAll('.mini-keyboard .key').forEach(key => {
             const noteIndex = parseInt(key.dataset.note);
 
             const playNote = () => {
                 // Calculate frequency: A4 = 440Hz
-                // MIDI note = 12 * octave + noteIndex (where C = 0)
                 const midiNote = 12 * this.currentOctave + noteIndex;
                 const frequency = 440 * Math.pow(2, (midiNote - 69) / 12);
                 window.synth.triggerNote(frequency, 0.3);
@@ -869,40 +711,13 @@ class App {
             });
             key.addEventListener('touchend', releaseNote);
         });
-
-        // Initialize all knob positions
-        this.initializeKnobs();
-    }
-
-    // Update knob rotation based on slider value
-    updateKnobRotation(input) {
-        const knob = input.closest('.euro-knob');
-        if (!knob) return;
-
-        const min = parseFloat(input.min);
-        const max = parseFloat(input.max);
-        const value = parseFloat(input.value);
-        const percent = (value - min) / (max - min);
-        const rotation = -135 + (percent * 270); // -135deg to +135deg
-
-        const indicator = knob.querySelector('.knob-indicator');
-        if (indicator) {
-            indicator.style.transform = `translate(-50%, -100%) rotate(${rotation}deg)`;
-        }
-    }
-
-    // Initialize all knobs to their current positions
-    initializeKnobs() {
-        document.querySelectorAll('.euro-knob input[type="range"]').forEach(input => {
-            this.updateKnobRotation(input);
-        });
     }
 
     // FX
     setupFX() {
         // FX Routing
         this.fxRoute = 'master'; // default
-        const routingBtns = document.querySelectorAll('.routing-btn');
+        const routingBtns = document.querySelectorAll('.route-btn');
 
         routingBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -911,115 +726,48 @@ class App {
                 routingBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
-                // Update mangle engine routing if it supports it
                 if (window.mangleEngine && window.mangleEngine.setRoute) {
                     window.mangleEngine.setRoute(route);
                 }
-                console.log('FX routing set to:', route);
+                console.log('FX routing:', route);
             });
-        });
-
-        // Bit Crusher
-        const crushBits = document.getElementById('crushBits');
-        const crushRate = document.getElementById('crushRate');
-        const crushToggle = document.getElementById('crushToggle');
-
-        crushBits.addEventListener('input', () => {
-            document.getElementById('crushBitsDisplay').textContent = crushBits.value;
-            window.mangleEngine.setCrusher(parseInt(crushBits.value), parseInt(crushRate.value));
-        });
-
-        crushRate.addEventListener('input', () => {
-            document.getElementById('crushRateDisplay').textContent = crushRate.value;
-            window.mangleEngine.setCrusher(parseInt(crushBits.value), parseInt(crushRate.value));
-        });
-
-        crushToggle.addEventListener('click', () => {
-            const enabled = !crushToggle.classList.contains('active');
-            crushToggle.classList.toggle('active', enabled);
-            crushToggle.textContent = enabled ? 'ON' : 'OFF';
-            window.mangleEngine.toggleCrusher(enabled);
-        });
-
-        // Glitch
-        const glitchProb = document.getElementById('glitchProb');
-        const glitchSize = document.getElementById('glitchSize');
-        const glitchModes = document.querySelectorAll('.glitch-mode');
-
-        glitchProb.addEventListener('input', () => {
-            document.getElementById('glitchProbDisplay').textContent = glitchProb.value;
-            window.mangleEngine.setGlitch(
-                parseInt(glitchProb.value),
-                parseInt(glitchSize.value),
-                document.querySelector('.glitch-mode.active')?.dataset.mode || 'stutter'
-            );
-        });
-
-        glitchSize.addEventListener('input', () => {
-            document.getElementById('glitchSizeDisplay').textContent = glitchSize.value;
-        });
-
-        glitchModes.forEach(btn => {
-            btn.addEventListener('click', () => {
-                glitchModes.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                window.mangleEngine.setGlitch(
-                    parseInt(glitchProb.value),
-                    parseInt(glitchSize.value),
-                    btn.dataset.mode
-                );
-            });
-        });
-
-        // Grain
-        const grainDensity = document.getElementById('grainDensity');
-        const grainSize = document.getElementById('grainSize');
-        const grainPitch = document.getElementById('grainPitch');
-        const grainFreeze = document.getElementById('grainFreeze');
-
-        grainDensity.addEventListener('input', () => {
-            document.getElementById('grainDensityDisplay').textContent = grainDensity.value;
-            window.mangleEngine.setGrain(
-                parseInt(grainDensity.value),
-                parseInt(grainSize.value),
-                parseInt(grainPitch.value)
-            );
-        });
-
-        grainSize.addEventListener('input', () => {
-            document.getElementById('grainSizeDisplay').textContent = grainSize.value;
-        });
-
-        grainPitch.addEventListener('input', () => {
-            document.getElementById('grainPitchDisplay').textContent = grainPitch.value;
-        });
-
-        grainFreeze.addEventListener('click', () => {
-            const frozen = !grainFreeze.classList.contains('active');
-            grainFreeze.classList.toggle('active', frozen);
-            grainFreeze.textContent = frozen ? 'UNFREEZE' : 'FREEZE';
-            window.mangleEngine.toggleGrainFreeze(frozen);
         });
 
         // Delay
-        const delayTime = document.getElementById('delayTime');
-        const delayFeedback = document.getElementById('delayFeedback');
         const delayMix = document.getElementById('delayMix');
+        if (delayMix) {
+            delayMix.addEventListener('input', () => {
+                document.getElementById('delayMixDisplay').textContent = delayMix.value;
+                window.mangleEngine.setDelayMix(parseInt(delayMix.value));
+            });
+        }
 
-        delayTime.addEventListener('input', () => {
-            document.getElementById('delayTimeDisplay').textContent = delayTime.value;
-            window.mangleEngine.setDelayTime(parseInt(delayTime.value));
-        });
+        // Crusher
+        const crushBits = document.getElementById('crushBits');
+        if (crushBits) {
+            crushBits.addEventListener('input', () => {
+                document.getElementById('crushBitsDisplay').textContent = crushBits.value;
+                window.mangleEngine.setBitDepth(parseInt(crushBits.value));
+            });
+        }
 
-        delayFeedback.addEventListener('input', () => {
-            document.getElementById('delayFeedbackDisplay').textContent = delayFeedback.value;
-            window.mangleEngine.setDelayFeedback(parseInt(delayFeedback.value));
-        });
+        // Glitch
+        const glitchProb = document.getElementById('glitchProb');
+        if (glitchProb) {
+            glitchProb.addEventListener('input', () => {
+                document.getElementById('glitchProbDisplay').textContent = glitchProb.value;
+                window.mangleEngine.setGlitch(parseInt(glitchProb.value), 100, 'stutter');
+            });
+        }
 
-        delayMix.addEventListener('input', () => {
-            document.getElementById('delayMixDisplay').textContent = delayMix.value;
-            window.mangleEngine.setDelayMix(parseInt(delayMix.value));
-        });
+        // Grain
+        const grainDensity = document.getElementById('grainDensity');
+        if (grainDensity) {
+            grainDensity.addEventListener('input', () => {
+                document.getElementById('grainDensityDisplay').textContent = grainDensity.value;
+                window.mangleEngine.setGrain(parseInt(grainDensity.value), 50, 0);
+            });
+        }
     }
 
     // AI
@@ -1037,105 +785,54 @@ class App {
             });
         });
 
-        densitySlider.addEventListener('input', () => {
-            document.getElementById('aiDensityDisplay').textContent = densitySlider.value;
-        });
+        if (generateBtn) {
+            generateBtn.addEventListener('click', () => {
+                const vibe = document.querySelector('.vibe-btn.active')?.dataset.vibe || 'calm';
+                const density = densitySlider ? parseInt(densitySlider.value) : 50;
+                const complexity = complexitySlider ? parseInt(complexitySlider.value) : 50;
 
-        complexitySlider.addEventListener('input', () => {
-            document.getElementById('aiComplexityDisplay').textContent = complexitySlider.value;
-        });
-
-        generateBtn.addEventListener('click', () => {
-            const vibe = document.querySelector('.vibe-btn.active')?.dataset.vibe || 'calm';
-            const density = parseInt(densitySlider.value);
-            const complexity = parseInt(complexitySlider.value);
-
-            const suggestions = window.aiComposer.generateRhythm(vibe, density, complexity);
-            this.updateSeqGrid();
-            this.updateSeqOverview();
-            this.displaySuggestions(suggestions);
-        });
-
-        surpriseBtn.addEventListener('click', () => {
-            const result = window.aiComposer.surprise();
-            this.updateSeqGrid();
-            this.updateSeqOverview();
-            this.displaySuggestions(result.suggestions);
-        });
-
-        // Build Full Arrangement button
-        const arrangementBtn = document.getElementById('aiArrangement');
-        arrangementBtn.addEventListener('click', () => {
-            const result = window.aiComposer.generateArrangement(4, 4);
-            this.updateSeqGrid();
-            this.updateSeqOverview();
-
-            // Show arrangement suggestions
-            const suggestions = window.aiComposer.getArrangementSuggestions();
-            this.displaySuggestions(suggestions);
-
-            // Switch to Mix tab to show arrangement
-            document.querySelector('[data-tab="mixer"]')?.click();
-
-            console.log('Generated arrangement:', result);
-        });
-    }
-
-    displaySuggestions(suggestions) {
-        const list = document.getElementById('suggestionList');
-        if (!suggestions || suggestions.length === 0) {
-            list.innerHTML = '<p class="placeholder">No suggestions</p>';
-            return;
+                window.aiComposer.generateRhythm(vibe, density, complexity);
+                this.updateSeqGrid();
+                this.updateSeqOverview();
+                console.log('AI Generated:', vibe, density, complexity);
+            });
         }
 
-        list.innerHTML = suggestions.map((s, i) => `
-            <div class="suggestion-item" data-index="${i}">
-                <div class="suggestion-type">${s.type}</div>
-                <div class="suggestion-text">${s.text}</div>
-            </div>
-        `).join('');
-
-        // Add click handlers
-        list.querySelectorAll('.suggestion-item').forEach((el, i) => {
-            el.addEventListener('click', () => {
-                if (suggestions[i].action) {
-                    suggestions[i].action();
-                    this.updateSeqGrid();
-                    this.updateSeqOverview();
-                }
+        if (surpriseBtn) {
+            surpriseBtn.addEventListener('click', () => {
+                window.aiComposer.surprise();
+                this.updateSeqGrid();
+                this.updateSeqOverview();
+                console.log('AI Surprise!');
             });
-        });
+        }
     }
 
     // Radio
     setupRadio() {
         const searchBtn = document.getElementById('radioSearchBtn');
         const searchInput = document.getElementById('radioSearch');
-        const countrySelect = document.getElementById('radioCountry');
-        const genreSelect = document.getElementById('radioGenre');
         const stationList = document.getElementById('stationList');
         const stopBtn = document.getElementById('radioStop');
 
+        if (!searchBtn || !searchInput) return;
+
         const doSearch = async () => {
             const query = searchInput.value;
-            const country = countrySelect.value;
-            const genre = genreSelect.value;
+            if (!query) return;
 
-            stationList.innerHTML = '<p class="placeholder">Searching...</p>';
+            stationList.innerHTML = '<span class="placeholder">Searching...</span>';
 
-            const stations = await window.radioPlayer.searchStations(query, country, genre);
+            const stations = await window.radioPlayer.searchStations(query, '', '');
 
             if (stations.length === 0) {
-                stationList.innerHTML = '<p class="placeholder">No stations found</p>';
+                stationList.innerHTML = '<span class="placeholder">No stations found</span>';
                 return;
             }
 
-            stationList.innerHTML = stations.map(s => `
+            stationList.innerHTML = stations.slice(0, 5).map(s => `
                 <div class="station-item" data-url="${s.url}" data-name="${s.name}">
-                    <div>
-                        <div class="station-name">${s.name}</div>
-                        <div class="station-genre">${s.genre} • ${s.country || 'Unknown'}</div>
-                    </div>
+                    ${s.name}
                 </div>
             `).join('');
 
@@ -1152,7 +849,7 @@ class App {
                     const success = await window.radioPlayer.play(station);
                     if (success) {
                         document.getElementById('currentStation').textContent = station.name;
-                        stopBtn.disabled = false;
+                        if (stopBtn) stopBtn.disabled = false;
                     }
                 });
             });
@@ -1162,15 +859,15 @@ class App {
         searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') doSearch();
         });
-        countrySelect.addEventListener('change', doSearch);
-        genreSelect.addEventListener('change', doSearch);
 
-        stopBtn.addEventListener('click', () => {
-            window.radioPlayer.stop();
-            document.getElementById('currentStation').textContent = 'None';
-            stopBtn.disabled = true;
-            stationList.querySelectorAll('.station-item').forEach(i => i.classList.remove('playing'));
-        });
+        if (stopBtn) {
+            stopBtn.addEventListener('click', () => {
+                window.radioPlayer.stop();
+                document.getElementById('currentStation').textContent = '--';
+                stopBtn.disabled = true;
+                stationList.querySelectorAll('.station-item').forEach(i => i.classList.remove('playing'));
+            });
+        }
     }
 
     // Recordings List

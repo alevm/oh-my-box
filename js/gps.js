@@ -145,53 +145,62 @@ class GPSTracker {
         }
     }
 
-    // Get static map image URL (OpenStreetMap based)
-    getMapImageUrl(width = 400, height = 80) {
+    // Get static map image URL
+    getMapImageUrl(width = 400, height = 100) {
         if (!this.currentPosition) return null;
 
         const lat = this.currentPosition.latitude;
         const lon = this.currentPosition.longitude;
-        const zoom = 15;
+        const zoom = 14;
 
         // Using OpenStreetMap static map service
-        // Alternative: use a local tile or custom service
-        return `https://staticmap.openstreetmap.de/staticmap.php?center=${lat},${lon}&zoom=${zoom}&size=${width}x${height}&maptype=mapnik`;
+        return `https://staticmap.openstreetmap.de/staticmap.php?center=${lat},${lon}&zoom=${zoom}&size=${width}x${height}&maptype=mapnik&markers=${lat},${lon},red`;
     }
 
     // Update location image element
     updateLocationImage() {
-        // Update both ORCH and PERF mode location banners
-        const elements = [
-            { image: 'locationImage', coords: 'locationCoords' },
-            { image: 'perfLocationImage', coords: 'perfLocationCoords' }
-        ];
+        const imageEl = document.getElementById('locationImage');
+        const coordsEl = document.getElementById('locationCoords');
 
-        elements.forEach(({ image, coords }) => {
-            const imageEl = document.getElementById(image);
-            const coordsEl = document.getElementById(coords);
+        if (!imageEl) return;
 
-            if (!imageEl) return;
+        if (this.currentPosition) {
+            // Update coordinates text
+            if (coordsEl) {
+                coordsEl.textContent = this.currentPosition.formatted;
+            }
 
-            if (this.currentPosition) {
-                const imageUrl = this.getMapImageUrl();
-                if (imageUrl) {
+            // Try to load map image
+            const imageUrl = this.getMapImageUrl();
+            if (imageUrl) {
+                // Create image to test loading
+                const testImg = new Image();
+                testImg.onload = () => {
                     imageEl.style.backgroundImage = `url('${imageUrl}')`;
                     imageEl.classList.add('has-image');
-                }
-
-                if (coordsEl) {
-                    coordsEl.textContent = this.currentPosition.formatted;
-                }
-            } else if (this.error) {
-                const placeholder = imageEl.querySelector('.location-text');
-                if (placeholder) {
-                    placeholder.textContent = this.error;
-                }
-                if (coordsEl) {
-                    coordsEl.textContent = this.error;
-                }
+                    // Hide placeholder
+                    const placeholder = imageEl.querySelector('.location-placeholder');
+                    if (placeholder) placeholder.style.display = 'none';
+                };
+                testImg.onerror = () => {
+                    // Map failed to load - show coordinates instead
+                    const placeholder = imageEl.querySelector('.location-placeholder');
+                    if (placeholder) {
+                        const text = placeholder.querySelector('.location-text');
+                        if (text) text.textContent = this.currentPosition.formatted;
+                    }
+                };
+                testImg.src = imageUrl;
             }
-        });
+        } else if (this.error) {
+            const placeholder = imageEl.querySelector('.location-text');
+            if (placeholder) {
+                placeholder.textContent = this.error;
+            }
+            if (coordsEl) {
+                coordsEl.textContent = this.error;
+            }
+        }
     }
 }
 
