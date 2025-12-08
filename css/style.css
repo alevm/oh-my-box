@@ -1,4 +1,4 @@
-/* Oh My Box v0.7.5 - 4-column layout reorganization */
+/* Oh My Box v0.7.9 - seq/pads 50% smaller, right cols 25% bigger */
 
 * {
     margin: 0;
@@ -50,8 +50,8 @@ html, body {
     z-index: 1;
     width: 100%;
     height: 100%;
-    max-width: 1100px;
-    max-height: 520px;
+    max-width: 1210px;
+    max-height: 572px;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -107,9 +107,9 @@ html, body {
 
 .col { display: flex; flex-direction: column; gap: 6px; }
 .col-mixer { width: 90px; flex-shrink: 0; }
-.col-seq { flex: 1; min-width: 280px; }
-.col-mid { width: 140px; flex-shrink: 0; }
-.col-right { width: 170px; flex-shrink: 0; }
+.col-seq { flex: 0 0 auto; width: 140px; }
+.col-mid { width: 275px; flex-shrink: 0; }
+.col-right { width: 350px; flex-shrink: 0; }
 
 .panel {
     background: var(--panel);
@@ -191,8 +191,8 @@ html, body {
 .pads-panel { }
 .pads-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .pads-header select { height: 18px; font-size: 8px; border: 1px solid var(--border); border-radius: 3px; }
-.pads-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
-.pad { width: 100%; aspect-ratio: 1; border: none; border-radius: 4px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%); color: #fff; font-size: 11px; font-weight: 700; cursor: pointer; }
+.pads-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; max-width: 120px; }
+.pad { width: 100%; aspect-ratio: 1; max-width: 28px; border: none; border-radius: 3px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%); color: #fff; font-size: 8px; font-weight: 700; cursor: pointer; }
 .pad:nth-child(odd) { background: linear-gradient(135deg, #9b59b6 0%, #7d3c98 100%); }
 .pad:active { transform: scale(0.95); }
 

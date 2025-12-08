@@ -1,4 +1,4 @@
-// Oh My Box v0.7.1 - Main Application Controller
+// Oh My Box v0.7.6 - Main Application Controller
 
 class App {
     constructor() {
@@ -103,7 +103,7 @@ class App {
         this.applySettings();
 
         this.initialized = true;
-        console.log('App v0.7.5 initialized');
+        console.log('App v0.7.6 initialized');
     }
 
     applySettings() {
