@@ -157,45 +157,30 @@ class GPSTracker {
         return `https://staticmap.openstreetmap.de/staticmap.php?center=${lat},${lon}&zoom=${zoom}&size=${width}x${height}&maptype=mapnik&markers=${lat},${lon},red`;
     }
 
-    // Update location image element
+    // Update location display
     updateLocationImage() {
         const imageEl = document.getElementById('locationImage');
         const coordsEl = document.getElementById('locationCoords');
 
-        if (!imageEl) return;
-
         if (this.currentPosition) {
-            // Update coordinates text
+            // Update coordinates overlay
             if (coordsEl) {
                 coordsEl.textContent = this.currentPosition.formatted;
             }
 
-            // Try to load map image
-            const imageUrl = this.getMapImageUrl();
-            if (imageUrl) {
-                // Create image to test loading
-                const testImg = new Image();
-                testImg.onload = () => {
-                    imageEl.style.backgroundImage = `url('${imageUrl}')`;
-                    imageEl.classList.add('has-image');
-                    // Hide placeholder
-                    const placeholder = imageEl.querySelector('.location-placeholder');
-                    if (placeholder) placeholder.style.display = 'none';
-                };
-                testImg.onerror = () => {
-                    // Map failed to load - show coordinates instead
-                    const placeholder = imageEl.querySelector('.location-placeholder');
-                    if (placeholder) {
-                        const text = placeholder.querySelector('.location-text');
-                        if (text) text.textContent = this.currentPosition.formatted;
-                    }
-                };
-                testImg.src = imageUrl;
+            // Update placeholder text to show coordinates
+            if (imageEl) {
+                const textEl = imageEl.querySelector('.location-text');
+                if (textEl) {
+                    textEl.textContent = this.currentPosition.formatted;
+                }
             }
         } else if (this.error) {
-            const placeholder = imageEl.querySelector('.location-text');
-            if (placeholder) {
-                placeholder.textContent = this.error;
+            if (imageEl) {
+                const textEl = imageEl.querySelector('.location-text');
+                if (textEl) {
+                    textEl.textContent = this.error;
+                }
             }
             if (coordsEl) {
                 coordsEl.textContent = this.error;
