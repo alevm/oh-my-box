@@ -1,17 +1,18 @@
 /* Oh My Box - v0.4.0 Redesign */
 
 :root {
-    --bg-primary: #1a1a2e;
-    --bg-secondary: #16213e;
-    --bg-tertiary: #0f0f23;
+    /* Light theme - better readability */
+    --bg-primary: #f5f5f5;
+    --bg-secondary: #e8e8e8;
+    --bg-tertiary: #ddd;
     --accent: #e94560;
-    --accent-dim: #a63346;
-    --success: #4ecca3;
-    --warning: #ffc857;
-    --text-primary: #eee;
-    --text-secondary: #aaa;
-    --text-dim: #666;
-    --border: #333;
+    --accent-dim: #c0392b;
+    --success: #27ae60;
+    --warning: #f39c12;
+    --text-primary: #222;
+    --text-secondary: #555;
+    --text-dim: #888;
+    --border: #ccc;
 }
 
 * {
@@ -26,10 +27,10 @@ html, body {
     overflow: hidden;
 }
 
-/* Background on body, not device */
+/* Background */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #0a0a0a url('../images/orch-bg.jpg') center/cover no-repeat fixed;
+    background: #e0e0e0 url('../images/orch-bg.jpg') center/cover no-repeat fixed;
     color: var(--text-primary);
     touch-action: manipulation;
 }
@@ -38,7 +39,7 @@ body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: rgba(10, 10, 20, 0.85);
+    background: rgba(255, 255, 255, 0.85);
     z-index: 0;
 }
 
@@ -51,9 +52,10 @@ body::before {
     height: 100%;
     max-width: 500px;
     margin: 0 auto;
-    background: rgba(15, 15, 25, 0.95);
-    border-left: 1px solid #333;
-    border-right: 1px solid #333;
+    background: var(--bg-primary);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
 /* ========== LOCATION BANNER ========== */
@@ -310,11 +312,12 @@ body::before {
 
 /* Sections */
 .orch-section {
-    background: rgba(0,0,0,0.3);
+    background: white;
     border: 1px solid var(--border);
     border-radius: 8px;
     margin-bottom: 8px;
     overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
 .section-header {
@@ -322,7 +325,7 @@ body::before {
     align-items: center;
     gap: 8px;
     padding: 8px 10px;
-    background: rgba(0,0,0,0.2);
+    background: var(--bg-secondary);
     border-bottom: 1px solid var(--border);
 }
 
@@ -362,9 +365,10 @@ body::before {
     flex: 1;
     height: 28px;
     -webkit-appearance: none;
-    background: var(--bg-tertiary);
+    background: #ddd;
     border-radius: 14px;
     cursor: pointer;
+    border: 1px solid var(--border);
 }
 
 .h-fader::-webkit-slider-thumb {
@@ -374,6 +378,7 @@ body::before {
     border-radius: 50%;
     background: var(--success);
     cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .mute-btn {
@@ -381,8 +386,8 @@ body::before {
     height: 28px;
     border: 1px solid var(--border);
     border-radius: 4px;
-    background: var(--bg-secondary);
-    color: var(--text-dim);
+    background: white;
+    color: var(--text-secondary);
     font-size: 10px;
     font-weight: 700;
     cursor: pointer;
@@ -478,7 +483,7 @@ body::before {
     aspect-ratio: 1;
     border: 2px solid var(--border);
     border-radius: 4px;
-    background: var(--bg-tertiary);
+    background: white;
     cursor: pointer;
     transition: all 0.1s;
 }
@@ -529,7 +534,7 @@ body::before {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--border);
+    background: #ccc;
 }
 
 .seq-track-mini .dot.active {
@@ -668,8 +673,9 @@ body::before {
     width: 100%;
     height: 24px;
     -webkit-appearance: none;
-    background: var(--bg-tertiary);
+    background: #ddd;
     border-radius: 12px;
+    border: 1px solid var(--border);
 }
 
 .synth-knob-group input::-webkit-slider-thumb {
@@ -700,7 +706,7 @@ body::before {
     font-weight: 700;
     border: 1px solid var(--border);
     border-radius: 4px;
-    background: var(--bg-tertiary);
+    background: white;
     color: var(--text-secondary);
     cursor: pointer;
 }
@@ -798,8 +804,9 @@ body::before {
     flex: 1;
     height: 22px;
     -webkit-appearance: none;
-    background: var(--bg-tertiary);
+    background: #ddd;
     border-radius: 11px;
+    border: 1px solid var(--border);
 }
 
 .fx-item input::-webkit-slider-thumb {
@@ -839,7 +846,7 @@ body::before {
 .radio-row input {
     flex: 1;
     padding: 8px;
-    background: var(--bg-tertiary);
+    background: white;
     border: 1px solid var(--border);
     border-radius: 4px;
     color: var(--text-primary);
@@ -852,7 +859,7 @@ body::before {
     font-weight: 700;
     border: 1px solid var(--border);
     border-radius: 4px;
-    background: var(--bg-secondary);
+    background: white;
     color: var(--text-secondary);
     cursor: pointer;
 }
@@ -880,14 +887,15 @@ body::before {
 .station-item {
     padding: 6px 8px;
     margin-bottom: 4px;
-    background: var(--bg-secondary);
+    background: white;
+    border: 1px solid var(--border);
     border-radius: 4px;
     font-size: 11px;
     cursor: pointer;
 }
 
 .station-item:hover {
-    background: var(--bg-tertiary);
+    background: var(--bg-secondary);
 }
 
 /* ========== AI SECTION ========== */
@@ -907,7 +915,7 @@ body::before {
     font-weight: 700;
     border: 1px solid var(--border);
     border-radius: 4px;
-    background: var(--bg-tertiary);
+    background: white;
     color: var(--text-secondary);
     cursor: pointer;
 }
@@ -940,8 +948,9 @@ body::before {
     width: 100%;
     height: 22px;
     -webkit-appearance: none;
-    background: var(--bg-tertiary);
+    background: #ddd;
     border-radius: 11px;
+    border: 1px solid var(--border);
 }
 
 .ai-slider input::-webkit-slider-thumb {
@@ -993,7 +1002,8 @@ body::before {
     justify-content: space-between;
     padding: 8px;
     margin-bottom: 4px;
-    background: var(--bg-secondary);
+    background: white;
+    border: 1px solid var(--border);
     border-radius: 4px;
 }
 
@@ -1002,7 +1012,7 @@ body::before {
     display: flex;
     flex-direction: column;
     height: 100%;
-    background: linear-gradient(180deg, rgba(10,10,20,0.95) 0%, rgba(20,20,35,0.95) 100%);
+    background: linear-gradient(180deg, #f8f8f8 0%, #e8e8e8 100%);
 }
 
 .perform-view.hidden {
@@ -1058,7 +1068,7 @@ body.perf-mode .perform-view {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: var(--border);
+    background: #ccc;
     transform: translate(-50%, -50%);
     transition: all 0.1s;
 }
@@ -1099,7 +1109,8 @@ body.perf-mode .perform-view {
     justify-content: center;
     gap: 12px;
     padding: 16px;
-    background: rgba(0,0,0,0.3);
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
 }
 
 .perf-scene-btn {
@@ -1107,7 +1118,7 @@ body.perf-mode .perform-view {
     height: 50px;
     border: 2px solid var(--border);
     border-radius: 8px;
-    background: var(--bg-secondary);
+    background: white;
     color: var(--text-primary);
     font-size: 20px;
     font-weight: 800;
@@ -1124,7 +1135,8 @@ body.perf-mode .perform-view {
     display: flex;
     gap: 16px;
     padding: 16px;
-    background: rgba(0,0,0,0.2);
+    background: white;
+    border-top: 1px solid var(--border);
 }
 
 .live-param {
@@ -1145,8 +1157,9 @@ body.perf-mode .perform-view {
     width: 100%;
     height: 40px;
     -webkit-appearance: none;
-    background: var(--bg-tertiary);
+    background: #ddd;
     border-radius: 20px;
+    border: 1px solid var(--border);
 }
 
 .big-slider::-webkit-slider-thumb {
@@ -1164,7 +1177,8 @@ body.perf-mode .perform-view {
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
-    background: rgba(0,0,0,0.3);
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
 }
 
 .mic-label {
@@ -1176,9 +1190,10 @@ body.perf-mode .perform-view {
 .mic-meter {
     flex: 1;
     height: 16px;
-    background: var(--bg-tertiary);
+    background: #ddd;
     border-radius: 8px;
     overflow: hidden;
+    border: 1px solid var(--border);
 }
 
 .mic-meter-fill {
@@ -1205,8 +1220,8 @@ body.perf-mode .perform-view {
     font-weight: 700;
     border: 1px solid var(--border);
     border-radius: 4px;
-    background: transparent;
-    color: var(--text-dim);
+    background: white;
+    color: var(--text-secondary);
     cursor: pointer;
 }
 
