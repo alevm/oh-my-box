@@ -1,4 +1,4 @@
-/* Oh My Box v0.7.1 - P-Locks, Trig Conditions & Dub Mode */
+/* Oh My Box v0.7.2 - Compact sequencer + Mini map */
 
 * {
     margin: 0;
@@ -32,7 +32,7 @@ html, body {
     color: var(--text);
 }
 
-/* ===== FULL-PAGE MAP BACKGROUND ===== */
+/* ===== FULL-PAGE MAP BACKGROUND (Vin Mariani default) ===== */
 .map-bg {
     position: fixed;
     top: 0;
@@ -42,6 +42,7 @@ html, body {
     background: #2a1810 url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Mariani_wine_Laurens.jpg/800px-Mariani_wine_Laurens.jpg') center/cover no-repeat;
     z-index: 0;
     transition: background-image 0.5s ease;
+    filter: brightness(0.7) sepia(0.2);
 }
 
 .map-bg.has-location {
@@ -274,49 +275,49 @@ html, body {
     color: var(--green);
 }
 
-/* ===== CENTER: SEQUENCER (Octatrack-style) ===== */
+/* ===== CENTER: SEQUENCER (Ultra-compact Octatrack-style) ===== */
 .seq-panel {
-    flex: 1;
     display: flex;
     flex-direction: column;
     min-height: 0;
+    max-height: 140px;
 }
 
 .seq-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .seq-controls {
     display: flex;
-    gap: 3px;
+    gap: 2px;
 }
 
 .seq-controls select {
-    height: 22px;
-    padding: 0 4px;
+    height: 18px;
+    padding: 0 3px;
     border: 1px solid var(--border);
     border-radius: 3px;
     background: var(--panel);
-    font-size: 10px;
+    font-size: 9px;
 }
 
 .seq-btn {
-    height: 22px;
-    padding: 0 8px;
+    height: 18px;
+    padding: 0 6px;
     border: 1px solid var(--border);
     border-radius: 3px;
     background: var(--panel-alt);
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 600;
     cursor: pointer;
 }
 
 .seq-btn.mini {
-    padding: 0 5px;
-    font-size: 8px;
+    padding: 0 4px;
+    font-size: 7px;
 }
 
 .seq-btn:active {
@@ -324,12 +325,12 @@ html, body {
     color: #fff;
 }
 
-/* Octatrack-style track strips */
+/* Octatrack-style track strips - super compact */
 .oct-tracks {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
     min-height: 0;
     overflow: hidden;
 }
@@ -338,23 +339,24 @@ html, body {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 3px;
-    min-height: 16px;
-    max-height: 28px;
-    padding: 2px;
+    gap: 2px;
+    min-height: 12px;
+    max-height: 16px;
+    padding: 1px 2px;
     background: rgba(0,0,0,0.03);
-    border-radius: 3px;
+    border-radius: 2px;
     cursor: pointer;
 }
 
 .oct-track.selected {
-    background: rgba(233, 69, 96, 0.1);
+    background: rgba(233, 69, 96, 0.15);
     border: 1px solid var(--accent);
+    padding: 0 1px;
 }
 
 .oct-track-num {
-    width: 14px;
-    font-size: 8px;
+    width: 10px;
+    font-size: 7px;
     font-weight: 700;
     color: var(--text-light);
     text-align: center;
@@ -365,9 +367,9 @@ html, body {
 }
 
 .oct-track-src {
-    font-size: 7px;
+    font-size: 6px;
     color: var(--text-light);
-    width: 20px;
+    width: 16px;
 }
 
 .oct-steps {
@@ -381,7 +383,7 @@ html, body {
     flex: 1;
     background: var(--panel-alt);
     border-radius: 1px;
-    min-width: 4px;
+    min-width: 3px;
     transition: background 0.05s;
 }
 
@@ -554,45 +556,47 @@ html, body {
 
 /* ===== PADS + KNOBS ===== */
 .pads-panel {
-    flex-shrink: 0;
+    flex: 1;
+    min-height: 0;
 }
 
 .pads-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 }
 
 .pads-header select {
-    height: 20px;
-    padding: 0 4px;
+    height: 18px;
+    padding: 0 3px;
     border: 1px solid var(--border);
     border-radius: 3px;
-    font-size: 9px;
+    font-size: 8px;
 }
 
 .pads-row {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     align-items: center;
 }
 
 .pads-grid {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
-    gap: 3px;
+    gap: 2px;
     flex: 1;
 }
 
 .pad {
     aspect-ratio: 1;
-    min-height: 32px;
+    min-height: 28px;
+    max-height: 36px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
     color: #fff;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
     cursor: pointer;
     transition: transform 0.1s;
@@ -609,24 +613,24 @@ html, body {
 /* ===== KNOBS ===== */
 .quick-knobs {
     display: flex;
-    gap: 6px;
+    gap: 4px;
 }
 
 .knob-group {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: 1px;
 }
 
 .knob-group span {
-    font-size: 7px;
+    font-size: 6px;
     color: var(--text-light);
 }
 
 .knob {
-    width: 36px;
-    height: 36px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
     border: 2px solid var(--border);
@@ -638,13 +642,13 @@ html, body {
 .knob::before {
     content: '';
     position: absolute;
-    top: 4px;
+    top: 3px;
     left: 50%;
     width: 2px;
-    height: 10px;
+    height: 8px;
     background: var(--accent);
     transform: translateX(-50%) rotate(var(--rotation, 0deg));
-    transform-origin: center 14px;
+    transform-origin: center 11px;
     border-radius: 1px;
 }
 
@@ -653,11 +657,40 @@ html, body {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     background: var(--border);
     border-radius: 50%;
     transform: translate(-50%, -50%);
+}
+
+/* ===== MINI MAP ===== */
+.mini-map {
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.mini-map-img {
+    flex: 1;
+    background: center/cover no-repeat;
+    background-color: #c4b5a0;
+}
+
+.mini-map-coords {
+    font-size: 5px;
+    text-align: center;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    padding: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* ===== RIGHT: SYNTH MATRIX ===== */

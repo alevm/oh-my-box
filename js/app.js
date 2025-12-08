@@ -21,7 +21,7 @@ class App {
 
     loadSettings() {
         const defaults = {
-            theme: 'map',
+            theme: 'mariani',
             recFormat: 'webm',
             recAutoSave: 'off',
             recGpsEmbed: true,
@@ -103,7 +103,7 @@ class App {
         this.applySettings();
 
         this.initialized = true;
-        console.log('App v0.7.1 initialized');
+        console.log('App v0.7.2 initialized');
     }
 
     applySettings() {
@@ -1350,12 +1350,25 @@ class App {
     updateGPS() {
         const text = document.getElementById('gpsText');
         const mapBg = document.getElementById('mapBackground');
+        const miniMapImg = document.getElementById('miniMapImg');
+        const miniMapCoords = document.getElementById('miniMapCoords');
 
         const pos = window.gpsTracker.getPosition();
 
         if (pos) {
             if (text) {
                 text.textContent = pos.formatted;
+            }
+
+            // Update mini map
+            if (miniMapImg) {
+                const mapUrl = window.gpsTracker.getMapImageUrl(14);
+                if (mapUrl) {
+                    miniMapImg.style.backgroundImage = `url("${mapUrl}")`;
+                }
+            }
+            if (miniMapCoords) {
+                miniMapCoords.textContent = `${pos.latitude.toFixed(3)}, ${pos.longitude.toFixed(3)}`;
             }
 
             // Update map background if theme is 'map'
@@ -1370,6 +1383,9 @@ class App {
             if (text) {
                 const err = window.gpsTracker.getError();
                 text.textContent = err || '--';
+            }
+            if (miniMapCoords) {
+                miniMapCoords.textContent = '--';
             }
         }
     }

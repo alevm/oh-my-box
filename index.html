@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="screen-orientation" content="landscape">
     <title>Oh My Box</title>
-    <link rel="stylesheet" href="css/style.css?v=071">
+    <link rel="stylesheet" href="css/style.css?v=072">
 </head>
 <body>
     <!-- Full-page map background -->
@@ -32,7 +32,7 @@
             </div>
             <div class="time-box" id="timeDisplay">00:00</div>
             <button id="btnAdmin" class="admin-btn" title="Settings">⚙</button>
-            <div class="version">v0.7.1</div>
+            <div class="version">v0.7.2</div>
         </header>
 
         <!-- Main Device Area - 3 columns -->
@@ -136,7 +136,7 @@
                     </div>
                 </div>
 
-                <!-- Pads + Knobs row -->
+                <!-- Pads + Knobs + Map row -->
                 <div class="panel pads-panel">
                     <div class="pads-header">
                         <span class="panel-title">PADS</span>
@@ -175,6 +175,11 @@
                                 <div class="knob" id="knobGrain" data-param="grain" data-min="0" data-max="100" data-value="0"></div>
                                 <span>GRN</span>
                             </div>
+                        </div>
+                        <!-- Mini map box -->
+                        <div class="mini-map" id="miniMap">
+                            <div class="mini-map-img" id="miniMapImg"></div>
+                            <div class="mini-map-coords" id="miniMapCoords">--</div>
                         </div>
                     </div>
                 </div>
