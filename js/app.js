@@ -1,4 +1,4 @@
-// Oh My Box v0.7.0 - Main Application Controller
+// Oh My Box v0.7.1 - Main Application Controller
 
 class App {
     constructor() {
@@ -9,6 +9,14 @@ class App {
         this.xfadeSceneA = 0;
         this.xfadeSceneB = 1;
         this.settings = this.loadSettings();
+
+        // P-Lock editor state
+        this.plockEditing = false;
+        this.plockTrack = 0;
+        this.plockStep = 0;
+
+        // Shift key state for P-Lock access
+        this.shiftHeld = false;
     }
 
     loadSettings() {
@@ -66,6 +74,8 @@ class App {
         this.setupTempo();
         this.setupMixer();
         this.setupOctaTrackSequencer();
+        this.setupPLockEditor();
+        this.setupDubMode();
         this.setupPads();
         this.setupKnobs();
         this.setupSynth();
@@ -76,6 +86,7 @@ class App {
         this.setupRadio();
         this.setupRecordings();
         this.setupAdminModal();
+        this.setupKeyboardShortcuts();
 
         // GPS display and map background
         window.gpsTracker.addListener(() => this.updateGPS());
@@ -92,7 +103,7 @@ class App {
         this.applySettings();
 
         this.initialized = true;
-        console.log('App v0.7.0 initialized');
+        console.log('App v0.7.1 initialized');
     }
 
     applySettings() {
@@ -268,12 +279,27 @@ class App {
                 step.dataset.track = t;
                 step.dataset.step = s;
 
-                // Click to toggle step
+                // Click to toggle step, SHIFT+click to edit P-Locks
                 step.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    const active = window.sequencer.toggleStep(t, s);
-                    step.classList.toggle('active', active);
+                    if (this.shiftHeld || e.shiftKey) {
+                        // Open P-Lock editor for this step
+                        this.openPLockEditor(t, s);
+                    } else {
+                        const active = window.sequencer.toggleStep(t, s);
+                        step.classList.toggle('active', active);
+                    }
                 });
+
+                // Long press for P-Lock editor (mobile)
+                let longPressTimer;
+                step.addEventListener('touchstart', (e) => {
+                    longPressTimer = setTimeout(() => {
+                        this.openPLockEditor(t, s);
+                    }, 500);
+                });
+                step.addEventListener('touchend', () => clearTimeout(longPressTimer));
+                step.addEventListener('touchmove', () => clearTimeout(longPressTimer));
 
                 steps.appendChild(step);
             }
@@ -348,7 +374,17 @@ class App {
         document.querySelectorAll('.oct-step').forEach(el => {
             const t = parseInt(el.dataset.track);
             const s = parseInt(el.dataset.step);
-            el.classList.toggle('active', pattern[t]?.[s]?.active || false);
+            const step = pattern[t]?.[s];
+
+            el.classList.toggle('active', step?.active || false);
+
+            // Show P-Lock indicator
+            const hasPLocks = window.sequencer.hasPLocks(t, s);
+            el.classList.toggle('has-plock', hasPLocks);
+
+            // Show trig condition indicator
+            const cond = step?.trigCondition;
+            el.classList.toggle('has-condition', cond && cond.type !== 'always');
         });
     }
 
@@ -369,6 +405,12 @@ class App {
             const trigger = () => {
                 pad.classList.add('active');
                 window.sampler.trigger(index);
+
+                // Record in dub mode if sequencer is playing
+                if (window.sequencer.getDubMode() !== 'off' && window.sequencer.isPlaying()) {
+                    window.sequencer.recordDubTrigger(index);
+                    this.updateOctSteps();
+                }
             };
 
             const release = () => {
@@ -386,6 +428,181 @@ class App {
             window.sampler.setBank(e.target.value);
             this.settings.selectedKit = e.target.value;
             this.saveSettings();
+        });
+    }
+
+    // P-Lock Editor
+    setupPLockEditor() {
+        const editor = document.getElementById('plockEditor');
+        const closeBtn = document.getElementById('plockClose');
+
+        // Close button
+        closeBtn.addEventListener('click', () => this.closePLockEditor());
+
+        // P-Lock parameter sliders
+        const params = ['Pitch', 'Slice', 'Filter', 'Decay'];
+        params.forEach(param => {
+            const slider = document.getElementById(`plock${param}`);
+            const display = document.getElementById(`plock${param}Val`);
+
+            if (slider) {
+                slider.addEventListener('input', () => {
+                    display.textContent = slider.value;
+                    if (this.plockEditing) {
+                        window.sequencer.setPLock(
+                            this.plockTrack,
+                            this.plockStep,
+                            param.toLowerCase(),
+                            parseInt(slider.value)
+                        );
+                        this.updateOctSteps();
+                    }
+                });
+            }
+        });
+
+        // Trig condition controls
+        const trigType = document.getElementById('trigCondType');
+        const trigValue = document.getElementById('trigCondValue');
+
+        trigType.addEventListener('change', () => {
+            if (this.plockEditing) {
+                window.sequencer.setTrigCondition(
+                    this.plockTrack,
+                    this.plockStep,
+                    trigType.value,
+                    parseInt(trigValue.value)
+                );
+                this.updateOctSteps();
+            }
+        });
+
+        trigValue.addEventListener('change', () => {
+            if (this.plockEditing) {
+                window.sequencer.setTrigCondition(
+                    this.plockTrack,
+                    this.plockStep,
+                    trigType.value,
+                    parseInt(trigValue.value)
+                );
+            }
+        });
+    }
+
+    openPLockEditor(trackIndex, stepIndex) {
+        const editor = document.getElementById('plockEditor');
+        this.plockEditing = true;
+        this.plockTrack = trackIndex;
+        this.plockStep = stepIndex;
+
+        // Update step number display
+        document.getElementById('plockStepNum').textContent = `${trackIndex + 1}.${stepIndex + 1}`;
+
+        // Load current P-Lock values
+        const pLocks = ['pitch', 'slice', 'filter', 'decay'];
+        pLocks.forEach(param => {
+            const value = window.sequencer.getPLock(trackIndex, stepIndex, param);
+            const slider = document.getElementById(`plock${param.charAt(0).toUpperCase() + param.slice(1)}`);
+            const display = document.getElementById(`plock${param.charAt(0).toUpperCase() + param.slice(1)}Val`);
+
+            if (slider) {
+                // Use default values if no P-Lock set
+                const defaultVal = param === 'pitch' ? 0 : (param === 'slice' ? 0 : 50);
+                slider.value = value !== null ? value : defaultVal;
+                display.textContent = slider.value;
+            }
+        });
+
+        // Load trig condition
+        const cond = window.sequencer.getTrigCondition(trackIndex, stepIndex);
+        document.getElementById('trigCondType').value = cond.type;
+        document.getElementById('trigCondValue').value = cond.value;
+
+        // Show editor
+        editor.classList.remove('hidden');
+    }
+
+    closePLockEditor() {
+        const editor = document.getElementById('plockEditor');
+        this.plockEditing = false;
+        editor.classList.add('hidden');
+    }
+
+    // Dub Mode
+    setupDubMode() {
+        const dubToggle = document.getElementById('dubToggle');
+        const fillBtn = document.getElementById('fillBtn');
+
+        // Dub toggle: cycles through off -> dub -> overdub -> off
+        dubToggle.addEventListener('click', () => {
+            const currentMode = window.sequencer.getDubMode();
+            let newMode;
+
+            if (currentMode === 'off') {
+                newMode = 'dub';
+                dubToggle.classList.add('dub-active');
+                dubToggle.classList.remove('overdub-active');
+                dubToggle.textContent = 'DUB';
+            } else if (currentMode === 'dub') {
+                newMode = 'overdub';
+                dubToggle.classList.remove('dub-active');
+                dubToggle.classList.add('overdub-active');
+                dubToggle.textContent = 'OVR';
+            } else {
+                newMode = 'off';
+                dubToggle.classList.remove('dub-active', 'overdub-active');
+                dubToggle.textContent = 'DUB';
+            }
+
+            window.sequencer.setDubMode(newMode);
+        });
+
+        // Fill button: hold to activate fill mode
+        fillBtn.addEventListener('mousedown', () => {
+            window.sequencer.setFillMode(true);
+            fillBtn.classList.add('active');
+        });
+
+        fillBtn.addEventListener('mouseup', () => {
+            window.sequencer.setFillMode(false);
+            fillBtn.classList.remove('active');
+        });
+
+        fillBtn.addEventListener('mouseleave', () => {
+            window.sequencer.setFillMode(false);
+            fillBtn.classList.remove('active');
+        });
+
+        // Touch support for Fill
+        fillBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            window.sequencer.setFillMode(true);
+            fillBtn.classList.add('active');
+        });
+
+        fillBtn.addEventListener('touchend', () => {
+            window.sequencer.setFillMode(false);
+            fillBtn.classList.remove('active');
+        });
+    }
+
+    // Keyboard shortcuts
+    setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Shift') {
+                this.shiftHeld = true;
+            }
+
+            // Escape closes P-Lock editor
+            if (e.key === 'Escape' && this.plockEditing) {
+                this.closePLockEditor();
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'Shift') {
+                this.shiftHeld = false;
+            }
         });
     }
 
@@ -543,17 +760,81 @@ class App {
             });
         }
 
-        // Crossfader
+        // Crossfader - real-time scene morphing
         if (crossfader) {
             crossfader.addEventListener('input', () => {
                 const value = parseInt(crossfader.value);
-                // Morph between scenes A and B based on crossfader position
-                if (window.sceneManager.hasScene(this.xfadeSceneA) &&
-                    window.sceneManager.hasScene(this.xfadeSceneB)) {
-                    // TODO: Implement live morphing
-                    console.log(`Crossfade: ${value}% between ${this.xfadeSceneA} and ${this.xfadeSceneB}`);
-                }
+                this.morphScenes(value / 100);
             });
+        }
+    }
+
+    // Real-time scene morphing based on crossfader position
+    morphScenes(t) {
+        // t = 0: fully scene A, t = 1: fully scene B
+        if (!window.sceneManager.hasScene(this.xfadeSceneA) ||
+            !window.sceneManager.hasScene(this.xfadeSceneB)) {
+            return;
+        }
+
+        const sceneA = window.sceneManager.getScene(this.xfadeSceneA);
+        const sceneB = window.sceneManager.getScene(this.xfadeSceneB);
+
+        // Get current scope
+        const scope = document.getElementById('sceneScope')?.value || 'all';
+
+        // Interpolate based on scope
+        const lerp = (a, b, t) => a + (b - a) * t;
+
+        if (scope === 'all' || scope === 'mixer') {
+            // Morph mixer levels
+            if (sceneA.mixer && sceneB.mixer) {
+                const channels = ['mic', 'samples', 'synth', 'radio'];
+                channels.forEach(ch => {
+                    const levelA = sceneA.mixer[ch]?.level ?? 0.8;
+                    const levelB = sceneB.mixer[ch]?.level ?? 0.8;
+                    const level = lerp(levelA, levelB, t);
+
+                    const fader = document.getElementById(`fader${ch.charAt(0).toUpperCase() + ch.slice(1)}`);
+                    if (fader) fader.value = level * 100;
+                    window.audioEngine?.setChannelLevel(ch, level);
+                });
+
+                // Master
+                const masterA = sceneA.mixer.master ?? 0.9;
+                const masterB = sceneB.mixer.master ?? 0.9;
+                const master = lerp(masterA, masterB, t);
+                const masterFader = document.getElementById('faderMaster');
+                if (masterFader) masterFader.value = master * 100;
+                window.audioEngine?.setMasterLevel(master);
+            }
+        }
+
+        if (scope === 'all' || scope === 'fx') {
+            // Morph FX parameters
+            if (sceneA.fx && sceneB.fx && window.mangleEngine) {
+                // Delay mix
+                const delayA = sceneA.fx.delay?.mix ?? 0;
+                const delayB = sceneB.fx.delay?.mix ?? 0;
+                const delayMix = lerp(delayA, delayB, t);
+                window.mangleEngine.setDelayMix(delayMix);
+
+                const delaySlider = document.getElementById('fxDelay');
+                if (delaySlider) delaySlider.value = delayMix;
+            }
+        }
+
+        if (scope === 'all') {
+            // Morph tempo
+            const tempoA = sceneA.tempo ?? 120;
+            const tempoB = sceneB.tempo ?? 120;
+            const tempo = Math.round(lerp(tempoA, tempoB, t));
+            window.sequencer?.setTempo(tempo);
+
+            const tempoSlider = document.getElementById('tempoSlider');
+            const tempoVal = document.getElementById('tempoVal');
+            if (tempoSlider) tempoSlider.value = tempo;
+            if (tempoVal) tempoVal.textContent = tempo;
         }
     }
 
@@ -608,6 +889,97 @@ class App {
                 console.log('Save FX preset');
             });
         }
+
+        // Punch-in FX buttons
+        this.setupPunchFX();
+    }
+
+    // Punch-in FX (hold for temporary effect)
+    setupPunchFX() {
+        // Store original values to restore after punch-out
+        this.punchFXStates = {};
+
+        document.querySelectorAll('.punch-btn').forEach(btn => {
+            const fxType = btn.dataset.fx;
+
+            const punchIn = () => {
+                btn.classList.add('active');
+                this.applyPunchFX(fxType, true);
+            };
+
+            const punchOut = () => {
+                btn.classList.remove('active');
+                this.applyPunchFX(fxType, false);
+            };
+
+            // Mouse events
+            btn.addEventListener('mousedown', punchIn);
+            btn.addEventListener('mouseup', punchOut);
+            btn.addEventListener('mouseleave', punchOut);
+
+            // Touch events
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                punchIn();
+            });
+            btn.addEventListener('touchend', punchOut);
+        });
+    }
+
+    applyPunchFX(fxType, active) {
+        if (!window.mangleEngine) return;
+
+        if (active) {
+            // Store current state before applying punch effect
+            switch (fxType) {
+                case 'stutter':
+                    // Apply heavy glitch/stutter effect
+                    this.punchFXStates.glitch = document.getElementById('fxGlitch')?.value || 0;
+                    window.mangleEngine.setGlitch(100, 50, 'stutter');
+                    break;
+
+                case 'reverse':
+                    // Apply reverse effect
+                    this.punchFXStates.reverse = false;
+                    window.mangleEngine.setReverse?.(true);
+                    break;
+
+                case 'filter':
+                    // Apply filter sweep (low pass filter down)
+                    this.punchFXStates.filter = window.synth?.getFilterCutoff?.() || 8000;
+                    window.synth?.setFilterCutoff(200);
+                    window.mangleEngine.setFilterSweep?.(true, 200, 8000);
+                    break;
+
+                case 'tape':
+                    // Apply tape stop effect (slow down)
+                    this.punchFXStates.tape = false;
+                    window.mangleEngine.setTapeStop?.(true);
+                    break;
+            }
+            console.log(`Punch-in: ${fxType}`);
+        } else {
+            // Restore original state
+            switch (fxType) {
+                case 'stutter':
+                    window.mangleEngine.setGlitch(this.punchFXStates.glitch || 0, 100, 'stutter');
+                    break;
+
+                case 'reverse':
+                    window.mangleEngine.setReverse?.(false);
+                    break;
+
+                case 'filter':
+                    window.synth?.setFilterCutoff(this.punchFXStates.filter || 8000);
+                    window.mangleEngine.setFilterSweep?.(false);
+                    break;
+
+                case 'tape':
+                    window.mangleEngine.setTapeStop?.(false);
+                    break;
+            }
+            console.log(`Punch-out: ${fxType}`);
+        }
     }
 
     // AI
@@ -625,11 +997,109 @@ class App {
         if (generateBtn) {
             generateBtn.addEventListener('click', () => {
                 const vibe = document.querySelector('.vibe-btn.active')?.dataset.vibe || 'calm';
-                window.aiComposer.generateRhythm(vibe, 70, 50);
-                this.updateOctSteps();
-                console.log('AI Generated:', vibe);
+                this.generateFullComposition(vibe);
             });
         }
+    }
+
+    // Generate full composition based on vibe (patterns + FX + mixer + tempo)
+    generateFullComposition(vibe) {
+        console.log(`Generating full composition: ${vibe}`);
+
+        // Generate rhythm pattern
+        window.aiComposer?.generateRhythm(vibe, 70, 50);
+
+        // Generate vibe-appropriate settings
+        const vibeSettings = {
+            calm: {
+                tempo: 85 + Math.floor(Math.random() * 20),  // 85-105
+                delay: 30 + Math.floor(Math.random() * 30),   // 30-60
+                grain: 0,
+                glitch: 0,
+                crush: 16,
+                mixer: { mic: 50, samples: 70, synth: 60, radio: 20, master: 85 }
+            },
+            urban: {
+                tempo: 110 + Math.floor(Math.random() * 30), // 110-140
+                delay: 20 + Math.floor(Math.random() * 40),
+                grain: Math.floor(Math.random() * 30),
+                glitch: Math.floor(Math.random() * 20),
+                crush: 12 + Math.floor(Math.random() * 4),
+                mixer: { mic: 30, samples: 90, synth: 70, radio: 40, master: 90 }
+            },
+            nature: {
+                tempo: 70 + Math.floor(Math.random() * 30),  // 70-100
+                delay: 40 + Math.floor(Math.random() * 30),
+                grain: 20 + Math.floor(Math.random() * 40),
+                glitch: 0,
+                crush: 16,
+                mixer: { mic: 70, samples: 60, synth: 40, radio: 50, master: 80 }
+            },
+            chaos: {
+                tempo: 130 + Math.floor(Math.random() * 40), // 130-170
+                delay: Math.floor(Math.random() * 80),
+                grain: 30 + Math.floor(Math.random() * 50),
+                glitch: 30 + Math.floor(Math.random() * 50),
+                crush: 4 + Math.floor(Math.random() * 8),
+                mixer: { mic: Math.random() * 100, samples: Math.random() * 100, synth: Math.random() * 100, radio: Math.random() * 100, master: 95 }
+            }
+        };
+
+        const settings = vibeSettings[vibe] || vibeSettings.calm;
+
+        // Apply tempo
+        window.sequencer?.setTempo(settings.tempo);
+        const tempoSlider = document.getElementById('tempoSlider');
+        const tempoVal = document.getElementById('tempoVal');
+        if (tempoSlider) tempoSlider.value = settings.tempo;
+        if (tempoVal) tempoVal.textContent = settings.tempo;
+
+        // Apply FX
+        window.mangleEngine?.setDelayMix(settings.delay);
+        window.mangleEngine?.setGrain(settings.grain, 50, 0);
+        window.mangleEngine?.setGlitch(settings.glitch, 100, 'stutter');
+        window.mangleEngine?.setBitDepth(settings.crush);
+
+        // Update FX sliders
+        const fxDelay = document.getElementById('fxDelay');
+        const fxGrain = document.getElementById('fxGrain');
+        const fxGlitch = document.getElementById('fxGlitch');
+        const fxCrush = document.getElementById('fxCrush');
+        if (fxDelay) fxDelay.value = settings.delay;
+        if (fxGrain) fxGrain.value = settings.grain;
+        if (fxGlitch) fxGlitch.value = settings.glitch;
+        if (fxCrush) fxCrush.value = settings.crush;
+
+        // Apply mixer levels
+        const mixerChannels = ['Mic', 'Samples', 'Synth', 'Radio'];
+        mixerChannels.forEach(ch => {
+            const key = ch.toLowerCase();
+            const level = settings.mixer[key];
+            const fader = document.getElementById(`fader${ch}`);
+            if (fader) fader.value = level;
+            window.audioEngine?.setChannelLevel(key, level / 100);
+        });
+
+        const masterFader = document.getElementById('faderMaster');
+        if (masterFader) masterFader.value = settings.mixer.master;
+        window.audioEngine?.setMasterLevel(settings.mixer.master / 100);
+
+        // Update knobs to match
+        const knobDelay = document.getElementById('knobDelay');
+        const knobGrain = document.getElementById('knobGrain');
+        if (knobDelay) {
+            knobDelay.dataset.value = settings.delay;
+            this.updateKnobRotation(knobDelay, settings.delay, 0, 100);
+        }
+        if (knobGrain) {
+            knobGrain.dataset.value = settings.grain;
+            this.updateKnobRotation(knobGrain, settings.grain, 0, 100);
+        }
+
+        // Update sequencer display
+        this.updateOctSteps();
+
+        console.log(`Generated ${vibe} composition: tempo=${settings.tempo}, delay=${settings.delay}, grain=${settings.grain}`);
     }
 
     // Radio

@@ -1,4 +1,4 @@
-// Oh My Box - Step Sequencer with Euclidean Rhythms
+// Oh My Box - Step Sequencer with P-Locks, Trig Conditions & Dub Mode
 
 class Sequencer {
     constructor() {
@@ -10,12 +10,12 @@ class Sequencer {
         this.intervalId = null;
 
         // Pattern data: 8 tracks x 16 steps
-        // Each step: { active: bool, probability: number 0-100, velocity: number 0-100 }
+        // Each step: extended with P-Locks and Trig Conditions
         this.pattern = [];
         for (let t = 0; t < this.tracks; t++) {
             this.pattern[t] = [];
             for (let s = 0; s < this.steps; s++) {
-                this.pattern[t][s] = { active: false, probability: 100, velocity: 100 };
+                this.pattern[t][s] = this.createEmptyStep();
             }
         }
 
@@ -25,6 +25,43 @@ class Sequencer {
 
         this.selectedTrack = 0;
         this.stepCallback = null;
+
+        // Playback counters for trig conditions
+        this.playCount = 0;  // How many times pattern has looped
+        this.fillMode = false;  // Fill mode active
+
+        // Dub/Overdub mode
+        this.dubMode = 'off';  // 'off', 'dub', 'overdub'
+        this.dubBuffer = [];  // Buffer for real-time recording
+
+        // Track play counters for nth-play conditions
+        this.trackPlayCounts = new Array(this.tracks).fill(0);
+    }
+
+    // Create empty step with all P-Lock and condition slots
+    createEmptyStep() {
+        return {
+            active: false,
+            probability: 100,
+            velocity: 100,
+            // P-Locks: parameter values locked per step (null = use track default)
+            pLocks: {
+                pitch: null,      // -24 to +24 semitones
+                slice: null,      // 0-15 slice index
+                filter: null,     // 0-100 filter cutoff
+                decay: null,      // 0-100 decay time
+                pan: null,        // -100 to +100
+                delay: null,      // 0-100 delay send
+                reverb: null,     // 0-100 reverb send
+                grain: null       // 0-100 grain amount
+            },
+            // Trig Conditions
+            trigCondition: {
+                type: 'always',   // 'always', 'probability', 'fill', 'notFill', 'nth', 'neighbor'
+                value: 100,       // Probability %, or nth count (1st, 2nd, 3rd...)
+                neighborTrack: null  // For neighbor condition
+            }
+        };
     }
 
     init() {
@@ -101,14 +138,23 @@ class Sequencer {
 
     clearTrack(trackIndex) {
         for (let s = 0; s < this.steps; s++) {
-            this.pattern[trackIndex][s].active = false;
+            this.pattern[trackIndex][s] = this.createEmptyStep();
         }
+        this.trackPlayCounts[trackIndex] = 0;
     }
 
     randomizeTrack(trackIndex, density = 0.3) {
         for (let s = 0; s < this.steps; s++) {
             this.pattern[trackIndex][s].active = Math.random() < density;
         }
+    }
+
+    // Clear all pattern data
+    clearAllTracks() {
+        for (let t = 0; t < this.tracks; t++) {
+            this.clearTrack(t);
+        }
+        this.resetPlayCounts();
     }
 
     setTempo(bpm) {
@@ -154,17 +200,19 @@ class Sequencer {
     }
 
     tick() {
-        // Trigger sounds for active steps (with probability)
+        // Trigger sounds for active steps (with trig conditions)
         for (let t = 0; t < this.tracks; t++) {
             const step = this.pattern[t][this.currentStep];
-            if (step.active) {
-                // Check probability
-                if (Math.random() * 100 < step.probability) {
-                    // Trigger based on source routing
-                    const source = this.trackSources[t];
-                    this.triggerSource(source, t);
-                }
+            if (step.active && this.shouldTrigger(step, t)) {
+                // Trigger based on source routing with P-Locks applied
+                const source = this.trackSources[t];
+                this.triggerSource(source, t, step.pLocks, step.velocity);
             }
+        }
+
+        // Record in dub mode
+        if (this.dubMode !== 'off') {
+            this.processDubRecording();
         }
 
         // Notify UI
@@ -172,15 +220,73 @@ class Sequencer {
             this.stepCallback(this.currentStep);
         }
 
-        // Advance
+        // Advance step
         this.currentStep = (this.currentStep + 1) % this.steps;
+
+        // Increment play count at pattern loop
+        if (this.currentStep === 0) {
+            this.playCount++;
+            this.trackPlayCounts = this.trackPlayCounts.map(c => c + 1);
+        }
     }
 
-    triggerSource(source, trackIndex) {
+    // Check trig condition to determine if step should fire
+    shouldTrigger(step, trackIndex) {
+        const cond = step.trigCondition;
+
+        switch (cond.type) {
+            case 'always':
+                return Math.random() * 100 < step.probability;
+
+            case 'probability':
+                return Math.random() * 100 < cond.value;
+
+            case 'fill':
+                return this.fillMode;
+
+            case 'notFill':
+                return !this.fillMode;
+
+            case 'nth':
+                // Only trigger on every Nth play (1st, 2nd, 3rd, etc.)
+                return (this.trackPlayCounts[trackIndex] % cond.value) === 0;
+
+            case 'neighbor':
+                // Only trigger if neighbor track also triggered this step
+                if (cond.neighborTrack !== null) {
+                    const neighborStep = this.pattern[cond.neighborTrack][this.currentStep];
+                    return neighborStep.active;
+                }
+                return true;
+
+            default:
+                return Math.random() * 100 < step.probability;
+        }
+    }
+
+    // Set fill mode (typically held by button)
+    setFillMode(active) {
+        this.fillMode = active;
+    }
+
+    // Reset play counters (useful when switching patterns)
+    resetPlayCounts() {
+        this.playCount = 0;
+        this.trackPlayCounts = new Array(this.tracks).fill(0);
+    }
+
+    triggerSource(source, trackIndex, pLocks = {}, velocity = 100) {
+        // Apply P-Locks to the audio engine before triggering
+        this.applyPLocks(pLocks);
+
         switch (source) {
             case 'sampler':
                 if (window.sampler) {
-                    window.sampler.trigger(trackIndex);
+                    window.sampler.trigger(trackIndex, {
+                        pitch: pLocks.pitch,
+                        slice: pLocks.slice,
+                        velocity: velocity / 100
+                    });
                 }
                 break;
             case 'radio':
@@ -196,11 +302,151 @@ class Sequencer {
             case 'synth':
                 // Trigger synth note based on track (different frequencies)
                 if (window.synth) {
-                    const notes = [110, 147, 165, 196, 220, 262, 330, 392]; // A2 to G4
-                    window.synth.triggerNote(notes[trackIndex], 0.1);
+                    const baseNotes = [110, 147, 165, 196, 220, 262, 330, 392]; // A2 to G4
+                    let freq = baseNotes[trackIndex];
+                    // Apply pitch P-Lock (semitones)
+                    if (pLocks.pitch !== null) {
+                        freq = freq * Math.pow(2, pLocks.pitch / 12);
+                    }
+                    window.synth.triggerNote(freq, 0.1);
                 }
                 break;
         }
+    }
+
+    // Apply P-Lock values to audio engines
+    applyPLocks(pLocks) {
+        if (!pLocks) return;
+
+        if (pLocks.filter !== null && window.synth) {
+            window.synth.setFilterCutoff(pLocks.filter * 80); // Scale to Hz
+        }
+        if (pLocks.delay !== null && window.mangleEngine) {
+            window.mangleEngine.setDelayMix(pLocks.delay);
+        }
+        if (pLocks.reverb !== null && window.mangleEngine) {
+            window.mangleEngine.setReverbMix?.(pLocks.reverb);
+        }
+        if (pLocks.grain !== null && window.mangleEngine) {
+            window.mangleEngine.setGrain(pLocks.grain, 50, 0);
+        }
+    }
+
+    // ===== P-LOCK METHODS =====
+
+    // Set a P-Lock value for a specific step
+    setPLock(trackIndex, stepIndex, param, value) {
+        if (trackIndex >= 0 && trackIndex < this.tracks &&
+            stepIndex >= 0 && stepIndex < this.steps) {
+            const step = this.pattern[trackIndex][stepIndex];
+            if (step.pLocks.hasOwnProperty(param)) {
+                step.pLocks[param] = value;
+                console.log(`P-Lock: Track ${trackIndex + 1}, Step ${stepIndex + 1}, ${param} = ${value}`);
+            }
+        }
+    }
+
+    // Clear a P-Lock for a specific step
+    clearPLock(trackIndex, stepIndex, param) {
+        this.setPLock(trackIndex, stepIndex, param, null);
+    }
+
+    // Clear all P-Locks for a step
+    clearAllPLocks(trackIndex, stepIndex) {
+        if (trackIndex >= 0 && trackIndex < this.tracks &&
+            stepIndex >= 0 && stepIndex < this.steps) {
+            const step = this.pattern[trackIndex][stepIndex];
+            for (const param in step.pLocks) {
+                step.pLocks[param] = null;
+            }
+        }
+    }
+
+    // Get P-Lock value for a step
+    getPLock(trackIndex, stepIndex, param) {
+        if (trackIndex >= 0 && trackIndex < this.tracks &&
+            stepIndex >= 0 && stepIndex < this.steps) {
+            return this.pattern[trackIndex][stepIndex].pLocks[param];
+        }
+        return null;
+    }
+
+    // Check if step has any P-Locks
+    hasPLocks(trackIndex, stepIndex) {
+        if (trackIndex >= 0 && trackIndex < this.tracks &&
+            stepIndex >= 0 && stepIndex < this.steps) {
+            const pLocks = this.pattern[trackIndex][stepIndex].pLocks;
+            return Object.values(pLocks).some(v => v !== null);
+        }
+        return false;
+    }
+
+    // ===== TRIG CONDITION METHODS =====
+
+    // Set trig condition for a step
+    setTrigCondition(trackIndex, stepIndex, type, value = 100, neighborTrack = null) {
+        if (trackIndex >= 0 && trackIndex < this.tracks &&
+            stepIndex >= 0 && stepIndex < this.steps) {
+            const step = this.pattern[trackIndex][stepIndex];
+            step.trigCondition = { type, value, neighborTrack };
+            console.log(`Trig Condition: Track ${trackIndex + 1}, Step ${stepIndex + 1}, ${type} (${value})`);
+        }
+    }
+
+    // Get trig condition for a step
+    getTrigCondition(trackIndex, stepIndex) {
+        if (trackIndex >= 0 && trackIndex < this.tracks &&
+            stepIndex >= 0 && stepIndex < this.steps) {
+            return this.pattern[trackIndex][stepIndex].trigCondition;
+        }
+        return { type: 'always', value: 100, neighborTrack: null };
+    }
+
+    // ===== DUB/OVERDUB METHODS =====
+
+    // Set dub mode: 'off', 'dub', 'overdub'
+    setDubMode(mode) {
+        this.dubMode = mode;
+        if (mode !== 'off') {
+            this.dubBuffer = [];
+        }
+        console.log(`Dub mode: ${mode}`);
+    }
+
+    getDubMode() {
+        return this.dubMode;
+    }
+
+    // Record a trigger in dub mode (called from UI when pad is pressed)
+    recordDubTrigger(trackIndex, pLocks = {}, velocity = 100) {
+        if (this.dubMode === 'off' || !this.playing) return;
+
+        const step = this.pattern[trackIndex][this.currentStep];
+
+        if (this.dubMode === 'overdub' || !step.active) {
+            // In overdub, always add; in dub, only add if step is empty
+            step.active = true;
+            step.velocity = velocity;
+
+            // Copy P-Locks if provided
+            for (const param in pLocks) {
+                if (pLocks[param] !== null) {
+                    step.pLocks[param] = pLocks[param];
+                }
+            }
+
+            console.log(`Dub recorded: Track ${trackIndex + 1}, Step ${this.currentStep + 1}`);
+        }
+    }
+
+    // Process dub recording (called each tick)
+    processDubRecording() {
+        // This can be extended to handle quantization, etc.
+    }
+
+    // Clear dub buffer
+    clearDubBuffer() {
+        this.dubBuffer = [];
     }
 
     isPlaying() {

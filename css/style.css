@@ -1,4 +1,4 @@
-/* Oh My Box v0.7.0 - Major UI Redesign */
+/* Oh My Box v0.7.1 - P-Locks, Trig Conditions & Dub Mode */
 
 * {
     margin: 0;
@@ -397,6 +397,161 @@ html, body {
     background: var(--green) !important;
 }
 
+.oct-step.has-plock {
+    border: 1px solid var(--gold);
+}
+
+.oct-step.has-condition {
+    position: relative;
+}
+
+.oct-step.has-condition::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+}
+
+/* Dub mode button states */
+.dub-btn.dub-active {
+    background: #f39c12 !important;
+    color: #fff;
+    border-color: #f39c12 !important;
+}
+
+.dub-btn.overdub-active {
+    background: var(--accent) !important;
+    color: #fff;
+    border-color: var(--accent) !important;
+    animation: pulse-rec 1s infinite;
+}
+
+/* Fill button (hold) */
+.fill-btn:active,
+.fill-btn.active {
+    background: var(--green) !important;
+    color: #fff;
+    border-color: var(--green) !important;
+}
+
+/* ===== P-LOCK EDITOR ===== */
+.plock-editor {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--cream);
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    padding: 8px;
+    min-width: 200px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 100;
+}
+
+.plock-editor.hidden {
+    display: none;
+}
+
+.plock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+}
+
+.plock-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.plock-close {
+    width: 18px;
+    height: 18px;
+    border: none;
+    background: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--text-light);
+}
+
+.plock-close:hover {
+    color: var(--accent);
+}
+
+.plock-params {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.plock-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.plock-row span:first-child {
+    font-size: 8px;
+    font-weight: 600;
+    color: var(--text-light);
+    width: 35px;
+}
+
+.plock-row input[type="range"] {
+    flex: 1;
+    height: 4px;
+}
+
+.plock-row span:last-child {
+    font-size: 9px;
+    font-weight: 600;
+    width: 24px;
+    text-align: right;
+    color: var(--accent);
+}
+
+.trig-cond {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.trig-cond span {
+    font-size: 8px;
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+.trig-cond select {
+    flex: 1;
+    height: 22px;
+    padding: 0 4px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 9px;
+}
+
+.trig-cond input[type="number"] {
+    width: 40px;
+    height: 22px;
+    padding: 0 4px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 9px;
+    text-align: center;
+}
+
 /* ===== PADS + KNOBS ===== */
 .pads-panel {
     flex-shrink: 0;
@@ -740,6 +895,35 @@ html, body {
 .fx-mini input {
     flex: 1;
     height: 6px;
+}
+
+/* Punch-in FX buttons */
+.punch-fx {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.punch-btn {
+    height: 22px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--panel-alt);
+    font-size: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.punch-btn:active,
+.punch-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    transform: scale(0.95);
 }
 
 /* ===== AI PANEL (compact) ===== */

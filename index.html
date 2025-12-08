@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="screen-orientation" content="landscape">
     <title>Oh My Box</title>
-    <link rel="stylesheet" href="css/style.css?v=070">
+    <link rel="stylesheet" href="css/style.css?v=071">
 </head>
 <body>
     <!-- Full-page map background -->
@@ -32,7 +32,7 @@
             </div>
             <div class="time-box" id="timeDisplay">00:00</div>
             <button id="btnAdmin" class="admin-btn" title="Settings">⚙</button>
-            <div class="version">v0.7.0</div>
+            <div class="version">v0.7.1</div>
         </header>
 
         <!-- Main Device Area - 3 columns -->
@@ -87,10 +87,53 @@
                             <button id="seqRandom" class="seq-btn mini">RND</button>
                             <button id="seqClear" class="seq-btn mini">CLR</button>
                             <button id="eucGen" class="seq-btn mini" title="Euclidean">EUC</button>
+                            <button id="dubToggle" class="seq-btn mini dub-btn" title="Dub Mode">DUB</button>
+                            <button id="fillBtn" class="seq-btn mini fill-btn" title="Fill (hold)">FILL</button>
                         </div>
                     </div>
                     <!-- Octatrack-style: 8 horizontal track strips -->
                     <div class="oct-tracks" id="octTracks"></div>
+                    <!-- P-Lock / Trig Condition Editor (shows when step selected with SHIFT) -->
+                    <div id="plockEditor" class="plock-editor hidden">
+                        <div class="plock-header">
+                            <span class="plock-title">STEP <span id="plockStepNum">1</span></span>
+                            <button id="plockClose" class="plock-close">×</button>
+                        </div>
+                        <div class="plock-params">
+                            <div class="plock-row">
+                                <span>PITCH</span>
+                                <input type="range" id="plockPitch" min="-24" max="24" value="0">
+                                <span id="plockPitchVal">0</span>
+                            </div>
+                            <div class="plock-row">
+                                <span>SLICE</span>
+                                <input type="range" id="plockSlice" min="0" max="15" value="0">
+                                <span id="plockSliceVal">0</span>
+                            </div>
+                            <div class="plock-row">
+                                <span>FILT</span>
+                                <input type="range" id="plockFilter" min="0" max="100" value="50">
+                                <span id="plockFilterVal">50</span>
+                            </div>
+                            <div class="plock-row">
+                                <span>DECAY</span>
+                                <input type="range" id="plockDecay" min="0" max="100" value="50">
+                                <span id="plockDecayVal">50</span>
+                            </div>
+                        </div>
+                        <div class="trig-cond">
+                            <span>TRIG</span>
+                            <select id="trigCondType">
+                                <option value="always">ALWAYS</option>
+                                <option value="probability">PROB %</option>
+                                <option value="fill">FILL</option>
+                                <option value="notFill">!FILL</option>
+                                <option value="nth">NTH</option>
+                                <option value="neighbor">NEIGH</option>
+                            </select>
+                            <input type="number" id="trigCondValue" min="1" max="100" value="100">
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Pads + Knobs row -->
@@ -242,6 +285,13 @@
                             <span>CRU</span>
                             <input type="range" id="fxCrush" min="1" max="16" value="16">
                         </div>
+                    </div>
+                    <!-- Punch-in FX buttons (hold for temporary effect) -->
+                    <div class="punch-fx">
+                        <button class="punch-btn" data-fx="stutter" title="Hold for stutter">STT</button>
+                        <button class="punch-btn" data-fx="reverse" title="Hold for reverse">REV</button>
+                        <button class="punch-btn" data-fx="filter" title="Hold for filter sweep">FLT</button>
+                        <button class="punch-btn" data-fx="tape" title="Hold for tape stop">TPE</button>
                     </div>
                 </div>
 
