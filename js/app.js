@@ -103,7 +103,7 @@ class App {
         this.applySettings();
 
         this.initialized = true;
-        console.log('App v0.7.2 initialized');
+        console.log('App v0.7.3 initialized');
     }
 
     applySettings() {
@@ -120,14 +120,18 @@ class App {
         const mapBg = document.getElementById('mapBackground');
         this.settings.theme = theme;
 
+        // Always remove filter first, then apply per theme
+        mapBg.style.filter = '';
+
         if (theme === 'mariani') {
             mapBg.style.backgroundImage = "url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Mariani_wine_Laurens.jpg/800px-Mariani_wine_Laurens.jpg')";
+            mapBg.style.filter = 'brightness(0.7) sepia(0.2)';
             mapBg.classList.remove('has-location');
         } else if (theme === 'map') {
             // Will be updated by GPS
             const pos = window.gpsTracker?.getPosition();
             if (pos) {
-                const mapUrl = window.gpsTracker.getMapImageUrl(16); // Higher zoom for background
+                const mapUrl = window.gpsTracker.getMapImageUrl(16);
                 if (mapUrl) {
                     mapBg.style.backgroundImage = `url("${mapUrl}")`;
                     mapBg.classList.add('has-location');
@@ -1349,7 +1353,6 @@ class App {
     // GPS
     updateGPS() {
         const text = document.getElementById('gpsText');
-        const mapBg = document.getElementById('mapBackground');
         const miniMapImg = document.getElementById('miniMapImg');
         const miniMapCoords = document.getElementById('miniMapCoords');
 
@@ -1360,7 +1363,7 @@ class App {
                 text.textContent = pos.formatted;
             }
 
-            // Update mini map
+            // Update mini map (always, regardless of theme)
             if (miniMapImg) {
                 const mapUrl = window.gpsTracker.getMapImageUrl(14);
                 if (mapUrl) {
@@ -1371,12 +1374,16 @@ class App {
                 miniMapCoords.textContent = `${pos.latitude.toFixed(3)}, ${pos.longitude.toFixed(3)}`;
             }
 
-            // Update map background if theme is 'map'
-            if (this.settings.theme === 'map' && mapBg) {
-                const mapUrl = window.gpsTracker.getMapImageUrl(15);
-                if (mapUrl) {
-                    mapBg.style.backgroundImage = `url("${mapUrl}")`;
-                    mapBg.classList.add('has-location');
+            // ONLY update background if theme is explicitly 'map'
+            // Don't override other themes!
+            if (this.settings.theme === 'map') {
+                const mapBg = document.getElementById('mapBackground');
+                if (mapBg) {
+                    const mapUrl = window.gpsTracker.getMapImageUrl(15);
+                    if (mapUrl) {
+                        mapBg.style.backgroundImage = `url("${mapUrl}")`;
+                        mapBg.classList.add('has-location');
+                    }
                 }
             }
         } else {
