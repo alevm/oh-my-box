@@ -130,7 +130,7 @@ html, body {
 /* ===== GRID LAYOUT - 3 Columns ===== */
 .device {
     display: grid;
-    grid-template-columns: 220px 1fr 1fr;
+    grid-template-columns: 240px 1fr 1fr;
     grid-template-rows: repeat(5, 1fr);
     gap: 4px;
     padding: 6px;
