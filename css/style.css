@@ -1,4 +1,4 @@
-/* Oh My Box v0.7.21 - fix grid rows, wider mixer, fix background */
+/* Oh My Box v0.7.22 - wider mixer 140px, smaller seq column */
 
 * {
     margin: 0;
@@ -102,7 +102,7 @@ html, body {
 .device {
     flex: 1;
     display: grid;
-    grid-template-columns: 100px 1.2fr 1fr 1.4fr;
+    grid-template-columns: 140px 0.8fr 1fr 1.4fr;
     grid-template-rows: 1fr 80px;
     gap: 6px;
     padding: 6px;
