@@ -4,28 +4,35 @@ class Sequencer {
     constructor() {
         this.tracks = 8;
         this.steps = 16;
+        this.maxSteps = 64;  // Maximum pattern length
         this.tempo = 120;
         this.playing = false;
         this.currentStep = 0;
         this.intervalId = null;
+        this.swing = 0;  // Swing amount 0-100
 
-        // Pattern data: 8 tracks x 16 steps
-        // Each step: extended with P-Locks and Trig Conditions
-        this.pattern = [];
-        for (let t = 0; t < this.tracks; t++) {
-            this.pattern[t] = [];
-            for (let s = 0; s < this.steps; s++) {
-                this.pattern[t][s] = this.createEmptyStep();
-            }
+        // Pattern slots (A-H = 0-7)
+        this.patternSlots = [];
+        this.currentPatternSlot = 0;
+        for (let p = 0; p < 8; p++) {
+            this.patternSlots[p] = this.createEmptyPattern();
         }
+
+        // Current pattern reference
+        this.pattern = this.patternSlots[0].tracks;
 
         // Source routing per track: sampler, radio, mic, synth
         this.trackSources = ['sampler', 'sampler', 'sampler', 'sampler',
                              'sampler', 'sampler', 'sampler', 'sampler'];
 
+        // Track mute/solo state
+        this.trackMutes = new Array(this.tracks).fill(false);
+        this.trackSolos = new Array(this.tracks).fill(false);
+
         this.selectedTrack = 0;
         this.stepCallback = null;
         this.onPadTrigger = null;  // Callback for pad visual feedback
+        this.onPatternChange = null;  // Callback when pattern changes
 
         // Playback counters for trig conditions
         this.playCount = 0;  // How many times pattern has looped
@@ -37,6 +44,30 @@ class Sequencer {
 
         // Track play counters for nth-play conditions
         this.trackPlayCounts = new Array(this.tracks).fill(0);
+
+        // Clipboard for copy/paste
+        this.clipboard = null;
+
+        // Undo/Redo history
+        this.undoStack = [];
+        this.redoStack = [];
+        this.maxHistorySize = 50;
+    }
+
+    // Create empty pattern slot
+    createEmptyPattern() {
+        const tracks = [];
+        for (let t = 0; t < this.tracks; t++) {
+            tracks[t] = [];
+            for (let s = 0; s < this.maxSteps; s++) {
+                tracks[t][s] = this.createEmptyStep();
+            }
+        }
+        return {
+            tracks: tracks,
+            length: 16,
+            name: ''
+        };
     }
 
     // Create empty step with all P-Lock and condition slots
@@ -201,10 +232,17 @@ class Sequencer {
     }
 
     tick() {
+        // Check if any track is soloed
+        const hasSolo = this.trackSolos.some(s => s);
+
         // Trigger sounds for active steps (with trig conditions)
         for (let t = 0; t < this.tracks; t++) {
+            // Skip muted tracks, or if solo mode, skip non-soloed tracks
+            if (this.trackMutes[t]) continue;
+            if (hasSolo && !this.trackSolos[t]) continue;
+
             const step = this.pattern[t][this.currentStep];
-            if (step.active && this.shouldTrigger(step, t)) {
+            if (step && step.active && this.shouldTrigger(step, t)) {
                 // Trigger based on source routing with P-Locks applied
                 const source = this.trackSources[t];
                 this.triggerSource(source, t, step.pLocks, step.velocity);
@@ -221,8 +259,9 @@ class Sequencer {
             this.stepCallback(this.currentStep);
         }
 
-        // Advance step
-        this.currentStep = (this.currentStep + 1) % this.steps;
+        // Advance step (use current pattern length)
+        const patternLength = this.getPatternLength();
+        this.currentStep = (this.currentStep + 1) % patternLength;
 
         // Increment play count at pattern loop
         if (this.currentStep === 0) {
@@ -588,6 +627,210 @@ class Sequencer {
         this.setTempo(80 + Math.floor(Math.random() * 80));
 
         return { vibe, density, complexity, tempo: this.tempo };
+    }
+
+    // ===== PATTERN SLOT METHODS =====
+
+    // Get current pattern length
+    getPatternLength() {
+        return this.patternSlots[this.currentPatternSlot]?.length || 16;
+    }
+
+    // Set pattern length
+    setPatternLength(length) {
+        this.saveHistory();
+        length = Math.max(1, Math.min(this.maxSteps, length));
+        this.patternSlots[this.currentPatternSlot].length = length;
+        this.steps = length;
+        console.log(`Pattern length set to ${length}`);
+        if (this.onPatternChange) this.onPatternChange();
+    }
+
+    // Switch to pattern slot (0-7 = A-H)
+    selectPattern(slotIndex) {
+        if (slotIndex < 0 || slotIndex >= 8) return;
+        this.currentPatternSlot = slotIndex;
+        this.pattern = this.patternSlots[slotIndex].tracks;
+        this.steps = this.patternSlots[slotIndex].length;
+        this.currentStep = 0;
+        console.log(`Selected pattern ${String.fromCharCode(65 + slotIndex)}`);
+        if (this.onPatternChange) this.onPatternChange();
+    }
+
+    // Check if pattern slot has data
+    patternHasData(slotIndex) {
+        const slot = this.patternSlots[slotIndex];
+        if (!slot) return false;
+        for (let t = 0; t < this.tracks; t++) {
+            for (let s = 0; s < slot.length; s++) {
+                if (slot.tracks[t][s]?.active) return true;
+            }
+        }
+        return false;
+    }
+
+    getCurrentPatternSlot() {
+        return this.currentPatternSlot;
+    }
+
+    // ===== TRACK MUTE/SOLO METHODS =====
+
+    toggleMute(trackIndex) {
+        if (trackIndex >= 0 && trackIndex < this.tracks) {
+            this.trackMutes[trackIndex] = !this.trackMutes[trackIndex];
+            console.log(`Track ${trackIndex + 1} mute: ${this.trackMutes[trackIndex]}`);
+            return this.trackMutes[trackIndex];
+        }
+        return false;
+    }
+
+    setMute(trackIndex, muted) {
+        if (trackIndex >= 0 && trackIndex < this.tracks) {
+            this.trackMutes[trackIndex] = muted;
+        }
+    }
+
+    isMuted(trackIndex) {
+        return this.trackMutes[trackIndex] || false;
+    }
+
+    toggleSolo(trackIndex) {
+        if (trackIndex >= 0 && trackIndex < this.tracks) {
+            this.trackSolos[trackIndex] = !this.trackSolos[trackIndex];
+            console.log(`Track ${trackIndex + 1} solo: ${this.trackSolos[trackIndex]}`);
+            return this.trackSolos[trackIndex];
+        }
+        return false;
+    }
+
+    setSolo(trackIndex, soloed) {
+        if (trackIndex >= 0 && trackIndex < this.tracks) {
+            this.trackSolos[trackIndex] = soloed;
+        }
+    }
+
+    isSoloed(trackIndex) {
+        return this.trackSolos[trackIndex] || false;
+    }
+
+    // ===== COPY/PASTE METHODS =====
+
+    copyTrack(trackIndex) {
+        if (trackIndex >= 0 && trackIndex < this.tracks) {
+            // Deep copy the track data
+            this.clipboard = {
+                type: 'track',
+                data: JSON.parse(JSON.stringify(this.pattern[trackIndex])),
+                source: this.trackSources[trackIndex]
+            };
+            console.log(`Copied track ${trackIndex + 1}`);
+            return true;
+        }
+        return false;
+    }
+
+    pasteTrack(trackIndex) {
+        if (!this.clipboard || this.clipboard.type !== 'track') {
+            console.log('No track in clipboard');
+            return false;
+        }
+        if (trackIndex >= 0 && trackIndex < this.tracks) {
+            this.saveHistory();
+            this.pattern[trackIndex] = JSON.parse(JSON.stringify(this.clipboard.data));
+            this.trackSources[trackIndex] = this.clipboard.source;
+            console.log(`Pasted to track ${trackIndex + 1}`);
+            if (this.onPatternChange) this.onPatternChange();
+            return true;
+        }
+        return false;
+    }
+
+    // ===== UNDO/REDO METHODS =====
+
+    saveHistory() {
+        // Save current state to undo stack
+        const state = {
+            pattern: JSON.parse(JSON.stringify(this.pattern)),
+            sources: [...this.trackSources],
+            length: this.steps
+        };
+        this.undoStack.push(state);
+        if (this.undoStack.length > this.maxHistorySize) {
+            this.undoStack.shift();
+        }
+        // Clear redo stack on new action
+        this.redoStack = [];
+    }
+
+    undo() {
+        if (this.undoStack.length === 0) {
+            console.log('Nothing to undo');
+            return false;
+        }
+        // Save current state to redo stack
+        const currentState = {
+            pattern: JSON.parse(JSON.stringify(this.pattern)),
+            sources: [...this.trackSources],
+            length: this.steps
+        };
+        this.redoStack.push(currentState);
+
+        // Restore previous state
+        const state = this.undoStack.pop();
+        this.pattern = state.pattern;
+        this.patternSlots[this.currentPatternSlot].tracks = this.pattern;
+        this.trackSources = state.sources;
+        this.steps = state.length;
+        this.patternSlots[this.currentPatternSlot].length = state.length;
+
+        console.log('Undo');
+        if (this.onPatternChange) this.onPatternChange();
+        return true;
+    }
+
+    redo() {
+        if (this.redoStack.length === 0) {
+            console.log('Nothing to redo');
+            return false;
+        }
+        // Save current state to undo stack
+        const currentState = {
+            pattern: JSON.parse(JSON.stringify(this.pattern)),
+            sources: [...this.trackSources],
+            length: this.steps
+        };
+        this.undoStack.push(currentState);
+
+        // Restore redo state
+        const state = this.redoStack.pop();
+        this.pattern = state.pattern;
+        this.patternSlots[this.currentPatternSlot].tracks = this.pattern;
+        this.trackSources = state.sources;
+        this.steps = state.length;
+        this.patternSlots[this.currentPatternSlot].length = state.length;
+
+        console.log('Redo');
+        if (this.onPatternChange) this.onPatternChange();
+        return true;
+    }
+
+    canUndo() {
+        return this.undoStack.length > 0;
+    }
+
+    canRedo() {
+        return this.redoStack.length > 0;
+    }
+
+    // ===== SWING METHODS =====
+
+    setSwing(amount) {
+        this.swing = Math.max(0, Math.min(100, amount));
+        console.log(`Swing set to ${this.swing}%`);
+    }
+
+    getSwing() {
+        return this.swing;
     }
 }
 

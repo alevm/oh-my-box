@@ -57,6 +57,42 @@
                         <button id="fillBtn" class="seq-btn mini fill-btn" title="Fill mode - hold for fill pattern (F)">FILL</button>
                     </div>
                 </div>
+                <div class="seq-row2">
+                    <div class="pattern-btns">
+                        <button class="pattern-btn active" data-pattern="0" title="Pattern A">A</button>
+                        <button class="pattern-btn" data-pattern="1" title="Pattern B">B</button>
+                        <button class="pattern-btn" data-pattern="2" title="Pattern C">C</button>
+                        <button class="pattern-btn" data-pattern="3" title="Pattern D">D</button>
+                        <button class="pattern-btn" data-pattern="4" title="Pattern E">E</button>
+                        <button class="pattern-btn" data-pattern="5" title="Pattern F">F</button>
+                        <button class="pattern-btn" data-pattern="6" title="Pattern G">G</button>
+                        <button class="pattern-btn" data-pattern="7" title="Pattern H">H</button>
+                    </div>
+                    <div class="seq-tools">
+                        <button id="seqCopy" class="seq-btn mini" title="Copy selected track (Ctrl+C)">CPY</button>
+                        <button id="seqPaste" class="seq-btn mini" title="Paste to selected track (Ctrl+V)">PST</button>
+                        <button id="seqUndo" class="seq-btn mini" title="Undo last change (Ctrl+Z)">UND</button>
+                        <button id="seqRedo" class="seq-btn mini" title="Redo (Ctrl+Y)">RED</button>
+                    </div>
+                    <div class="length-ctrl">
+                        <span title="Pattern length in steps">LEN</span>
+                        <select id="patternLength" title="Set pattern length (1-64 steps)">
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                            <option value="12">12</option>
+                            <option value="16" selected>16</option>
+                            <option value="24">24</option>
+                            <option value="32">32</option>
+                            <option value="48">48</option>
+                            <option value="64">64</option>
+                        </select>
+                    </div>
+                    <div class="swing-ctrl">
+                        <span title="Swing amount">SWG</span>
+                        <input type="range" id="swingAmount" min="0" max="100" value="0" title="Swing timing (0-100%)">
+                        <span id="swingVal">0</span>
+                    </div>
+                </div>
                 <div class="oct-tracks" id="octTracks"></div>
                 <div id="plockEditor" class="plock-editor hidden">
                     <div class="plock-header"><span class="plock-title">STEP <span id="plockStepNum">1</span></span><button id="plockClose" class="plock-close">×</button></div>
