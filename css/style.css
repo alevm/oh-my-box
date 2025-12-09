@@ -208,6 +208,7 @@ html, body {
 /* COL 2: Mixer + EQ */
 .col-mixer {
     padding: 6px;
+    align-self: start;
 }
 
 .col-mixer .mixer-panel {
