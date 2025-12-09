@@ -352,36 +352,104 @@ html, body {
 /* ===== MIXER ===== */
 .mixer-panel { flex: 1; }
 .mixer-channels { display: flex; gap: 4px; height: calc(100% - 20px); }
-.ch { display: flex; flex-direction: column; align-items: center; flex: 1; }
-.ch-name { font-size: 12px; font-weight: 700; color: var(--text-light); margin-bottom: 2px; }
+.ch { display: flex; flex-direction: column; align-items: center; flex: 1; gap: 2px; }
+.ch-name { font-size: 11px; font-weight: 700; color: var(--text-light); }
+
+/* Gain knob (input gain) */
+.gain-knob {
+    width: 28px;
+    height: 6px;
+    appearance: none;
+    background: linear-gradient(to right, #27ae60 0%, #f1c40f 50%, #e74c3c 100%);
+    border-radius: 3px;
+    cursor: pointer;
+}
+.gain-knob::-webkit-slider-thumb {
+    appearance: none;
+    width: 8px;
+    height: 12px;
+    background: #fff;
+    border: 1px solid #666;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
 .v-fader {
     writing-mode: vertical-lr;
     direction: rtl;
     width: 100%;
     touch-action: none;
     flex: 1;
-    margin: 4px 0;
+    cursor: pointer;
+    min-height: 60px;
+}
+
+/* Pan knob */
+.pan-knob {
+    width: 28px;
+    height: 6px;
+    appearance: none;
+    background: linear-gradient(to right, #3498db 0%, #888 50%, #e74c3c 100%);
+    border-radius: 3px;
     cursor: pointer;
 }
-.mute {
-    width: 100%; height: 28px;
-    border: 2px solid var(--border);
-    border-radius: 4px;
+.pan-knob::-webkit-slider-thumb {
+    appearance: none;
+    width: 6px;
+    height: 10px;
+    background: #fff;
+    border: 1px solid #666;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+/* Channel buttons row */
+.ch-btns { display: flex; gap: 2px; width: 100%; }
+.mute, .solo {
+    flex: 1;
+    height: 22px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
     background: var(--panel-alt);
-    font-size: 13px;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.mute.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.solo.active { background: #f1c40f; color: #000; border-color: #f1c40f; }
+.ch.master .ch-name { color: var(--green); font-weight: 800; }
+
+/* Limiter indicator */
+.limiter-indicator {
+    width: 20px;
+    height: 6px;
+    background: #27ae60;
+    border-radius: 3px;
+    transition: background 0.1s;
+}
+.limiter-indicator.active { background: #e74c3c; animation: limiter-flash 0.2s ease-out; }
+@keyframes limiter-flash { 0% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+/* Meter mode buttons */
+.meter-mode { display: flex; gap: 2px; width: 100%; }
+.meter-btn {
+    flex: 1;
+    height: 18px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--panel-alt);
+    font-size: 9px;
     font-weight: 600;
     cursor: pointer;
 }
-.mute.active { background: var(--accent); color: #fff; }
-.ch.master .ch-name { color: var(--green); font-weight: 800; }
+.meter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
 /* VU Meters */
 .vu-meter {
-    width: 6px;
-    height: 60px;
+    width: 8px;
+    height: 50px;
     background: #333;
     border-radius: 2px;
-    margin-bottom: 4px;
     position: relative;
     overflow: hidden;
 }
@@ -394,6 +462,15 @@ html, body {
     background: #27ae60;
     transition: height 0.05s ease-out;
     border-radius: 2px;
+}
+.vu-peak {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    transition: bottom 0.1s ease-out;
+    bottom: 0;
 }
 
 /* ===== SEQUENCER ===== */

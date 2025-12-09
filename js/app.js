@@ -260,24 +260,61 @@ class App {
     // Mixer
     setupMixer() {
         const channels = ['Mic', 'Samples', 'Synth', 'Radio'];
+        this.mixerSolos = {};  // Track solo state
+        this.meterMode = 'peak';  // 'peak' or 'rms'
+        this.peakHolds = {};  // Peak hold values
 
         channels.forEach(name => {
             const fader = document.getElementById(`fader${name}`);
             const muteBtn = document.getElementById(`mute${name}`);
+            const soloBtn = document.getElementById(`solo${name}`);
+            const gainKnob = document.getElementById(`gain${name}`);
+            const panKnob = document.getElementById(`pan${name}`);
             const channelKey = name.toLowerCase();
 
+            // Fader
             if (fader) {
                 fader.addEventListener('input', () => {
                     window.audioEngine.setChannelLevel(channelKey, fader.value / 100);
                 });
             }
 
+            // Mute button
             if (muteBtn) {
                 muteBtn.addEventListener('click', () => {
                     const muted = window.audioEngine.toggleMute(channelKey);
                     muteBtn.classList.toggle('active', muted);
                 });
             }
+
+            // Solo button
+            if (soloBtn) {
+                this.mixerSolos[channelKey] = false;
+                soloBtn.addEventListener('click', () => {
+                    this.mixerSolos[channelKey] = !this.mixerSolos[channelKey];
+                    soloBtn.classList.toggle('active', this.mixerSolos[channelKey]);
+                    this.updateMixerSoloState();
+                });
+            }
+
+            // Gain knob (input gain)
+            if (gainKnob) {
+                gainKnob.addEventListener('input', () => {
+                    const gain = gainKnob.value / 100;  // 0-2 range
+                    window.audioEngine.setChannelGain?.(channelKey, gain);
+                });
+            }
+
+            // Pan knob
+            if (panKnob) {
+                panKnob.addEventListener('input', () => {
+                    const pan = panKnob.value / 100;  // -1 to 1
+                    window.audioEngine.setChannelPan?.(channelKey, pan);
+                });
+            }
+
+            // Initialize peak hold
+            this.peakHolds[channelKey] = 0;
         });
 
         // Master fader
@@ -287,6 +324,32 @@ class App {
                 window.audioEngine.setMasterLevel(masterFader.value / 100);
             });
         }
+
+        // Meter mode buttons
+        const meterBtns = document.querySelectorAll('.meter-btn');
+        meterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                meterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.meterMode = btn.dataset.mode;
+            });
+        });
+    }
+
+    // Update mixer solo state (mute non-soloed channels)
+    updateMixerSoloState() {
+        const hasSolo = Object.values(this.mixerSolos).some(s => s);
+        const channels = ['mic', 'samples', 'synth', 'radio'];
+
+        channels.forEach(ch => {
+            if (hasSolo) {
+                // If any channel is soloed, mute non-soloed channels
+                window.audioEngine.setSoloMute?.(ch, !this.mixerSolos[ch]);
+            } else {
+                // No solo active, unmute all
+                window.audioEngine.setSoloMute?.(ch, false);
+            }
+        });
     }
 
     // EQ with channel selector buttons
@@ -1234,11 +1297,19 @@ class App {
             { name: 'Master', key: 'master' }
         ];
 
+        // Initialize peak holds if not exists
+        if (!this.peakHolds) {
+            this.peakHolds = {};
+            channels.forEach(({ key }) => this.peakHolds[key] = 0);
+        }
+
         channels.forEach(({ name, key }) => {
             const vu = document.getElementById(`vu${name}`);
             if (vu) {
                 const level = window.audioEngine?.getMeterLevel(key) || 0;
                 const fill = vu.querySelector('.vu-fill');
+                const peak = document.getElementById(`peak${name}`);
+
                 if (fill) {
                     fill.style.height = level + '%';
                     // Color based on level
@@ -1250,8 +1321,27 @@ class App {
                         fill.style.background = '#27ae60';
                     }
                 }
+
+                // Update peak hold
+                if (peak) {
+                    if (level > this.peakHolds[key]) {
+                        this.peakHolds[key] = level;
+                    } else {
+                        // Decay peak slowly
+                        this.peakHolds[key] = Math.max(0, this.peakHolds[key] - 1);
+                    }
+                    peak.style.bottom = this.peakHolds[key] + '%';
+                }
             }
         });
+
+        // Update limiter indicator
+        const limiter = document.getElementById('limiterIndicator');
+        if (limiter) {
+            const masterLevel = window.audioEngine?.getMeterLevel('master') || 0;
+            const isLimiting = masterLevel > 95;
+            limiter.classList.toggle('active', isLimiting);
+        }
 
         this.vuAnimationId = requestAnimationFrame(() => this.updateVUMeters());
     }

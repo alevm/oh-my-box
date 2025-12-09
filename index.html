@@ -119,11 +119,60 @@
             <div class="panel mixer-panel">
                 <div class="panel-title">MIXER</div>
                 <div class="mixer-channels">
-                    <div class="ch"><span class="ch-name">MIC</span><div class="vu-meter" title="Microphone level"><div class="vu-fill" id="vuMic"></div></div><input type="range" class="v-fader" id="faderMic" min="0" max="100" value="80" orient="vertical" title="Microphone volume"><button class="mute" id="muteMic" title="Mute microphone">M</button></div>
-                    <div class="ch"><span class="ch-name">SMP</span><div class="vu-meter" title="Sampler level"><div class="vu-fill" id="vuSamples"></div></div><input type="range" class="v-fader" id="faderSamples" min="0" max="100" value="80" orient="vertical" title="Sampler volume"><button class="mute" id="muteSamples" title="Mute sampler">M</button></div>
-                    <div class="ch"><span class="ch-name">SYN</span><div class="vu-meter" title="Synth level"><div class="vu-fill" id="vuSynth"></div></div><input type="range" class="v-fader" id="faderSynth" min="0" max="100" value="80" orient="vertical" title="Synth volume"><button class="mute" id="muteSynth" title="Mute synth">M</button></div>
-                    <div class="ch"><span class="ch-name">RAD</span><div class="vu-meter" title="Radio level"><div class="vu-fill" id="vuRadio"></div></div><input type="range" class="v-fader" id="faderRadio" min="0" max="100" value="80" orient="vertical" title="Radio volume"><button class="mute" id="muteRadio" title="Mute radio">M</button></div>
-                    <div class="ch master"><span class="ch-name">OUT</span><div class="vu-meter" title="Master output level"><div class="vu-fill" id="vuMaster"></div></div><input type="range" class="v-fader" id="faderMaster" min="0" max="100" value="90" orient="vertical" title="Master volume"></div>
+                    <div class="ch" data-ch="mic">
+                        <span class="ch-name">MIC</span>
+                        <input type="range" class="gain-knob" id="gainMic" min="0" max="200" value="100" title="Input gain (0-200%)">
+                        <div class="vu-meter" title="Microphone level"><div class="vu-fill" id="vuMic"></div><div class="vu-peak" id="peakMic"></div></div>
+                        <input type="range" class="v-fader" id="faderMic" min="0" max="100" value="80" orient="vertical" title="Microphone volume">
+                        <input type="range" class="pan-knob" id="panMic" min="-100" max="100" value="0" title="Pan L/R">
+                        <div class="ch-btns">
+                            <button class="mute" id="muteMic" title="Mute microphone">M</button>
+                            <button class="solo" id="soloMic" title="Solo microphone">S</button>
+                        </div>
+                    </div>
+                    <div class="ch" data-ch="samples">
+                        <span class="ch-name">SMP</span>
+                        <input type="range" class="gain-knob" id="gainSamples" min="0" max="200" value="100" title="Input gain (0-200%)">
+                        <div class="vu-meter" title="Sampler level"><div class="vu-fill" id="vuSamples"></div><div class="vu-peak" id="peakSamples"></div></div>
+                        <input type="range" class="v-fader" id="faderSamples" min="0" max="100" value="80" orient="vertical" title="Sampler volume">
+                        <input type="range" class="pan-knob" id="panSamples" min="-100" max="100" value="0" title="Pan L/R">
+                        <div class="ch-btns">
+                            <button class="mute" id="muteSamples" title="Mute sampler">M</button>
+                            <button class="solo" id="soloSamples" title="Solo sampler">S</button>
+                        </div>
+                    </div>
+                    <div class="ch" data-ch="synth">
+                        <span class="ch-name">SYN</span>
+                        <input type="range" class="gain-knob" id="gainSynth" min="0" max="200" value="100" title="Input gain (0-200%)">
+                        <div class="vu-meter" title="Synth level"><div class="vu-fill" id="vuSynth"></div><div class="vu-peak" id="peakSynth"></div></div>
+                        <input type="range" class="v-fader" id="faderSynth" min="0" max="100" value="80" orient="vertical" title="Synth volume">
+                        <input type="range" class="pan-knob" id="panSynth" min="-100" max="100" value="0" title="Pan L/R">
+                        <div class="ch-btns">
+                            <button class="mute" id="muteSynth" title="Mute synth">M</button>
+                            <button class="solo" id="soloSynth" title="Solo synth">S</button>
+                        </div>
+                    </div>
+                    <div class="ch" data-ch="radio">
+                        <span class="ch-name">RAD</span>
+                        <input type="range" class="gain-knob" id="gainRadio" min="0" max="200" value="100" title="Input gain (0-200%)">
+                        <div class="vu-meter" title="Radio level"><div class="vu-fill" id="vuRadio"></div><div class="vu-peak" id="peakRadio"></div></div>
+                        <input type="range" class="v-fader" id="faderRadio" min="0" max="100" value="80" orient="vertical" title="Radio volume">
+                        <input type="range" class="pan-knob" id="panRadio" min="-100" max="100" value="0" title="Pan L/R">
+                        <div class="ch-btns">
+                            <button class="mute" id="muteRadio" title="Mute radio">M</button>
+                            <button class="solo" id="soloRadio" title="Solo radio">S</button>
+                        </div>
+                    </div>
+                    <div class="ch master" data-ch="master">
+                        <span class="ch-name">OUT</span>
+                        <div class="limiter-indicator" id="limiterIndicator" title="Limiter active when red"></div>
+                        <div class="vu-meter" title="Master output level"><div class="vu-fill" id="vuMaster"></div><div class="vu-peak" id="peakMaster"></div></div>
+                        <input type="range" class="v-fader" id="faderMaster" min="0" max="100" value="90" orient="vertical" title="Master volume">
+                        <div class="meter-mode">
+                            <button class="meter-btn active" data-mode="peak" title="Peak metering">PK</button>
+                            <button class="meter-btn" data-mode="rms" title="RMS metering">RM</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="panel synth-panel">
