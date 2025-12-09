@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="screen-orientation" content="landscape">
     <title>Oh My Box</title>
-    <link rel="stylesheet" href="css/style.css?v=131">
+    <link rel="stylesheet" href="css/style.css?v=132">
 </head>
 <body>
     <!-- Full-page map background -->
@@ -29,7 +29,7 @@
             </div>
             <button id="btnHelp" class="help-btn" title="Keyboard Shortcuts">?</button>
             <div class="gps-box" id="gpsBox">
-                <div class="mini-map" id="miniMap"><div class="mini-map-img" id="miniMapImg"></div></div>
+                <div class="mini-map" id="headerMiniMap"><div class="mini-map-img" id="headerMapImg"></div></div>
                 <span id="gpsText">--</span>
             </div>
             <div class="time-box" id="timeDisplay">00:00</div>
@@ -209,9 +209,8 @@
             <!-- Row 3: RADIO | LOCATION | AI GEN | REC -->
             <div class="panel radio-panel">
                 <div class="panel-title">RADIO</div>
-                <div class="radio-dial">
-                    <div class="freq-display" id="radioFreq">88.0 FM</div>
-                    <div class="knob" id="radioTuner" data-param="tune" data-min="88" data-max="108" data-value="88"></div>
+                <div class="radio-search">
+                    <input type="text" id="radioSearch" placeholder="Search...">
                 </div>
                 <div class="radio-controls">
                     <button id="radioScan" class="radio-btn">SCAN</button>

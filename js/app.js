@@ -1721,12 +1721,13 @@ class App {
     // Radio
     setupRadio() {
         const searchInput = document.getElementById('radioSearch');
+        const scanBtn = document.getElementById('radioScan');
         const goBtn = document.getElementById('radioGo');
         const stopBtn = document.getElementById('radioStop');
         const stationList = document.getElementById('stationList');
 
         const doSearch = async () => {
-            const query = searchInput.value.trim();
+            const query = searchInput?.value?.trim();
             if (!query) return;
 
             stationList.innerHTML = '<div style="color:#888;font-size:9px;">Searching...</div>';
@@ -1760,8 +1761,37 @@ class App {
         };
 
         goBtn.addEventListener('click', doSearch);
-        searchInput.addEventListener('keypress', (e) => {
+        searchInput?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') doSearch();
+        });
+
+        // SCAN button - search for local stations
+        scanBtn?.addEventListener('click', async () => {
+            stationList.innerHTML = '<div style="color:#888;font-size:9px;">Scanning...</div>';
+            const stations = await window.radioPlayer.searchLocalStations();
+            if (stations.length === 0) {
+                stationList.innerHTML = '<div style="color:#888;font-size:9px;">No local stations</div>';
+                return;
+            }
+            stationList.innerHTML = stations.slice(0, 5).map(s => `
+                <div class="station-item" data-url="${s.url}" data-name="${s.name}">
+                    ${s.name}
+                </div>
+            `).join('');
+
+            stationList.querySelectorAll('.station-item').forEach(item => {
+                item.addEventListener('click', async () => {
+                    const success = await window.radioPlayer.play({
+                        name: item.dataset.name,
+                        url: item.dataset.url
+                    });
+                    if (success) {
+                        stationList.querySelectorAll('.station-item').forEach(i => i.classList.remove('playing'));
+                        item.classList.add('playing');
+                        stopBtn.disabled = false;
+                    }
+                });
+            });
         });
 
         stopBtn.addEventListener('click', () => {
@@ -1990,6 +2020,7 @@ class App {
     // GPS
     updateGPS() {
         const text = document.getElementById('gpsText');
+        const headerMapImg = document.getElementById('headerMapImg');
         const miniMapImg = document.getElementById('miniMapImg');
         const miniMapCoords = document.getElementById('miniMapCoords');
 
@@ -2000,7 +2031,15 @@ class App {
                 text.textContent = pos.formatted;
             }
 
-            // Update mini map (always, regardless of theme)
+            // Update header mini map
+            if (headerMapImg) {
+                const mapUrl = window.gpsTracker.getMapImageUrl(16);
+                if (mapUrl) {
+                    headerMapImg.style.backgroundImage = `url("${mapUrl}")`;
+                }
+            }
+
+            // Update panel mini map (if visible)
             if (miniMapImg) {
                 const mapUrl = window.gpsTracker.getMapImageUrl(14);
                 if (mapUrl) {
