@@ -269,295 +269,138 @@
             left: 6px;
             right: 6px;
             bottom: 6px;
-            background: linear-gradient(180deg, #f5f0e8 0%, #e8e0d5 100%);
+            background: #1a1a0a;
             border-radius: 6px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            font-family: 'Courier New', monospace;
         }
 
-        /* App Header in Display */
-        .app-header {
-            height: 28px;
-            background: linear-gradient(180deg, #f5f0e8 0%, #e8e0d5 100%);
-            border-bottom: 2px solid #8b5a2b;
+        /* LCD Status Bar */
+        .lcd-status {
+            height: 24px;
+            background: #0d0d05;
+            border-bottom: 1px solid #333;
             display: flex;
             align-items: center;
-            padding: 0 8px;
-            gap: 8px;
+            padding: 0 10px;
+            gap: 20px;
         }
 
-        .app-logo {
-            font-size: 9px;
-            font-weight: 800;
-            color: #e94560;
-            letter-spacing: 0.5px;
+        .lcd-pattern {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ff6600;
+            text-shadow: 0 0 8px rgba(255, 102, 0, 0.8);
         }
 
-        .app-transport {
-            display: flex;
-            gap: 3px;
-            margin-left: 8px;
+        .lcd-bpm {
+            font-size: 14px;
+            font-weight: 700;
+            color: #00ff66;
+            text-shadow: 0 0 8px rgba(0, 255, 102, 0.8);
         }
 
-        .app-tr-btn {
-            width: 18px;
-            height: 18px;
-            border-radius: 3px;
-            border: 1px solid #8b5a2b;
-            background: #f5f0e8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .lcd-bpm::after {
+            content: ' BPM';
             font-size: 8px;
-        }
-        .app-tr-btn.play { color: #27ae60; }
-        .app-tr-btn.rec { color: #e94560; }
-
-        .app-tempo {
-            font-size: 10px;
-            font-weight: 700;
-            color: #333;
-            margin-left: 8px;
+            color: #00aa44;
         }
 
-        .app-gps {
+        .lcd-time {
             margin-left: auto;
-            font-size: 7px;
+            font-size: 11px;
+            color: #ffcc00;
+            text-shadow: 0 0 6px rgba(255, 204, 0, 0.6);
+        }
+
+        /* LCD Sequencer */
+        .lcd-seq {
+            flex: 1;
+            display: flex;
+            padding: 8px;
+            gap: 6px;
+        }
+
+        .lcd-tracks {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            padding-top: 2px;
+        }
+
+        .lcd-tracks span {
+            font-size: 8px;
             color: #666;
-        }
-
-        /* App Grid Layout - 3 columns x 5 rows like the real app */
-        .app-grid {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 60px 1fr 1fr;
-            grid-template-rows: repeat(5, 1fr);
-            gap: 2px;
-            padding: 3px;
-            background: #8b5a2b;
-        }
-
-        .app-panel {
-            background: rgba(255,255,255,0.95);
-            border-radius: 2px;
-            padding: 2px;
-            font-size: 5px;
+            height: 12px;
             display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .app-panel-title {
-            font-size: 5px;
-            font-weight: 700;
-            color: #8b5a2b;
-            margin-bottom: 1px;
-        }
-
-        /* Mixer Panel - Left col, rows 1-3 */
-        .app-mixer {
-            grid-row: span 3;
-        }
-        .app-mixer-channels {
-            display: flex;
-            gap: 2px;
-            flex: 1;
-        }
-        .app-mixer-ch {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 1px;
-        }
-        .app-mixer-ch span {
-            font-size: 5px;
-            color: #666;
-        }
-        .app-fader {
-            width: 6px;
-            height: 40px;
-            background: #ddd;
-            border-radius: 2px;
-            position: relative;
-        }
-        .app-fader::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 70%;
-            background: linear-gradient(to top, #27ae60, #2ecc71);
-            border-radius: 2px;
-        }
-        .app-fader.low::after { height: 30%; background: linear-gradient(to top, #e94560, #ff6b81); }
-        .app-fader.med::after { height: 50%; }
-        .app-fader.high::after { height: 85%; }
-
-        /* EQ Panel - Left col, rows 4-5 */
-        .app-eq {
-            grid-row: span 2;
         }
 
-        /* Sequencer Panel - Middle col, rows 1-2 */
-        .app-seq {
-            grid-row: span 2;
-        }
-        .app-seq-grid {
+        .lcd-grid {
+            flex: 1;
             display: grid;
             grid-template-columns: repeat(16, 1fr);
-            grid-template-rows: repeat(4, 1fr);
-            gap: 1px;
-            flex: 1;
-            margin-top: 2px;
-        }
-        .app-step {
-            background: #e8e0d5;
-            border-radius: 1px;
-        }
-        .app-step.active {
-            background: #e94560;
-        }
-        .app-step.playing {
-            background: #27ae60;
-        }
-
-        /* Pads Panel - Middle col, row 3 */
-        .app-pads { }
-        .app-pads-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            gap: 1px;
-            flex: 1;
-        }
-        .app-pad {
-            background: linear-gradient(145deg, #444 0%, #333 100%);
-            border-radius: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #888;
-            font-size: 4px;
-            font-weight: 700;
-        }
-        .app-pad.hit {
-            background: #e94560;
-            color: #fff;
-        }
-
-        /* CTRL/Knobs Panel - Middle col, row 4 */
-        .app-ctrl { }
-        .app-ctrl-knobs {
-            display: flex;
+            grid-template-rows: repeat(8, 1fr);
             gap: 2px;
-            flex: 1;
-            align-items: center;
-        }
-        .app-ctrl-knob {
-            width: 8px;
-            height: 8px;
-            background: linear-gradient(145deg, #555 0%, #333 100%);
-            border-radius: 50%;
         }
 
-        /* Scenes Panel - Middle col, row 5 */
-        .app-scenes { }
-        .app-scene-btns {
-            display: flex;
-            gap: 1px;
-            flex: 1;
-        }
-        .app-scene-btn {
-            flex: 1;
-            background: #e8e0d5;
-            border-radius: 1px;
-            font-size: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-weight: 700;
-        }
-        .app-scene-btn.active {
-            background: #8b5a2b;
-            color: #fff;
-        }
-
-        /* Synth Panel - Right col, row 1 */
-        .app-synth { }
-        .app-wave-btns {
-            display: flex;
-            gap: 1px;
-            flex: 1;
-        }
-        .app-wave-btn {
-            flex: 1;
-            background: #e8e0d5;
-            border-radius: 1px;
-            font-size: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-        }
-        .app-wave-btn.active {
-            background: #e94560;
-            color: #fff;
-        }
-
-        /* FX Panel - Right col, row 2 */
-        .app-fx { }
-        .app-fx-knobs {
-            display: flex;
-            gap: 2px;
-            flex: 1;
-            align-items: center;
-        }
-        .app-fx-knob {
-            width: 8px;
-            height: 8px;
-            background: linear-gradient(145deg, #555 0%, #333 100%);
-            border-radius: 50%;
-        }
-
-        /* AI Panel - Right col, row 3 */
-        .app-ai { }
-        .app-ai-btns {
-            display: flex;
-            gap: 1px;
-            flex: 1;
-        }
-        .app-ai-btn {
-            flex: 1;
-            background: #e8e0d5;
-            border-radius: 1px;
-            font-size: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-        }
-        .app-ai-btn.active {
-            background: #9b59b6;
-            color: #fff;
-        }
-
-        /* Radio Panel - Right col, row 4 */
-        .app-radio { }
-
-        /* REC Panel - Right col, row 5 */
-        .app-rec { }
-        .app-rec-btn {
-            background: #e94560;
-            color: #fff;
+        .lcd-step {
+            background: #2a2a1a;
             border-radius: 2px;
-            font-size: 5px;
-            font-weight: 700;
-            padding: 2px;
-            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .lcd-step.on {
+            background: #ff6600;
+            border-color: #ff8833;
+            box-shadow: 0 0 4px rgba(255, 102, 0, 0.6);
+        }
+
+        .lcd-step.play {
+            background: #00ff66;
+            border-color: #33ff88;
+            box-shadow: 0 0 6px rgba(0, 255, 102, 0.8);
+        }
+
+        /* LCD Info Bar */
+        .lcd-info {
+            height: 22px;
+            background: #0d0d05;
+            border-top: 1px solid #333;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            gap: 20px;
+        }
+
+        .lcd-sample {
+            font-size: 9px;
+            color: #00ccff;
+            text-shadow: 0 0 6px rgba(0, 204, 255, 0.6);
+        }
+
+        .lcd-file {
+            margin-left: auto;
+            font-size: 8px;
+            color: #888;
+        }
+
+        /* ==================== SP-404 STYLE ARTWORK OVERLAY ==================== */
+        .sp404-art {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+
+        .sp404-art svg {
+            width: 100%;
+            height: 100%;
         }
 
         /* ==================== PHYSICAL CONTROLS ==================== */
@@ -1118,135 +961,64 @@
                 <div class="device-artwork">
                     <!-- The Enclosure -->
                     <div class="enclosure">
-                        <!-- Display with App Mockup -->
+                        <!-- Display - Sequencer & Setup Only (minimal LED) -->
                         <div class="display-bezel">
                             <div class="display-screen">
-                                <!-- App Header -->
-                                <div class="app-header">
-                                    <span class="app-logo">OH MY BOX</span>
-                                    <div class="app-transport">
-                                        <div class="app-tr-btn play">&#9654;</div>
-                                        <div class="app-tr-btn">&#9632;</div>
-                                        <div class="app-tr-btn rec">&#9679;</div>
-                                    </div>
-                                    <span class="app-tempo">120 BPM</span>
-                                    <span class="app-gps">40.7128° N</span>
+                                <!-- Status Bar -->
+                                <div class="lcd-status">
+                                    <span class="lcd-pattern">PTN A1</span>
+                                    <span class="lcd-bpm">120</span>
+                                    <span class="lcd-time">00:42</span>
                                 </div>
-                                <!-- App Grid - 12 panels: 3 cols x 5 rows -->
-                                <div class="app-grid">
-                                    <!-- LEFT COLUMN -->
-                                    <!-- Mixer (rows 1-3) -->
-                                    <div class="app-panel app-mixer">
-                                        <span class="app-panel-title">MIXER</span>
-                                        <div class="app-mixer-channels">
-                                            <div class="app-mixer-ch"><span>MIC</span><div class="app-fader med"></div></div>
-                                            <div class="app-mixer-ch"><span>SMP</span><div class="app-fader high"></div></div>
-                                            <div class="app-mixer-ch"><span>SYN</span><div class="app-fader"></div></div>
-                                            <div class="app-mixer-ch"><span>RAD</span><div class="app-fader low"></div></div>
-                                            <div class="app-mixer-ch"><span>OUT</span><div class="app-fader high"></div></div>
-                                        </div>
+                                <!-- Main Sequencer Grid -->
+                                <div class="lcd-seq">
+                                    <div class="lcd-tracks">
+                                        <span>BD</span><span>SD</span><span>HH</span><span>PC</span><span>S1</span><span>S2</span><span>S3</span><span>S4</span>
                                     </div>
-                                    <!-- EQ (rows 4-5) -->
-                                    <div class="app-panel app-eq">
-                                        <span class="app-panel-title">EQ</span>
+                                    <div class="lcd-grid">
+                                        <!-- Track 1 - BD -->
+                                        <div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <!-- Track 2 - SD -->
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <!-- Track 3 - HH -->
+                                        <div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step on"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step on"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step on"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step on play"></div><div class="lcd-step"></div><div class="lcd-step on"></div><div class="lcd-step"></div>
+                                        <!-- Track 4 - PC -->
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step on"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step on"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step on"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step on"></div>
+                                        <!-- Track 5-8 (samples) -->
+                                        <div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step on"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step on"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step on"></div>
+                                        <div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step on"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step on"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step"></div>
+                                        <div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step"></div><div class="lcd-step on"></div>
+                                        <div class="lcd-step"></div><div class="lcd-step on"></div><div class="lcd-step"></div><div class="lcd-step"></div>
                                     </div>
-
-                                    <!-- MIDDLE COLUMN -->
-                                    <!-- Sequencer (rows 1-2) -->
-                                    <div class="app-panel app-seq">
-                                        <span class="app-panel-title">SEQ</span>
-                                        <div class="app-seq-grid">
-                                            <div class="app-step active"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step active"></div>
-                                            <div class="app-step playing"></div><div class="app-step"></div><div class="app-step active"></div><div class="app-step"></div>
-                                            <div class="app-step active"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step active"></div>
-                                            <div class="app-step"></div><div class="app-step"></div><div class="app-step active"></div><div class="app-step"></div>
-                                            <div class="app-step"></div><div class="app-step"></div><div class="app-step active"></div><div class="app-step"></div>
-                                            <div class="app-step"></div><div class="app-step active"></div><div class="app-step"></div><div class="app-step"></div>
-                                            <div class="app-step"></div><div class="app-step"></div><div class="app-step active"></div><div class="app-step"></div>
-                                            <div class="app-step active"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step active"></div>
-                                            <div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div>
-                                            <div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div>
-                                            <div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div>
-                                            <div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div>
-                                            <div class="app-step"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step"></div>
-                                            <div class="app-step active"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step"></div>
-                                            <div class="app-step"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step"></div>
-                                            <div class="app-step active"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step"></div>
-                                        </div>
-                                    </div>
-                                    <!-- Pads (row 3) -->
-                                    <div class="app-panel app-pads">
-                                        <span class="app-panel-title">PADS</span>
-                                        <div class="app-pads-grid">
-                                            <div class="app-pad">1</div><div class="app-pad hit">2</div><div class="app-pad">3</div><div class="app-pad">4</div>
-                                            <div class="app-pad">5</div><div class="app-pad">6</div><div class="app-pad">7</div><div class="app-pad">8</div>
-                                        </div>
-                                    </div>
-                                    <!-- CTRL (row 4) -->
-                                    <div class="app-panel app-ctrl">
-                                        <span class="app-panel-title">CTRL</span>
-                                        <div class="app-ctrl-knobs">
-                                            <div class="app-ctrl-knob"></div>
-                                            <div class="app-ctrl-knob"></div>
-                                            <div class="app-ctrl-knob"></div>
-                                            <div class="app-ctrl-knob"></div>
-                                            <div class="app-ctrl-knob"></div>
-                                            <div class="app-ctrl-knob"></div>
-                                            <div class="app-ctrl-knob"></div>
-                                            <div class="app-ctrl-knob"></div>
-                                        </div>
-                                    </div>
-                                    <!-- Scenes (row 5) -->
-                                    <div class="app-panel app-scenes">
-                                        <span class="app-panel-title">SCENES</span>
-                                        <div class="app-scene-btns">
-                                            <div class="app-scene-btn active">A</div>
-                                            <div class="app-scene-btn">B</div>
-                                            <div class="app-scene-btn">C</div>
-                                            <div class="app-scene-btn">D</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- RIGHT COLUMN -->
-                                    <!-- Synth (row 1) -->
-                                    <div class="app-panel app-synth">
-                                        <span class="app-panel-title">SYNTH</span>
-                                        <div class="app-wave-btns">
-                                            <div class="app-wave-btn">SIN</div>
-                                            <div class="app-wave-btn active">SAW</div>
-                                            <div class="app-wave-btn">SQR</div>
-                                            <div class="app-wave-btn">TRI</div>
-                                        </div>
-                                    </div>
-                                    <!-- FX (row 2) -->
-                                    <div class="app-panel app-fx">
-                                        <span class="app-panel-title">FX</span>
-                                        <div class="app-fx-knobs">
-                                            <div class="app-fx-knob"></div>
-                                            <div class="app-fx-knob"></div>
-                                            <div class="app-fx-knob"></div>
-                                            <div class="app-fx-knob"></div>
-                                        </div>
-                                    </div>
-                                    <!-- AI Gen (row 3) -->
-                                    <div class="app-panel app-ai">
-                                        <span class="app-panel-title">AI GEN</span>
-                                        <div class="app-ai-btns">
-                                            <div class="app-ai-btn active">CALM</div>
-                                            <div class="app-ai-btn">URBAN</div>
-                                            <div class="app-ai-btn">NATURE</div>
-                                            <div class="app-ai-btn">CHAOS</div>
-                                        </div>
-                                    </div>
-                                    <!-- Radio (row 4) -->
-                                    <div class="app-panel app-radio">
-                                        <span class="app-panel-title">RADIO</span>
-                                    </div>
-                                    <!-- REC (row 5) -->
-                                    <div class="app-panel app-rec">
-                                        <span class="app-panel-title">REC</span>
-                                        <div class="app-rec-btn">00:42</div>
-                                    </div>
+                                </div>
+                                <!-- Sample Info -->
+                                <div class="lcd-info">
+                                    <span class="lcd-sample">S2: field_birds.wav</span>
+                                    <span class="lcd-file">PROJECT: Madrid_Park</span>
                                 </div>
                             </div>
                         </div>
@@ -1329,6 +1101,61 @@
                             <div class="hw-scene-btn">B</div>
                             <div class="hw-scene-btn">C</div>
                             <div class="hw-scene-btn">D</div>
+                        </div>
+
+                        <!-- SP-404 Style Artwork Overlay -->
+                        <div class="sp404-art">
+                            <svg viewBox="0 0 700 600" preserveAspectRatio="xMidYMid slice">
+                                <!-- Abstract geometric patterns -->
+                                <defs>
+                                    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+                                        <circle cx="2" cy="2" r="1" fill="#e94560"/>
+                                    </pattern>
+                                    <pattern id="lines" width="10" height="10" patternUnits="userSpaceOnUse">
+                                        <line x1="0" y1="10" x2="10" y2="0" stroke="#e94560" stroke-width="0.5"/>
+                                    </pattern>
+                                </defs>
+
+                                <!-- Retro wave circles -->
+                                <circle cx="600" cy="100" r="80" fill="none" stroke="#e94560" stroke-width="1"/>
+                                <circle cx="600" cy="100" r="60" fill="none" stroke="#e94560" stroke-width="0.5"/>
+                                <circle cx="600" cy="100" r="40" fill="none" stroke="#e94560" stroke-width="0.5"/>
+
+                                <!-- Sound wave visualization -->
+                                <path d="M 50 520 Q 80 480 110 520 Q 140 560 170 520 Q 200 480 230 520 Q 260 560 290 520"
+                                      fill="none" stroke="#27ae60" stroke-width="2" opacity="0.6"/>
+                                <path d="M 50 535 Q 90 510 130 535 Q 170 560 210 535 Q 250 510 290 535"
+                                      fill="none" stroke="#27ae60" stroke-width="1" opacity="0.4"/>
+
+                                <!-- Grid pattern area -->
+                                <rect x="480" y="450" width="180" height="120" fill="url(#dots)" opacity="0.3"/>
+
+                                <!-- Abstract shapes -->
+                                <polygon points="100,80 140,120 100,160 60,120" fill="none" stroke="#9b59b6" stroke-width="1.5"/>
+                                <polygon points="110,90 140,115 110,140 80,115" fill="none" stroke="#9b59b6" stroke-width="0.5"/>
+
+                                <!-- Frequency bars -->
+                                <rect x="520" y="280" width="8" height="40" fill="#3498db" opacity="0.4"/>
+                                <rect x="532" y="260" width="8" height="60" fill="#3498db" opacity="0.5"/>
+                                <rect x="544" y="240" width="8" height="80" fill="#3498db" opacity="0.6"/>
+                                <rect x="556" y="255" width="8" height="65" fill="#3498db" opacity="0.5"/>
+                                <rect x="568" y="270" width="8" height="50" fill="#3498db" opacity="0.4"/>
+
+                                <!-- Cassette tape motif -->
+                                <rect x="30" y="380" width="100" height="60" rx="5" fill="none" stroke="#fff" stroke-width="1"/>
+                                <circle cx="55" cy="410" r="15" fill="none" stroke="#fff" stroke-width="0.5"/>
+                                <circle cx="105" cy="410" r="15" fill="none" stroke="#fff" stroke-width="0.5"/>
+                                <rect x="45" y="430" width="70" height="5" fill="none" stroke="#fff" stroke-width="0.5"/>
+
+                                <!-- Abstract lines -->
+                                <line x1="620" y1="200" x2="680" y2="350" stroke="#ffcc00" stroke-width="1" opacity="0.5"/>
+                                <line x1="640" y1="200" x2="700" y2="320" stroke="#ffcc00" stroke-width="0.5" opacity="0.4"/>
+
+                                <!-- Text elements (lo-fi aesthetic) -->
+                                <text x="520" y="400" font-family="monospace" font-size="8" fill="#666" opacity="0.5">SAMPLE</text>
+                                <text x="520" y="415" font-family="monospace" font-size="8" fill="#666" opacity="0.5">FLIP</text>
+                                <text x="60" y="360" font-family="monospace" font-size="6" fill="#888" opacity="0.4">TAPE LOOP</text>
+                            </svg>
                         </div>
                     </div>
 
