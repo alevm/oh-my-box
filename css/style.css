@@ -173,93 +173,93 @@ html, body {
     display: none;
 }
 
-/* Middle Column - Dark Gray (SEQ/PADS/CTRL) */
+/* MIDDLE COLUMN - Pastel Mint (SEQ/PADS/CTRL) */
 .device > .seq-panel,
 .device > .pads-panel,
 .device > .knobs-panel {
-    background: #2d2d2d;
-    border-color: #505050;
+    background: #d4edda !important;
+    border-color: #a8d5b1 !important;
 }
 
 .device > .seq-panel .panel-title,
 .device > .pads-panel .panel-title,
 .device > .knobs-panel .panel-title {
-    color: #0f0;
+    color: #1e7e34 !important;
 }
 
 .device > .knobs-panel .ctrl-header select {
-    background: #333;
-    color: #0f0;
-    border-color: #444;
+    background: #fff;
+    color: #1e7e34;
+    border-color: #a8d5b1;
 }
 
 .device > .knobs-panel .knob-group span {
-    color: #0f0;
+    color: #1e7e34;
 }
 
-/* LEFT COLUMN - Blue (Mixer/EQ) */
+/* LEFT COLUMN - Pastel Blue (Mixer/EQ) */
 .device > .mixer-panel,
 .device > .eq-panel {
-    background: #1e3a5f;
-    border-color: #2a5080;
+    background: #d0e8f2 !important;
+    border-color: #a0c8e0 !important;
 }
 
 .device > .mixer-panel .panel-title,
 .device > .eq-panel .panel-title {
-    color: #48cae4;
+    color: #1a5276 !important;
 }
 
 .device > .mixer-panel .ch-name,
 .device > .eq-panel .eq-band span {
-    color: #90e0ef;
+    color: #2874a6;
 }
 
-/* RIGHT COLUMN - Light Purple (Synth/Radio/FX/Scenes) */
+/* RIGHT COLUMN - Pastel Orange/Peach (Synth/Radio/FX/Scenes) */
 .device > .synth-panel,
 .device > .radio-panel,
 .device > .fx-panel,
 .device > .scenes-panel {
-    background: #e8d5f0 !important;
-    border-color: #b080d0 !important;
-    color: #3a1050;
+    background: #fdebd0 !important;
+    border-color: #f5b041 !important;
+    color: #6e2c00;
 }
 
 .synth-panel .panel-title,
 .radio-panel .panel-title,
 .fx-panel .panel-title,
 .scenes-panel .panel-title {
-    color: #7b2cbf !important;
+    color: #d35400 !important;
 }
 
 .synth-panel .wave-btn,
 .scenes-panel .scene-btn,
 .fx-panel .punch-btn {
-    background: #d0a0e8 !important;
-    border-color: #a060c0 !important;
-    color: #3a1050 !important;
+    background: #fad7a0 !important;
+    border-color: #e59866 !important;
+    color: #6e2c00 !important;
 }
 
 .synth-panel .wave-btn.active,
 .scenes-panel .scene-btn.active {
-    background: #9b4dca !important;
+    background: #e67e22 !important;
     color: #fff !important;
 }
 
 .radio-panel input,
 .radio-panel button {
     background: #fff !important;
-    border-color: #a060c0 !important;
-    color: #3a1050 !important;
+    border-color: #e59866 !important;
+    color: #6e2c00 !important;
 }
 
 .fx-panel .fx-row span,
 .synth-panel .adsr-param span {
-    color: #5a2080 !important;
+    color: #d35400 !important;
 }
 
 .scenes-panel .scene-actions button {
-    background: #9b4dca !important;
-    border-color: #7b2cbf !important;
+    background: #e67e22 !important;
+    border-color: #d35400 !important;
     color: #fff !important;
 }
 
