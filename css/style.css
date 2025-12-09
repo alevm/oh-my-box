@@ -350,6 +350,12 @@ html, body {
         overflow: auto;
         height: auto;
         min-height: 100%;
+        background: transparent;
+    }
+
+    .map-bg {
+        position: fixed;
+        z-index: -1;
     }
 
     #app {
