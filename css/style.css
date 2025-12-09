@@ -173,45 +173,45 @@ html, body {
     display: none;
 }
 
-/* MIDDLE COLUMN - Black (SEQ/PADS/CTRL) */
+/* MIDDLE COLUMN - Pastel Gray/Warm (SEQ/PADS/CTRL) */
 .device > .seq-panel,
 .device > .pads-panel,
 .device > .knobs-panel {
-    background: #1a1a1a !important;
-    border-color: #333 !important;
+    background: #e8e8e8 !important;
+    border-color: #c0c0c0 !important;
 }
 
 .device > .seq-panel .panel-title,
 .device > .pads-panel .panel-title,
 .device > .knobs-panel .panel-title {
-    color: #0f0 !important;
+    color: #2c3e50 !important;
 }
 
 .device > .knobs-panel .ctrl-header select {
-    background: #333;
-    color: #0f0;
-    border-color: #444;
+    background: #fff;
+    color: #2c3e50;
+    border-color: #b0b0b0;
 }
 
 .device > .knobs-panel .knob-group span {
-    color: #0f0;
+    color: #2c3e50;
 }
 
-/* LEFT COLUMN - Blue (Mixer/EQ) */
+/* LEFT COLUMN - Pastel Blue (Mixer/EQ) */
 .device > .mixer-panel,
 .device > .eq-panel {
-    background: #1a3a5c !important;
-    border-color: #2a5080 !important;
+    background: #d6eaf8 !important;
+    border-color: #a9cce3 !important;
 }
 
 .device > .mixer-panel .panel-title,
 .device > .eq-panel .panel-title {
-    color: #5dade2 !important;
+    color: #1a5276 !important;
 }
 
 .device > .mixer-panel .ch-name,
 .device > .eq-panel .eq-band span {
-    color: #85c1e9;
+    color: #2874a6;
 }
 
 /* RIGHT COLUMN - Pastel Violet/Purple (Synth/Radio/FX/Scenes) */
