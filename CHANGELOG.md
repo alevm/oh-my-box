@@ -1,5 +1,77 @@
 # Oh My Box - Changelog
 
+## v2.0.0 (2025-12-09)
+
+### Major UI/UX Overhaul
+- **Bigger Text**: All text sizes increased throughout the UI
+- **Larger Buttons**: All buttons easier to click/tap
+- **No Dropdowns**: ALL dropdowns replaced with button groups
+  - Source selector (SMP, SYN, RAD, MIC)
+  - Kit selector
+  - EQ channel selector
+  - CTRL target selector
+  - Trigger condition selector (ALL, PROB, FILL, !FILL, NTH, NEIGH)
+  - FX preset selector
+  - Waveform selector (SIN, TRI, SAW, SQR)
+- **Doubled Header Size**: 96px height with larger transport buttons (56x56)
+- **Mini Map in Header**: GPS map visible at all times
+- **8 CTRL Knobs**: Added PAN and VOL knobs (FREQ, FILT, DLY, GRN, RES, DRV, PAN, VOL)
+- **Full-Width Scene Buttons**: A/B/C/D buttons 56px tall, filling panel width
+- **Comprehensive Tooltips**: All interactive elements have hover descriptions
+- **Panel Reorganization**: FX and Scenes panels swapped positions
+- **Smaller Radio Panel**: More compact design
+
+### Layout Changes
+- Left column: 240px (Mixer + EQ)
+- Header: 96px with transport, tempo, mini map, GPS
+- Scene buttons: Full width, 56px height
+- CTRL knobs: 8 in single row using CSS grid
+
+---
+
+## v1.7.x (2025-12-09)
+
+### v1.7.4
+- Scene buttons full width with flex: 1
+- Increased scene button height to 56px
+
+### v1.7.3
+- Added tooltips to REC panel and settings modal elements
+
+### v1.7.2
+- Increased text sizes (knob labels 12px, recording text 12px)
+
+### v1.7.1
+- Increased all text sizes by ~2px
+
+### v1.7.0
+- Doubled header height (60px → 96px)
+- Transport buttons enlarged (44x40 → 56x56)
+- Left column widened to 240px
+
+---
+
+## v1.6.0 (2025-12-09)
+
+### Header Enhancements
+- Added mini map to top bar
+- Increased header height to 60px
+- Changed CTRL to 8 knobs (added PAN and VOL)
+
+---
+
+## v1.5.0 (2025-12-09)
+
+### UI/UX Improvements
+- Increased text sizes throughout
+- Made buttons larger
+- Replaced all dropdowns with button groups
+- Swapped FX and Scenes panel positions
+- Made Radio panel smaller (1 row)
+- Enabled REC panel
+
+---
+
 ## v1.3.0 (2025-12-09)
 
 ### 3-Column Layout Redesign

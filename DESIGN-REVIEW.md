@@ -1,44 +1,43 @@
 # Oh My Box - Design Review & Roadmap
 
-## Current State Assessment
+## Current State Assessment (v2.0)
 
 Oh My Box is a web-based music creation tool with:
-- 4-column layout (Mixer, SEQ/EQ, CTRL/Location/AI/Radio, Synth/Scenes/FX/REC)
-- 8-track sequencer with P-locks
+- 3-column layout (Mixer/EQ, SEQ/PADS/CTRL, Synth/FX/Scenes/AI/Radio/REC)
+- 8-track sequencer with P-locks and conditional triggers
 - Scene system with crossfader morphing
 - AI-assisted pattern generation with GPS awareness
 - Radio streaming integration
 - Punch-in FX
+- Comprehensive tooltips for all controls
 
 **Unique Strengths:**
 - GPS/Location-aware music generation
 - Radio integration (local station discovery)
 - AI vibe-based composition
 - Web-based = accessible anywhere
+- No dropdowns = hardware-ready UI
 
 ---
 
-## Usability Issues (Priority Fixes)
+## v2.0 Achievements
 
-### Critical
-1. **Too many panels visible at once** - cognitive overload
-2. **No clear workflow** - user doesn't know where to start
-3. **Sequencer tracks too small** - hard to see/edit patterns
-4. **No visual feedback when sounds play** - pads/steps don't flash
-5. **Transport controls lost in header** - Play/Stop not prominent
+### Usability Fixes Completed
+1. ~~Too many panels visible at once~~ → 3-column layout with clear organization
+2. ~~No clear workflow~~ → Tooltips explain every control
+3. ~~Transport controls lost in header~~ → Large 56x56 buttons, 96px header
+4. ~~Knobs too small~~ → 8 knobs in clear row
+5. ~~No keyboard shortcuts visible~~ → Help modal + tooltips show shortcuts
+6. ~~Dropdowns not hardware-friendly~~ → All replaced with button groups
 
-### Important
-6. **Knobs too small on desktop** - hard to grab
-7. **No keyboard shortcuts visible** - hidden functionality
-8. **No undo/redo** - destructive edits
-9. **Pattern length fixed at 16** - limits creativity
-10. **No sample preview** - can't hear before loading
-
-### Nice to Have
-11. **No dark mode** - eye strain at night
-12. **No tempo tap** - have to guess BPM
-13. **No metronome** - hard to play in time
-14. **No copy/paste patterns** - tedious workflow
+### v2.0 UI/UX Features
+- Bigger text sizes throughout
+- Larger buttons for easier touch/click
+- All dropdowns → button groups
+- Doubled header with mini map
+- 8 CTRL knobs (FREQ, FILT, DLY, GRN, RES, DRV, PAN, VOL)
+- Full-width scene buttons (56px)
+- Comprehensive hover tooltips
 
 ---
 
@@ -56,11 +55,11 @@ Oh My Box is a web-based music creation tool with:
 - Arranger mode for full songs
 
 **Adopt for Oh My Box:**
-- [ ] **Conditional triggers** - 1:2, 2:4, random %, A:B fills
+- [x] **Conditional triggers** - ALL, PROB, FILL, !FILL, NTH, NEIGH
 - [ ] **Slice mode** - auto-slice loaded samples
 - [ ] **Pickup machine** - loop pedal style recording
 - [ ] **Parts** - 4 variations per pattern (A/B/C/D)
-- [ ] **Better P-locks** - lock ANY parameter per step
+- [x] **Better P-locks** - lock ANY parameter per step
 
 ### Teenage Engineering OP-Z
 
@@ -105,7 +104,7 @@ Oh My Box is a web-based music creation tool with:
 - DJ-friendly (vinyl sim, isolator)
 
 **Adopt for Oh My Box:**
-- [ ] **Bigger pads** - make them the star
+- [x] **Bigger pads** - prominently displayed
 - [ ] **Resample button** - capture output as new sample
 - [ ] **Pad FX** - each pad can have assigned effect
 - [ ] **Bank system** - A/B/C/D banks x 8 pads = 32 sounds
@@ -211,26 +210,35 @@ Oh My Box is a web-based music creation tool with:
 ## Implementation Priority
 
 ### Phase 1: Core UX (v1.2) ✓ COMPLETED
-1. ~~Add mode switching (PLAY/SEQ/MIX/GEN)~~ → Deferred to v1.3
-2. ✓ Make pads flash on trigger
-3. ✓ Add keyboard shortcuts display ([?] button)
-4. ✓ Add tempo tap button
-5. ✓ Transport controls bigger/more visible
-6. ✓ Full keyboard shortcuts (1-8, SPACE, R, D, F, Q/W/E/T, G, arrows)
+1. ✓ Make pads flash on trigger
+2. ✓ Add keyboard shortcuts display ([?] button)
+3. ✓ Add tempo tap button
+4. ✓ Transport controls bigger/more visible
+5. ✓ Full keyboard shortcuts (1-8, SPACE, R, D, F, Q/W/E/T, G, arrows)
 
-### Phase 2: Sequencer Power (v1.3)
-1. Conditional triggers (1:2, 2:4, %, fill)
-2. Variable pattern length (1-64 steps)
-3. Copy/paste patterns
-4. Undo/redo for pattern edits
+### Phase 2: UI/UX Overhaul (v2.0) ✓ COMPLETED
+1. ✓ Bigger text throughout
+2. ✓ All dropdowns → button groups
+3. ✓ Larger header with mini map
+4. ✓ 8 CTRL knobs
+5. ✓ Full-width scene buttons
+6. ✓ Comprehensive tooltips
+7. ✓ Conditional triggers (ALL, PROB, FILL, !FILL, NTH, NEIGH)
 
-### Phase 3: Performance (v1.4)
-1. Performance mode with big mute buttons
-2. Hold-for-effect on pads
-3. Resample to new pad
-4. Motion recording (record knob movements)
+### Phase 3: Sequencer Power (v2.1)
+1. Variable pattern length (1-64 steps)
+2. Copy/paste patterns
+3. Undo/redo for pattern edits
+4. More conditional trigger types
 
-### Phase 4: Polish (v2.0)
+### Phase 4: Performance (v2.2)
+1. Mode switching (PLAY/SEQ/MIX/GEN views)
+2. Performance mode with big mute buttons
+3. Hold-for-effect on pads
+4. Resample to new pad
+5. Motion recording (record knob movements)
+
+### Phase 5: Polish (v3.0)
 1. Dark mode theme
 2. Slice mode for samples
 3. Waveform display with markers
@@ -238,7 +246,7 @@ Oh My Box is a web-based music creation tool with:
 
 ---
 
-## Questions for User
+## Questions for Future Development
 
 1. Which mode should be default? (PLAY, SEQ, MIX, or GEN)
 2. Priority: More sequencer features or better live performance?

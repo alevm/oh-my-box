@@ -1,4 +1,4 @@
-# Oh My Box - Web Prototype
+# Oh My Box - Web Prototype v2.0
 
 A browser-based proof-of-concept for the Oh My Box portable music instrument.
 
@@ -6,11 +6,23 @@ A browser-based proof-of-concept for the Oh My Box portable music instrument.
 
 - **Microphone Input** - Capture ambient audio
 - **Sample Player** - 8 touch pads with synthesized percussion
-- **Synthesizer** - Oscillator + noise generator with filter
+- **Synthesizer** - Oscillator + noise generator with filter and ADSR
 - **Internet Radio** - Stream from thousands of stations worldwide
-- **4-Channel Mixer** - Volume and mute for each input
-- **GPS Tracking** - Automatic location embedding in recordings
+- **5-Channel Mixer** - Volume, mute, and 3-band EQ per channel
+- **8-Track Sequencer** - With P-locks and conditional triggers
+- **Scene System** - A/B/C/D scenes with crossfader morphing
+- **AI Generation** - Vibe-based pattern generation with GPS awareness
+- **GPS Tracking** - Automatic location embedding and local radio discovery
 - **Session Recording** - Export audio with metadata
+
+## v2.0 Highlights
+
+- **Bigger UI** - Larger text, buttons, and controls throughout
+- **No Dropdowns** - All selectors replaced with button groups
+- **8 CTRL Knobs** - FREQ, FILT, DLY, GRN, RES, DRV, PAN, VOL
+- **Enlarged Header** - 96px with transport, tempo, mini map
+- **Full-Width Scenes** - Large A/B/C/D buttons
+- **Hover Tooltips** - Help text on all interactive elements
 
 ## Quick Start (Local)
 
@@ -35,7 +47,7 @@ Then open http://localhost:8080
 
 1. Create a GitHub repository
 2. Push this folder to the `main` branch
-3. Go to Settings → Pages → Source: `main` branch
+3. Go to Settings > Pages > Source: `main` branch
 4. Your app will be at `https://yourusername.github.io/repo-name`
 
 ## Deploy to Netlify (Drag & Drop)
@@ -44,32 +56,43 @@ Then open http://localhost:8080
 2. Drag the `oh-my-box-web` folder
 3. Get your HTTPS URL instantly
 
-## Usage
+## Keyboard Shortcuts
 
-1. **Tap "TAP TO START"** - Grants microphone & GPS permissions
-2. **Mixer tab** - Adjust levels for each input source
-3. **Pads tab** - Tap pads to trigger samples
-4. **Synth tab** - Configure and start the synthesizer
-5. **Radio tab** - Search and stream internet radio
-6. **Files tab** - View and download recordings
-7. **REC button** - Record the full mix with GPS metadata
+| Key | Action |
+|-----|--------|
+| SPACE | Play/Pause |
+| R | Record |
+| ESC | Stop All |
+| 1-8 | Trigger Pads |
+| Up/Down | Select Track |
+| D | Toggle Dub Mode |
+| F (hold) | Fill Mode |
+| Q/W/E/T (hold) | Punch FX |
+| G | Generate Pattern |
+| ? | Show Help |
 
 ## File Structure
 
 ```
 oh-my-box-web/
 ├── index.html          # Main HTML
+├── VERSION             # Version number
 ├── css/
-│   └── style.css       # Mobile-first styling
+│   └── style.css       # Styling
 ├── js/
 │   ├── app.js          # Main controller
 │   ├── audio-engine.js # Core audio routing
 │   ├── gps.js          # Location tracking
 │   ├── mic-input.js    # Microphone capture
 │   ├── sampler.js      # 8-pad sample player
-│   ├── synth.js        # Oscillator + noise
+│   ├── synth.js        # Oscillator + ADSR
 │   ├── radio.js        # Internet radio
-│   └── recorder.js     # Session recording
+│   ├── recorder.js     # Session recording
+│   ├── sequencer.js    # 8-track sequencer
+│   ├── scenes.js       # Scene management
+│   ├── mangle.js       # FX processing
+│   ├── ai-composer.js  # AI pattern generation
+│   └── arrangement.js  # Arrangement tools
 └── samples/            # (Optional) Custom samples
 ```
 
@@ -95,7 +118,7 @@ Recordings are saved as WebM/Opus with a JSON metadata sidecar:
     "formatted": "40.41680°N, 3.70380°W"
   },
   "app": "Oh My Box Web",
-  "version": "1.0.0"
+  "version": "2.0.0"
 }
 ```
 
