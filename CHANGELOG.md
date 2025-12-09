@@ -1,5 +1,21 @@
 # Oh My Box - Changelog
 
+## v1.3.0 (2025-12-09)
+
+### 3-Column Layout Redesign
+- **New 3-column layout** with color-coded sections:
+  - **Left (Blue #0d1b2a)**: MIXER + EQ - cyan accents
+  - **Middle (Black #1a1a1a)**: SEQ + PADS + CTRL - green LED style
+  - **Right (Purple #1a0a2e)**: SYNTH + RADIO + FX + SCENES - magenta accents
+- **CTRL target selector**: Route knobs to FX, Synth, or Sampler
+- **SCENES redesign**: 8-button grid (1-8) with SAVE/LOAD
+- **REC panel update**: Shows last recording with map icon
+- **PADS A/B**: Dual pad banks (1-8 and 9-16)
+- Removed secondary transport from screen column
+- Improved visual hierarchy with distinct column colors
+
+---
+
 ## v1.2.1 (2025-12-09)
 
 ### Hardware Layout Redesign
