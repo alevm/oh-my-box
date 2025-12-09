@@ -130,29 +130,38 @@ html, body {
     flex: 1;
     display: grid;
     grid-template-columns: minmax(350px, 1.5fr) 160px 1fr 1fr;
-    gap: 6px;
+    gap: 0;
     padding: 6px;
     min-height: 0;
     overflow: hidden;
+    background: var(--border);
+    border-radius: 8px;
 }
 
 /* Column containers */
 .col {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 1px;
     min-height: 0;
     overflow: hidden;
+    background: var(--border);
+}
+
+/* All columns get panel background */
+.col-mixer, .col-ctrl, .col-synth {
+    background: var(--panel);
+    border-left: 2px solid var(--border);
 }
 
 /* COL 1: Screen (Sequencer + Pads) */
 .col-screen {
     background: #1a1a1a;
-    border-radius: 8px;
     padding: 6px;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    border-radius: 6px 0 0 6px;
 }
 
 .col-screen .panel {
@@ -197,21 +206,43 @@ html, body {
 
 /* COL 2: Mixer + EQ */
 .col-mixer {
-    width: 160px;
+    padding: 6px;
 }
 
 .col-mixer .mixer-panel {
     flex: 1;
+    border: none;
+    background: transparent;
 }
 
 .col-mixer .eq-panel {
     flex-shrink: 0;
-    height: 120px;
+    border: none;
+    background: transparent;
+    border-top: 1px solid var(--border);
+    padding-top: 6px;
 }
 
 /* COL 3 & 4: Control columns */
 .col-ctrl, .col-synth {
-    flex: 1;
+    padding: 6px;
+}
+
+.col-ctrl .panel, .col-synth .panel {
+    border: none;
+    background: transparent;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-radius: 0;
+    padding-bottom: 8px;
+}
+
+.col-ctrl .panel:last-child, .col-synth .panel:last-child {
+    border-bottom: none;
+}
+
+/* Last column rounded corner */
+.col-synth {
+    border-radius: 0 6px 6px 0;
 }
 
 .panel {
