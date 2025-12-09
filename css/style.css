@@ -1,4 +1,4 @@
-/* Oh My Box v0.7.18 - pads full baseline, improved mixer */
+/* Oh My Box v0.7.19 - fix sequencer visibility */
 
 * {
     margin: 0;
@@ -153,7 +153,7 @@ html, body {
 .ch.master .ch-name { color: var(--green); font-weight: 800; }
 
 /* ===== COL 2: SEQUENCER ===== */
-.seq-panel { flex: 0.75; display: flex; flex-direction: column; }
+.seq-panel { flex: 1; display: flex; flex-direction: column; }
 .seq-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .seq-controls { display: flex; gap: 2px; }
 .seq-controls select { height: 18px; font-size: 8px; border: 1px solid var(--border); border-radius: 3px; }
@@ -163,7 +163,7 @@ html, body {
 .dub-btn.overdub-active { background: var(--accent); color: #fff; }
 .fill-btn:active, .fill-btn.active { background: var(--green); color: #fff; }
 
-.oct-tracks { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+.oct-tracks { flex: 1; display: flex; flex-direction: column; gap: 2px; min-height: 180px; }
 .oct-track { display: flex; align-items: center; gap: 3px; height: 20px; padding: 2px; background: rgba(0,0,0,0.03); border-radius: 2px; cursor: pointer; }
 .oct-track.selected { background: rgba(233, 69, 96, 0.15); border: 1px solid var(--accent); }
 .oct-track-num { width: 10px; font-size: 7px; font-weight: 700; color: var(--text-light); }
