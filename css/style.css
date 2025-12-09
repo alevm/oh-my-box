@@ -125,14 +125,14 @@ html, body {
 .admin-btn { width: 24px; height: 24px; border: 1px solid var(--border); border-radius: 4px; background: var(--cream); cursor: pointer; }
 .version { font-size: 9px; color: var(--text-light); margin-left: auto; }
 
-/* ===== GRID LAYOUT - 12 Equal Tiles ===== */
+/* ===== GRID LAYOUT - 3 Columns ===== */
 .device {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: 180px 1fr 1fr;
+    grid-template-rows: repeat(4, 1fr);
     gap: 4px;
     padding: 6px;
-    height: 480px;
+    height: 520px;
     overflow: hidden;
     background: var(--border);
     border-radius: 8px;
@@ -146,6 +146,31 @@ html, body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+}
+
+/* Left column: Mixer spans 2 rows, EQ spans 2 rows */
+.device > .mixer-panel { grid-column: 1; grid-row: 1 / 3; }
+.device > .eq-panel { grid-column: 1; grid-row: 3 / 5; }
+
+/* Middle column */
+.device > .seq-panel { grid-column: 2; grid-row: 1 / 3; }
+.device > .pads-panel:not(.pads2) { grid-column: 2; grid-row: 3; }
+.device > .radio-panel { grid-column: 2; grid-row: 4; }
+
+/* Right column */
+.device > .synth-panel { grid-column: 3; grid-row: 1; }
+.device > .knobs-panel { grid-column: 3; grid-row: 2; }
+.device > .fx-panel { grid-column: 3; grid-row: 3; }
+.device > .scenes-panel { grid-column: 3; grid-row: 4; }
+
+/* Hide PADS B, LOCATION, REC for now - merge into others */
+.device > .pads2,
+.device > .map-panel { display: none; }
+
+.device > .rec-panel {
+    grid-column: 2;
+    grid-row: 3;
+    display: none;
 }
 
 /* Dark panels for screen elements */
@@ -393,9 +418,15 @@ html, body {
 
 /* REC */
 .rec-panel { }
-.rec-row { display: flex; align-items: center; gap: 6px; }
-.rec-row span:nth-child(2) { font-size: 11px; font-weight: 600; color: var(--accent); }
-.rec-list-btn { height: 20px; padding: 0 8px; border: 1px solid var(--border); border-radius: 3px; background: var(--panel-alt); font-size: 8px; cursor: pointer; margin-left: auto; }
+.rec-header { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.rec-header span:nth-child(2) { font-size: 11px; font-weight: 600; color: var(--accent); margin-left: auto; }
+.rec-last { display: flex; align-items: center; gap: 6px; padding: 6px; background: var(--panel-alt); border-radius: 4px; margin-bottom: 6px; flex: 1; }
+.rec-map-icon { font-size: 14px; }
+.rec-last-name { flex: 1; font-size: 9px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rec-last-time { font-size: 10px; color: var(--text-light); font-family: monospace; }
+.rec-actions { display: flex; gap: 4px; }
+.rec-actions button { flex: 1; height: 24px; border-radius: 3px; font-size: 9px; font-weight: 600; cursor: pointer; }
+.rec-list-btn { border: 1px solid var(--border); background: var(--panel-alt); }
 .rec-list { margin-top: 4px; max-height: 60px; overflow-y: auto; }
 .rec-item { display: flex; align-items: center; gap: 4px; padding: 2px 4px; font-size: 8px; }
 .rec-item-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
@@ -403,6 +434,10 @@ html, body {
 .rec-item button { width: 18px; height: 16px; border: 1px solid var(--border); border-radius: 2px; background: var(--panel-alt); font-size: 8px; cursor: pointer; }
 .rec-item-del { color: var(--accent); }
 .rec-item-del:hover { background: var(--accent); color: #fff; }
+
+/* CTRL header */
+.ctrl-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.ctrl-header select { height: 18px; font-size: 8px; border: 1px solid var(--border); border-radius: 3px; background: var(--panel-alt); }
 
 /* ===== COL 4: SYNTH + SCENES + FX ===== */
 .synth-panel { }
@@ -428,14 +463,15 @@ html, body {
 
 /* SCENES */
 .scenes-panel { }
-.scene-row { display: flex; gap: 3px; margin-bottom: 4px; }
-.scene-btn { flex: 1; height: 22px; border: 1px solid var(--border); border-radius: 3px; background: var(--panel-alt); font-size: 10px; font-weight: 600; cursor: pointer; }
+.scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; margin-bottom: 6px; flex: 1; }
+.scene-btn { height: 28px; border: 1px solid var(--border); border-radius: 3px; background: var(--panel-alt); font-size: 10px; font-weight: 600; cursor: pointer; }
 .scene-btn.active { background: var(--accent); color: #fff; }
+.scene-row { display: flex; gap: 3px; margin-bottom: 4px; }
 .xfade-row { display: flex; align-items: center; gap: 4px; margin-bottom: 4px; }
 .xfade-row span { font-size: 9px; font-weight: 600; }
 .xfader { flex: 1; height: 6px; }
 .scene-actions { display: flex; gap: 4px; }
-.scene-actions button { flex: 1; height: 20px; border: 1px solid var(--green); border-radius: 3px; background: var(--green); color: #fff; font-size: 8px; cursor: pointer; }
+.scene-actions button { flex: 1; height: 24px; border: 1px solid var(--green); border-radius: 3px; background: var(--green); color: #fff; font-size: 9px; font-weight: 600; cursor: pointer; }
 .scene-actions select { flex: 1; height: 20px; font-size: 8px; border: 1px solid var(--border); border-radius: 3px; }
 
 /* FX */

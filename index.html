@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="screen-orientation" content="landscape">
     <title>Oh My Box</title>
-    <link rel="stylesheet" href="css/style.css?v=123">
+    <link rel="stylesheet" href="css/style.css?v=124">
 </head>
 <body>
     <!-- Full-page map background -->
@@ -39,7 +39,7 @@
 
         <!-- Main Device Area - 12 Equal Tiles (4x3) -->
         <main class="device">
-            <!-- Row 1 -->
+            <!-- Row 1: SEQ | MIXER | SYNTH | SCENES -->
             <div class="panel seq-panel">
                 <div class="seq-header">
                     <span class="panel-title">SEQ</span>
@@ -74,15 +74,6 @@
                     <div class="ch master"><span class="ch-name">OUT</span><div class="vu-meter"><div class="vu-fill" id="vuMaster"></div></div><input type="range" class="v-fader" id="faderMaster" min="0" max="100" value="90" orient="vertical"></div>
                 </div>
             </div>
-            <div class="panel knobs-panel">
-                <div class="panel-title">CTRL</div>
-                <div class="knobs-grid">
-                    <div class="knob-group"><div class="knob" id="knobFreq" data-param="freq" data-min="20" data-max="2000" data-value="220"></div><span>FREQ</span></div>
-                    <div class="knob-group"><div class="knob" id="knobFilter" data-param="filter" data-min="20" data-max="8000" data-value="4000"></div><span>FILT</span></div>
-                    <div class="knob-group"><div class="knob" id="knobDelay" data-param="delay" data-min="0" data-max="100" data-value="0"></div><span>DLY</span></div>
-                    <div class="knob-group"><div class="knob" id="knobGrain" data-param="grain" data-min="0" max="100" data-value="0"></div><span>GRN</span></div>
-                </div>
-            </div>
             <div class="panel synth-panel">
                 <div class="synth-header"><span class="panel-title">SYNTH</span><button id="synthToggle" class="power-btn">OFF</button></div>
                 <div class="wave-btns">
@@ -98,11 +89,25 @@
                     <div class="adsr-param"><span>R</span><input type="range" id="adsrRelease" min="0" max="2000" value="200"><span id="adsrRVal">200</span></div>
                 </div>
             </div>
+            <div class="panel scenes-panel">
+                <div class="panel-title">SCENES</div>
+                <div class="scene-grid">
+                    <button class="scene-btn active" data-scene="0">1</button>
+                    <button class="scene-btn" data-scene="1">2</button>
+                    <button class="scene-btn" data-scene="2">3</button>
+                    <button class="scene-btn" data-scene="3">4</button>
+                    <button class="scene-btn" data-scene="4">5</button>
+                    <button class="scene-btn" data-scene="5">6</button>
+                    <button class="scene-btn" data-scene="6">7</button>
+                    <button class="scene-btn" data-scene="7">8</button>
+                </div>
+                <div class="scene-actions"><button id="saveScene">SAVE</button><button id="loadScene">LOAD</button></div>
+            </div>
 
-            <!-- Row 2 -->
+            <!-- Row 2: PADS | PADS2 | CTRL | FX -->
             <div class="panel pads-panel">
                 <div class="pads-header">
-                    <span class="panel-title">PADS</span>
+                    <span class="panel-title">PADS A</span>
                     <select id="sampleBank"><option value="kit1">Kit1</option><option value="kit2">Kit2</option><option value="kit3">Kit3</option></select>
                 </div>
                 <div class="pads-grid">
@@ -116,46 +121,33 @@
                     <button class="pad" data-pad="7">8</button>
                 </div>
             </div>
-            <div class="panel eq-panel">
-                <div class="eq-header"><span class="panel-title">EQ</span><select id="eqChannel"><option value="master">OUT</option><option value="mic">MIC</option><option value="samples">SMP</option><option value="synth">SYN</option><option value="radio">RAD</option></select></div>
-                <div class="eq-sliders">
-                    <div class="eq-band"><span>LO</span><input type="range" class="eq-slider" id="eqLow" min="-12" max="12" value="0" orient="vertical"><span id="eqLowVal">0</span></div>
-                    <div class="eq-band"><span>MID</span><input type="range" class="eq-slider" id="eqMid" min="-12" max="12" value="0" orient="vertical"><span id="eqMidVal">0</span></div>
-                    <div class="eq-band"><span>HI</span><input type="range" class="eq-slider" id="eqHigh" min="-12" max="12" value="0" orient="vertical"><span id="eqHighVal">0</span></div>
+            <div class="panel pads-panel pads2">
+                <div class="pads-header">
+                    <span class="panel-title">PADS B</span>
+                    <select id="sampleBank2"><option value="kit1">Kit1</option><option value="kit2">Kit2</option><option value="kit3">Kit3</option></select>
+                </div>
+                <div class="pads-grid">
+                    <button class="pad" data-pad="8">9</button>
+                    <button class="pad" data-pad="9">10</button>
+                    <button class="pad" data-pad="10">11</button>
+                    <button class="pad" data-pad="11">12</button>
+                    <button class="pad" data-pad="12">13</button>
+                    <button class="pad" data-pad="13">14</button>
+                    <button class="pad" data-pad="14">15</button>
+                    <button class="pad" data-pad="15">16</button>
                 </div>
             </div>
-            <div class="panel ai-panel">
-                <div class="panel-title">AI GEN</div>
-                <div class="vibe-btns">
-                    <button class="vibe-btn active" data-vibe="calm">C</button>
-                    <button class="vibe-btn" data-vibe="urban">U</button>
-                    <button class="vibe-btn" data-vibe="nature">N</button>
-                    <button class="vibe-btn" data-vibe="chaos">X</button>
+            <div class="panel knobs-panel">
+                <div class="ctrl-header">
+                    <span class="panel-title">CTRL</span>
+                    <select id="ctrlTarget"><option value="fx">FX</option><option value="synth">SYN</option><option value="sampler">SMP</option></select>
                 </div>
-                <button id="aiGenerate" class="ai-btn">GENERATE</button>
-            </div>
-            <div class="panel scenes-panel">
-                <div class="panel-title">SCENES</div>
-                <div class="scene-row">
-                    <button class="scene-btn active" data-scene="0">A</button>
-                    <button class="scene-btn" data-scene="1">B</button>
-                    <button class="scene-btn" data-scene="2">C</button>
-                    <button class="scene-btn" data-scene="3">D</button>
+                <div class="knobs-grid">
+                    <div class="knob-group"><div class="knob" id="knobFreq" data-param="freq" data-min="20" data-max="2000" data-value="220"></div><span>FREQ</span></div>
+                    <div class="knob-group"><div class="knob" id="knobFilter" data-param="filter" data-min="20" data-max="8000" data-value="4000"></div><span>FILT</span></div>
+                    <div class="knob-group"><div class="knob" id="knobDelay" data-param="delay" data-min="0" data-max="100" data-value="0"></div><span>DLY</span></div>
+                    <div class="knob-group"><div class="knob" id="knobGrain" data-param="grain" data-min="0" data-max="100" data-value="0"></div><span>GRN</span></div>
                 </div>
-                <div class="xfade-row"><span id="xfadeLeft">A</span><input type="range" id="sceneCrossfader" class="xfader" min="0" max="100" value="0"><span id="xfadeRight">B</span></div>
-                <div class="scene-actions"><button id="saveScene">SAVE</button><select id="sceneScope"><option value="all">ALL</option><option value="mixer">MIX</option><option value="seq">SEQ</option><option value="fx">FX</option></select></div>
-            </div>
-
-            <!-- Row 3 -->
-            <div class="panel radio-panel">
-                <div class="panel-title">RADIO</div>
-                <div class="radio-row"><input type="text" id="radioSearch" placeholder="Search..."><button id="radioGo">▶</button><button id="radioStop" disabled>■</button></div>
-                <div class="station-list" id="stationList"></div>
-            </div>
-            <div class="panel map-panel">
-                <div class="panel-title">LOCATION</div>
-                <div class="map-box" id="miniMap"><div class="map-img" id="miniMapImg"></div></div>
-                <div class="map-coords" id="miniMapCoords">--</div>
             </div>
             <div class="panel fx-panel">
                 <div class="fx-header"><span class="panel-title">FX</span><select id="fxPreset"><option value="0">--</option></select><button id="saveFx">+</button></div>
@@ -172,13 +164,40 @@
                     <button class="punch-btn" data-fx="tape">TPE</button>
                 </div>
             </div>
+
+            <!-- Row 3: RADIO | LOCATION | AI GEN | REC -->
+            <div class="panel radio-panel">
+                <div class="panel-title">RADIO</div>
+                <div class="radio-row"><input type="text" id="radioSearch" placeholder="Search..."><button id="radioGo">▶</button><button id="radioStop" disabled>■</button></div>
+                <div class="station-list" id="stationList"></div>
+            </div>
+            <div class="panel map-panel">
+                <div class="panel-title">LOCATION</div>
+                <div class="map-box" id="miniMap"><div class="map-img" id="miniMapImg"></div></div>
+                <div class="map-coords" id="miniMapCoords">--</div>
+            </div>
+            <div class="panel eq-panel">
+                <div class="eq-header"><span class="panel-title">EQ</span><select id="eqChannel"><option value="master">OUT</option><option value="mic">MIC</option><option value="samples">SMP</option><option value="synth">SYN</option><option value="radio">RAD</option></select></div>
+                <div class="eq-sliders">
+                    <div class="eq-band"><span>LO</span><input type="range" class="eq-slider" id="eqLow" min="-12" max="12" value="0" orient="vertical"><span id="eqLowVal">0</span></div>
+                    <div class="eq-band"><span>MID</span><input type="range" class="eq-slider" id="eqMid" min="-12" max="12" value="0" orient="vertical"><span id="eqMidVal">0</span></div>
+                    <div class="eq-band"><span>HI</span><input type="range" class="eq-slider" id="eqHigh" min="-12" max="12" value="0" orient="vertical"><span id="eqHighVal">0</span></div>
+                </div>
+            </div>
             <div class="panel rec-panel">
-                <div class="rec-row">
+                <div class="rec-header">
                     <span class="panel-title">REC</span>
                     <span id="recCount">0</span>
-                    <button id="recListBtn" class="rec-list-btn">LIST</button>
                 </div>
-                <div class="rec-list" id="recList"></div>
+                <div class="rec-last" id="recLast">
+                    <span class="rec-map-icon">📍</span>
+                    <span class="rec-last-name">No recordings</span>
+                    <span class="rec-last-time">--:--</span>
+                </div>
+                <div class="rec-actions">
+                    <button id="recListBtn" class="rec-list-btn">LIST</button>
+                    <button id="aiGenerate" class="ai-btn">AI GEN</button>
+                </div>
             </div>
         </main>
     </div>
