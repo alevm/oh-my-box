@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="screen-orientation" content="landscape">
     <title>Oh My Box</title>
-    <link rel="stylesheet" href="css/style.css?v=127">
+    <link rel="stylesheet" href="css/style.css?v=129">
 </head>
 <body>
     <!-- Full-page map background -->
@@ -34,7 +34,7 @@
             </div>
             <div class="time-box" id="timeDisplay">00:00</div>
             <button id="btnAdmin" class="admin-btn" title="Settings">⚙</button>
-            <div class="version">v1.3.0</div>
+            <div class="version">v1.5.0</div>
         </header>
 
         <!-- Main Device Area - 12 Equal Tiles (4x3) -->
@@ -66,7 +66,18 @@
                         <div class="plock-row"><span>FILT</span><input type="range" id="plockFilter" min="0" max="100" value="50"><span id="plockFilterVal">50</span></div>
                         <div class="plock-row"><span>DECAY</span><input type="range" id="plockDecay" min="0" max="100" value="50"><span id="plockDecayVal">50</span></div>
                     </div>
-                    <div class="trig-cond"><span>TRIG</span><select id="trigCondType"><option value="always">ALWAYS</option><option value="probability">PROB %</option><option value="fill">FILL</option><option value="notFill">!FILL</option><option value="nth">NTH</option><option value="neighbor">NEIGH</option></select><input type="number" id="trigCondValue" min="1" max="100" value="100"></div>
+                    <div class="trig-cond">
+                        <span>TRIG</span>
+                        <div class="trig-btns" id="trigCondBtns">
+                            <button class="trig-btn active" data-cond="always">ALL</button>
+                            <button class="trig-btn" data-cond="probability">PROB</button>
+                            <button class="trig-btn" data-cond="fill">FILL</button>
+                            <button class="trig-btn" data-cond="notFill">!FILL</button>
+                            <button class="trig-btn" data-cond="nth">NTH</button>
+                            <button class="trig-btn" data-cond="neighbor">NEIGH</button>
+                        </div>
+                        <input type="number" id="trigCondValue" min="1" max="100" value="100">
+                    </div>
                 </div>
             </div>
             <div class="panel mixer-panel">
@@ -172,7 +183,13 @@
                 </div>
             </div>
             <div class="panel fx-panel">
-                <div class="fx-header"><span class="panel-title">FX</span><select id="fxPreset"><option value="0">--</option></select><button id="saveFx">+</button></div>
+                <div class="fx-header">
+                    <span class="panel-title">FX</span>
+                    <div class="fx-preset-btns" id="fxPresetBtns">
+                        <button class="fx-preset-btn active" data-preset="0">--</button>
+                    </div>
+                    <button id="saveFx">+</button>
+                </div>
                 <div class="fx-params">
                     <div class="fx-row"><span>DLY</span><input type="range" id="fxDelay" min="0" max="100" value="0"></div>
                     <div class="fx-row"><span>GRN</span><input type="range" id="fxGrain" min="0" max="100" value="0"></div>

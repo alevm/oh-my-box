@@ -289,9 +289,9 @@ class App {
         }
     }
 
-    // EQ with channel selector
+    // EQ with channel selector buttons
     setupEQ() {
-        const channelSelect = document.getElementById('eqChannel');
+        const chBtns = document.querySelectorAll('.ch-btn');
         const eqLow = document.getElementById('eqLow');
         const eqMid = document.getElementById('eqMid');
         const eqHigh = document.getElementById('eqHigh');
@@ -312,12 +312,15 @@ class App {
             if (eqHighVal) eqHighVal.textContent = Math.round(eq.high);
         };
 
-        if (channelSelect) {
-            channelSelect.addEventListener('change', () => {
-                this.currentEqChannel = channelSelect.value;
+        // Channel selector buttons
+        chBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                chBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.currentEqChannel = btn.dataset.ch;
                 updateSliders();
             });
-        }
+        });
 
         // EQ slider handlers
         if (eqLow) {
@@ -348,7 +351,6 @@ class App {
     // Octatrack-style sequencer
     setupOctaTrackSequencer() {
         const octTracks = document.getElementById('octTracks');
-        const sourceSelect = document.getElementById('seqSource');
         const numTracks = this.settings.seqTracks;
         const numSteps = this.settings.seqSteps;
 
@@ -411,10 +413,15 @@ class App {
             octTracks.appendChild(track);
         }
 
-        // Source select
-        sourceSelect.addEventListener('change', () => {
-            window.sequencer.setTrackSource(this.selectedTrack, sourceSelect.value);
-            this.updateTrackSourceDisplay();
+        // Source buttons (instead of dropdown)
+        const srcBtns = document.querySelectorAll('.src-btn');
+        srcBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                srcBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                window.sequencer.setTrackSource(this.selectedTrack, btn.dataset.src);
+                this.updateTrackSourceDisplay();
+            });
         });
 
         // Random button
@@ -462,9 +469,11 @@ class App {
             el.classList.toggle('selected', i === trackIndex);
         });
 
-        // Update source dropdown
-        const sourceSelect = document.getElementById('seqSource');
-        sourceSelect.value = window.sequencer.getTrackSource(trackIndex);
+        // Update source buttons
+        const source = window.sequencer.getTrackSource(trackIndex);
+        document.querySelectorAll('.src-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.src === source);
+        });
     }
 
     updateOctSteps() {
@@ -523,10 +532,16 @@ class App {
             pad.addEventListener('touchend', release);
         });
 
-        document.getElementById('sampleBank').addEventListener('change', (e) => {
-            window.sampler.setBank(e.target.value);
-            this.settings.selectedKit = e.target.value;
-            this.saveSettings();
+        // Kit selector buttons
+        const kitBtns = document.querySelectorAll('.kit-btn');
+        kitBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                kitBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                window.sampler.setBank(btn.dataset.kit);
+                this.settings.selectedKit = btn.dataset.kit;
+                this.saveSettings();
+            });
         });
 
         // Register callback for sequencer-triggered pads
@@ -579,28 +594,36 @@ class App {
             }
         });
 
-        // Trig condition controls
-        const trigType = document.getElementById('trigCondType');
+        // Trig condition controls - now using buttons instead of dropdown
+        const trigBtns = document.querySelectorAll('#trigCondBtns .trig-btn');
         const trigValue = document.getElementById('trigCondValue');
 
-        trigType.addEventListener('change', () => {
-            if (this.plockEditing) {
-                window.sequencer.setTrigCondition(
-                    this.plockTrack,
-                    this.plockStep,
-                    trigType.value,
-                    parseInt(trigValue.value)
-                );
-                this.updateOctSteps();
-            }
+        trigBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                trigBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                if (this.plockEditing) {
+                    window.sequencer.setTrigCondition(
+                        this.plockTrack,
+                        this.plockStep,
+                        btn.dataset.cond,
+                        parseInt(trigValue.value)
+                    );
+                    this.updateOctSteps();
+                }
+            });
         });
 
         trigValue.addEventListener('change', () => {
             if (this.plockEditing) {
+                const activeBtn = document.querySelector('#trigCondBtns .trig-btn.active');
+                const condType = activeBtn ? activeBtn.dataset.cond : 'always';
                 window.sequencer.setTrigCondition(
                     this.plockTrack,
                     this.plockStep,
-                    trigType.value,
+                    condType,
                     parseInt(trigValue.value)
                 );
             }
@@ -631,9 +654,12 @@ class App {
             }
         });
 
-        // Load trig condition
+        // Load trig condition - update buttons instead of dropdown
         const cond = window.sequencer.getTrigCondition(trackIndex, stepIndex);
-        document.getElementById('trigCondType').value = cond.type;
+        const trigBtns = document.querySelectorAll('#trigCondBtns .trig-btn');
+        trigBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.cond === cond.type);
+        });
         document.getElementById('trigCondValue').value = cond.value;
 
         // Show editor
@@ -1065,6 +1091,18 @@ class App {
 
     // Knobs
     setupKnobs() {
+        // Target selector buttons (FX/SYN/SMP)
+        const targetBtns = document.querySelectorAll('.target-btn');
+        this.knobTarget = 'fx';  // Default target
+
+        targetBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                targetBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.knobTarget = btn.dataset.target;
+            });
+        });
+
         const knobs = document.querySelectorAll('.knob');
 
         knobs.forEach(knob => {
@@ -1333,7 +1371,6 @@ class App {
         const crush = document.getElementById('fxCrush');
         const glitch = document.getElementById('fxGlitch');
         const grain = document.getElementById('fxGrain');
-        const presetSelect = document.getElementById('fxPreset');
         const saveFxBtn = document.getElementById('saveFx');
 
         delay.addEventListener('input', () => {
@@ -1364,10 +1401,18 @@ class App {
             }
         });
 
-        // FX presets
-        if (presetSelect) {
-            presetSelect.addEventListener('change', () => {
-                const idx = parseInt(presetSelect.value);
+        // FX presets - now using buttons instead of dropdown
+        const presetContainer = document.getElementById('fxPresetBtns');
+        if (presetContainer) {
+            presetContainer.addEventListener('click', (e) => {
+                const btn = e.target.closest('.fx-preset-btn');
+                if (!btn) return;
+
+                // Update active state
+                presetContainer.querySelectorAll('.fx-preset-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const idx = parseInt(btn.dataset.preset);
                 if (idx > 0 && this.settings.fxPresets[idx - 1]) {
                     this.loadFxPreset(this.settings.fxPresets[idx - 1]);
                 }
@@ -1417,17 +1462,18 @@ class App {
         console.log('Loaded FX preset:', preset.name);
     }
 
-    // Update FX preset dropdown
+    // Update FX preset buttons
     updateFxPresetList() {
-        const select = document.getElementById('fxPreset');
-        if (!select) return;
+        const container = document.getElementById('fxPresetBtns');
+        if (!container) return;
 
-        select.innerHTML = '<option value="0">--</option>';
+        container.innerHTML = '<button class="fx-preset-btn active" data-preset="0">--</button>';
         this.settings.fxPresets.forEach((preset, idx) => {
-            const opt = document.createElement('option');
-            opt.value = idx + 1;
-            opt.textContent = preset.name;
-            select.appendChild(opt);
+            const btn = document.createElement('button');
+            btn.className = 'fx-preset-btn';
+            btn.dataset.preset = idx + 1;
+            btn.textContent = preset.name;
+            container.appendChild(btn);
         });
     }
 
