@@ -177,8 +177,8 @@ html, body {
 .device > .seq-panel,
 .device > .pads-panel,
 .device > .knobs-panel {
-    background: #2a2a2a;
-    border-color: #444;
+    background: #2d2d2d;
+    border-color: #505050;
 }
 
 .device > .seq-panel .panel-title,
@@ -214,52 +214,53 @@ html, body {
     color: #90e0ef;
 }
 
-/* RIGHT COLUMN - Purple (Synth/Radio/FX/Scenes) */
+/* RIGHT COLUMN - Light Purple (Synth/Radio/FX/Scenes) */
 .device > .synth-panel,
 .device > .radio-panel,
 .device > .fx-panel,
 .device > .scenes-panel {
-    background: #3d1a5c !important;
-    border-color: #5a2a80 !important;
-    color: #e0c0f0;
+    background: #e8d5f0 !important;
+    border-color: #b080d0 !important;
+    color: #3a1050;
 }
 
 .synth-panel .panel-title,
 .radio-panel .panel-title,
 .fx-panel .panel-title,
 .scenes-panel .panel-title {
-    color: #e040fb !important;
+    color: #7b2cbf !important;
 }
 
 .synth-panel .wave-btn,
 .scenes-panel .scene-btn,
 .fx-panel .punch-btn {
-    background: #5a3080 !important;
-    border-color: #7a40a0 !important;
-    color: #f0e0ff !important;
+    background: #d0a0e8 !important;
+    border-color: #a060c0 !important;
+    color: #3a1050 !important;
 }
 
 .synth-panel .wave-btn.active,
 .scenes-panel .scene-btn.active {
-    background: #e040fb !important;
-    color: #000 !important;
+    background: #9b4dca !important;
+    color: #fff !important;
 }
 
 .radio-panel input,
 .radio-panel button {
-    background: #5a3080 !important;
-    border-color: #7a40a0 !important;
-    color: #f0e0ff !important;
+    background: #fff !important;
+    border-color: #a060c0 !important;
+    color: #3a1050 !important;
 }
 
 .fx-panel .fx-row span,
 .synth-panel .adsr-param span {
-    color: #ce93d8 !important;
+    color: #5a2080 !important;
 }
 
 .scenes-panel .scene-actions button {
-    background: #7b2cbf !important;
-    border-color: #9d4edd !important;
+    background: #9b4dca !important;
+    border-color: #7b2cbf !important;
+    color: #fff !important;
 }
 
 .panel {
