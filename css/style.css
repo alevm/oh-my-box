@@ -68,11 +68,11 @@ html, body {
 .top-bar {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 4px 10px;
+    gap: 10px;
+    padding: 8px 12px;
     background: linear-gradient(180deg, var(--cream) 0%, #e8e0d5 100%);
     border-bottom: 2px solid var(--border);
-    height: 34px;
+    height: 48px;
     flex-shrink: 0;
 }
 
