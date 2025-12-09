@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hardware Mockup - Oh My Box</title>
+    <title>Hardware Design - Oh My Box</title>
     <link rel="stylesheet" href="css/style.css?v=137">
     <style>
         body {
@@ -88,221 +88,465 @@
             border-bottom: 2px solid var(--border);
         }
 
-        /* Hardware Mockup Container */
-        .mockup-wrapper {
-            display: flex;
-            gap: 40px;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        /* Top View */
-        .top-view {
+        /* ==================== ARTISTIC HARDWARE BOX ==================== */
+        .artistic-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-        .view-label {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-light);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            gap: 60px;
+            padding: 40px 0;
         }
 
-        .hardware-box {
-            width: 700px;
-            height: 480px;
-            background: linear-gradient(145deg, #2c2c2c 0%, #1a1a1a 100%);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow:
-                0 20px 60px rgba(0,0,0,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.1);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto 1fr auto;
-            gap: 12px;
+        .device-artwork {
             position: relative;
+            width: 900px;
+            height: 650px;
         }
 
-        .hardware-box::before {
+        /* The main enclosure */
+        .enclosure {
+            position: absolute;
+            top: 50px;
+            left: 100px;
+            width: 700px;
+            height: 500px;
+            background: linear-gradient(165deg, #2a2a2a 0%, #1a1a1a 40%, #0f0f0f 100%);
+            border-radius: 24px;
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.5),
+                0 0 0 2px #3a3a3a,
+                inset 0 1px 0 rgba(255,255,255,0.08),
+                inset 0 -2px 0 rgba(0,0,0,0.3);
+        }
+
+        /* Decorative border with fine lines */
+        .enclosure::before {
             content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border: 1px solid rgba(139, 90, 43, 0.3);
+            border-radius: 18px;
+            pointer-events: none;
+        }
+
+        /* Inner fine line decoration */
+        .enclosure::after {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        /* ==================== DISPLAY WITH APP MOCKUP ==================== */
+        .display-bezel {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            right: 24px;
+            height: 220px;
+            background: #0a0a0a;
+            border-radius: 12px;
+            border: 3px solid #2a2a2a;
+            box-shadow:
+                inset 0 2px 15px rgba(0,0,0,0.8),
+                0 2px 4px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .display-screen {
             position: absolute;
             top: 6px;
             left: 6px;
             right: 6px;
             bottom: 6px;
-            border: 2px solid rgba(139, 90, 43, 0.4);
-            border-radius: 12px;
-            pointer-events: none;
+            background: linear-gradient(180deg, #f5f0e8 0%, #e8e0d5 100%);
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        /* Screen Section */
-        .screen-section {
-            grid-column: 1 / -1;
-            background: #0a0a0a;
-            border-radius: 8px;
-            height: 180px;
+        /* App Header in Display */
+        .app-header {
+            height: 28px;
+            background: linear-gradient(180deg, #f5f0e8 0%, #e8e0d5 100%);
+            border-bottom: 2px solid #8b5a2b;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            gap: 8px;
+        }
+
+        .app-logo {
+            font-size: 9px;
+            font-weight: 800;
+            color: #e94560;
+            letter-spacing: 0.5px;
+        }
+
+        .app-transport {
+            display: flex;
+            gap: 3px;
+            margin-left: 8px;
+        }
+
+        .app-tr-btn {
+            width: 18px;
+            height: 18px;
+            border-radius: 3px;
+            border: 1px solid #8b5a2b;
+            background: #f5f0e8;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 3px solid #333;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
-            position: relative;
-        }
-        .screen-label {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 10px;
-            color: #666;
-            background: #2c2c2c;
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
-        .screen-content {
-            width: 96%;
-            height: 92%;
-            background: linear-gradient(180deg, var(--cream) 0%, #e8e0d5 100%);
-            border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-            font-size: 10px;
-        }
-
-        .screen-header {
-            background: var(--cream);
-            padding: 4px 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .screen-logo {
-            font-weight: 800;
             font-size: 8px;
-            color: var(--accent);
+        }
+        .app-tr-btn.play { color: #27ae60; }
+        .app-tr-btn.rec { color: #e94560; }
+
+        .app-tempo {
+            font-size: 10px;
+            font-weight: 700;
+            color: #333;
+            margin-left: 8px;
         }
 
-        .screen-body {
+        .app-gps {
+            margin-left: auto;
+            font-size: 7px;
+            color: #666;
+        }
+
+        /* App Grid Layout - 3 columns x 5 rows like the real app */
+        .app-grid {
             flex: 1;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: 60px 1fr 1fr;
+            grid-template-rows: repeat(5, 1fr);
             gap: 2px;
-            padding: 4px;
-            background: var(--border);
+            padding: 3px;
+            background: #8b5a2b;
         }
 
-        .screen-panel {
-            background: rgba(255,255,255,0.9);
+        .app-panel {
+            background: rgba(255,255,255,0.95);
+            border-radius: 2px;
+            padding: 2px;
+            font-size: 5px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .app-panel-title {
+            font-size: 5px;
+            font-weight: 700;
+            color: #8b5a2b;
+            margin-bottom: 1px;
+        }
+
+        /* Mixer Panel - Left col, rows 1-3 */
+        .app-mixer {
+            grid-row: span 3;
+        }
+        .app-mixer-channels {
+            display: flex;
+            gap: 2px;
+            flex: 1;
+        }
+        .app-mixer-ch {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+        }
+        .app-mixer-ch span {
+            font-size: 5px;
+            color: #666;
+        }
+        .app-fader {
+            width: 6px;
+            height: 40px;
+            background: #ddd;
+            border-radius: 2px;
+            position: relative;
+        }
+        .app-fader::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70%;
+            background: linear-gradient(to top, #27ae60, #2ecc71);
             border-radius: 2px;
         }
+        .app-fader.low::after { height: 30%; background: linear-gradient(to top, #e94560, #ff6b81); }
+        .app-fader.med::after { height: 50%; }
+        .app-fader.high::after { height: 85%; }
 
-        /* Pads Section */
-        .pads-section {
+        /* EQ Panel - Left col, rows 4-5 */
+        .app-eq {
+            grid-row: span 2;
+        }
+
+        /* Sequencer Panel - Middle col, rows 1-2 */
+        .app-seq {
+            grid-row: span 2;
+        }
+        .app-seq-grid {
+            display: grid;
+            grid-template-columns: repeat(16, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 1px;
+            flex: 1;
+            margin-top: 2px;
+        }
+        .app-step {
+            background: #e8e0d5;
+            border-radius: 1px;
+        }
+        .app-step.active {
+            background: #e94560;
+        }
+        .app-step.playing {
+            background: #27ae60;
+        }
+
+        /* Pads Panel - Middle col, row 3 */
+        .app-pads { }
+        .app-pads-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            gap: 8px;
-            padding: 8px;
-            position: relative;
+            gap: 1px;
+            flex: 1;
         }
-        .pads-label {
-            position: absolute;
-            top: -16px;
-            left: 8px;
-            font-size: 10px;
-            color: #666;
+        .app-pad {
+            background: linear-gradient(145deg, #444 0%, #333 100%);
+            border-radius: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 4px;
+            font-weight: 700;
+        }
+        .app-pad.hit {
+            background: #e94560;
+            color: #fff;
         }
 
-        .pad {
-            aspect-ratio: 1;
-            background: linear-gradient(145deg, #3a3a3a 0%, #252525 100%);
-            border-radius: 6px;
+        /* CTRL/Knobs Panel - Middle col, row 4 */
+        .app-ctrl { }
+        .app-ctrl-knobs {
+            display: flex;
+            gap: 2px;
+            flex: 1;
+            align-items: center;
+        }
+        .app-ctrl-knob {
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(145deg, #555 0%, #333 100%);
+            border-radius: 50%;
+        }
+
+        /* Scenes Panel - Middle col, row 5 */
+        .app-scenes { }
+        .app-scene-btns {
+            display: flex;
+            gap: 1px;
+            flex: 1;
+        }
+        .app-scene-btn {
+            flex: 1;
+            background: #e8e0d5;
+            border-radius: 1px;
+            font-size: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-weight: 700;
+        }
+        .app-scene-btn.active {
+            background: #8b5a2b;
+            color: #fff;
+        }
+
+        /* Synth Panel - Right col, row 1 */
+        .app-synth { }
+        .app-wave-btns {
+            display: flex;
+            gap: 1px;
+            flex: 1;
+        }
+        .app-wave-btn {
+            flex: 1;
+            background: #e8e0d5;
+            border-radius: 1px;
+            font-size: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+        .app-wave-btn.active {
+            background: #e94560;
+            color: #fff;
+        }
+
+        /* FX Panel - Right col, row 2 */
+        .app-fx { }
+        .app-fx-knobs {
+            display: flex;
+            gap: 2px;
+            flex: 1;
+            align-items: center;
+        }
+        .app-fx-knob {
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(145deg, #555 0%, #333 100%);
+            border-radius: 50%;
+        }
+
+        /* AI Panel - Right col, row 3 */
+        .app-ai { }
+        .app-ai-btns {
+            display: flex;
+            gap: 1px;
+            flex: 1;
+        }
+        .app-ai-btn {
+            flex: 1;
+            background: #e8e0d5;
+            border-radius: 1px;
+            font-size: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+        .app-ai-btn.active {
+            background: #9b59b6;
+            color: #fff;
+        }
+
+        /* Radio Panel - Right col, row 4 */
+        .app-radio { }
+
+        /* REC Panel - Right col, row 5 */
+        .app-rec { }
+        .app-rec-btn {
+            background: #e94560;
+            color: #fff;
+            border-radius: 2px;
+            font-size: 5px;
+            font-weight: 700;
+            padding: 2px;
+            text-align: center;
+        }
+
+        /* ==================== PHYSICAL CONTROLS ==================== */
+
+        /* Touch Pads */
+        .pads-area {
+            position: absolute;
+            top: 260px;
+            left: 32px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 12px;
+            width: 300px;
+            height: 160px;
+        }
+
+        .hw-pad {
+            background: linear-gradient(145deg, #3a3a3a 0%, #222 100%);
+            border-radius: 10px;
             box-shadow:
-                0 3px 6px rgba(0,0,0,0.3),
-                inset 0 1px 0 rgba(255,255,255,0.1);
+                0 4px 12px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.1),
+                inset 0 -1px 0 rgba(0,0,0,0.3);
             border: 2px solid #444;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #555;
-            font-size: 11px;
+            font-size: 14px;
             font-weight: 700;
-            cursor: pointer;
-            transition: all 0.1s ease;
             position: relative;
+            cursor: pointer;
+            transition: all 0.1s;
         }
-        .pad::after {
+
+        .hw-pad:hover {
+            background: linear-gradient(145deg, #4a4a4a 0%, #333 100%);
+            transform: translateY(-2px);
+        }
+
+        .hw-pad::before {
             content: '';
             position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 6px;
-            height: 6px;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: #333;
             border: 1px solid #444;
         }
-        .pad:hover {
-            background: linear-gradient(145deg, #4a4a4a 0%, #353535 100%);
-        }
-        .pad:active {
-            background: var(--accent);
-            color: #fff;
-        }
-        .pad:active::after {
-            background: #fff;
-            box-shadow: 0 0 8px #fff;
+
+        .hw-pad.lit::before {
+            background: #e94560;
+            box-shadow: 0 0 10px #e94560;
         }
 
-        /* Encoders Section */
-        .encoders-section {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding: 8px;
-            position: relative;
-        }
-        .encoders-label {
+        /* Encoders */
+        .encoders-area {
             position: absolute;
-            top: -16px;
-            left: 8px;
-            font-size: 10px;
-            color: #666;
+            top: 260px;
+            right: 32px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 16px 24px;
+            width: 320px;
+            height: 160px;
         }
 
-        .encoders-row {
-            display: flex;
-            justify-content: space-around;
-        }
-
-        .encoder-container {
+        .hw-encoder {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
         }
 
-        .encoder {
-            width: 44px;
-            height: 44px;
+        .encoder-knob {
+            width: 48px;
+            height: 48px;
             background: linear-gradient(145deg, #555 0%, #333 100%);
             border-radius: 50%;
             border: 3px solid #222;
             box-shadow:
-                0 3px 6px rgba(0,0,0,0.4),
+                0 4px 12px rgba(0,0,0,0.4),
                 inset 0 2px 4px rgba(255,255,255,0.1);
             position: relative;
         }
 
-        .encoder::before {
+        .encoder-knob::before {
             content: '';
             position: absolute;
             top: 50%;
@@ -314,262 +558,228 @@
             transform: translate(-50%, -50%);
         }
 
-        .encoder::after {
+        .encoder-knob::after {
             content: '';
             position: absolute;
             top: 6px;
             left: 50%;
-            width: 2px;
-            height: 10px;
+            width: 3px;
+            height: 12px;
             background: #e94560;
             border-radius: 2px;
             transform: translateX(-50%);
         }
 
         .encoder-label {
-            font-size: 9px;
-            color: #888;
+            font-size: 10px;
+            color: #777;
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        /* Transport Section */
-        .transport-section {
-            grid-column: 1 / -1;
+        /* Transport Buttons */
+        .transport-area {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            justify-content: center;
+            gap: 20px;
             align-items: center;
-            gap: 16px;
-            padding: 8px;
         }
 
-        .transport-btn {
-            width: 44px;
-            height: 44px;
+        .hw-btn {
+            width: 48px;
+            height: 32px;
+            background: linear-gradient(145deg, #3a3a3a 0%, #252525 100%);
+            border-radius: 6px;
+            border: 2px solid #444;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 9px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .hw-transport {
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
             border: 3px solid #333;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 22px;
             cursor: pointer;
-            transition: all 0.15s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
-        .transport-btn.play {
+        .hw-transport.play {
             background: linear-gradient(145deg, #2ecc71 0%, #27ae60 100%);
             color: #fff;
         }
 
-        .transport-btn.stop {
+        .hw-transport.stop {
             background: linear-gradient(145deg, #555 0%, #333 100%);
             color: #fff;
         }
 
-        .transport-btn.rec {
+        .hw-transport.rec {
             background: linear-gradient(145deg, #e74c3c 0%, #c0392b 100%);
             color: #fff;
         }
 
-        .mode-btn {
-            width: 60px;
-            height: 32px;
-            border-radius: 4px;
-            border: 2px solid #444;
-            background: linear-gradient(145deg, #3a3a3a 0%, #252525 100%);
-            color: #888;
-            font-size: 10px;
-            font-weight: 700;
-            cursor: pointer;
+        /* ==================== FINE LINE SCHEMATICS ==================== */
+        .schematics-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
         }
 
-        /* Side View - I/O Panel */
-        .side-view {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* Signal flow lines */
+        .signal-line {
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
-        .io-panel {
-            width: 120px;
-            height: 480px;
-            background: linear-gradient(90deg, #1a1a1a 0%, #2c2c2c 50%, #1a1a1a 100%);
-            border-radius: 8px;
-            padding: 16px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        .line-mic { stroke: #3498db; stroke-width: 1.5; }
+        .line-radio { stroke: #9b59b6; stroke-width: 1.5; }
+        .line-synth { stroke: #e94560; stroke-width: 1.5; }
+        .line-fx { stroke: #27ae60; stroke-width: 1.5; }
+        .line-audio { stroke: #f39c12; stroke-width: 2; }
+
+        .line-dashed {
+            stroke-dasharray: 4, 3;
         }
 
-        .io-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .io-group-label {
+        /* Component symbols */
+        .symbol {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             font-size: 9px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .symbol-mic { fill: #3498db; }
+        .symbol-radio { fill: #9b59b6; }
+        .symbol-synth { fill: #e94560; }
+        .symbol-fx { fill: #27ae60; }
+        .symbol-out { fill: #f39c12; }
+
+        /* Schematic boxes */
+        .schematic-box {
+            fill: rgba(255,255,255,0.03);
+            stroke-width: 1;
+            rx: 4;
+        }
+
+        .schematic-label {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 8px;
+            fill: #666;
+        }
+
+        /* Circuit nodes */
+        .node {
+            fill: currentColor;
+        }
+
+        /* Waveform symbols */
+        .waveform {
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        /* I/O Ports on sides */
+        .io-port-group {
+            position: absolute;
         }
 
         .io-port {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            margin-bottom: 8px;
         }
 
         .port-jack {
-            width: 24px;
-            height: 24px;
+            width: 16px;
+            height: 16px;
             background: #0a0a0a;
             border-radius: 50%;
             border: 2px solid #444;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: relative;
         }
         .port-jack::after {
             content: '';
-            width: 8px;
-            height: 8px;
-            background: #333;
-            border-radius: 50%;
-        }
-
-        .port-jack.trs {
-            width: 20px;
-            height: 20px;
-        }
-        .port-jack.trs::after {
+            position: absolute;
+            top: 50%;
+            left: 50%;
             width: 6px;
             height: 6px;
+            background: #333;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
         }
 
-        .port-jack.usb {
-            width: 32px;
-            height: 14px;
-            border-radius: 3px;
-        }
-        .port-jack.usb::after {
-            width: 16px;
-            height: 6px;
-            border-radius: 1px;
-        }
-
-        .port-jack.sd {
-            width: 28px;
-            height: 22px;
-            border-radius: 2px;
-        }
-        .port-jack.sd::after {
-            width: 18px;
-            height: 14px;
-            border-radius: 1px;
-            background: #222;
-        }
-
-        .port-name {
-            font-size: 9px;
-            color: #888;
+        .port-label {
+            font-size: 8px;
+            color: #666;
             font-weight: 600;
         }
 
-        /* Block Diagram */
-        .block-diagram {
-            width: 100%;
-            background: #fafafa;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
+        /* Left I/O */
+        .io-left {
+            left: -80px;
+            top: 80px;
+        }
+
+        /* Right I/O */
+        .io-right {
+            right: -80px;
+            top: 80px;
+        }
+
+        /* ==================== LEGEND ==================== */
+        .schematic-legend {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            flex-wrap: wrap;
             margin-top: 24px;
         }
 
-        .diagram-svg {
-            width: 100%;
-            height: auto;
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* Component boxes in SVG */
-        .comp-box {
-            fill: var(--cream);
-            stroke: var(--border);
-            stroke-width: 2;
+        .legend-line {
+            width: 32px;
+            height: 3px;
+            border-radius: 2px;
         }
-        .comp-box-accent {
-            fill: #ffe4e8;
-            stroke: var(--accent);
-            stroke-width: 2;
-        }
-        .comp-box-green {
-            fill: #e8f5e9;
-            stroke: #27ae60;
-            stroke-width: 2;
-        }
-        .comp-box-blue {
-            fill: #e3f2fd;
-            stroke: #2196f3;
-            stroke-width: 2;
-        }
-        .comp-text {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+        .legend-line.mic { background: #3498db; }
+        .legend-line.radio { background: #9b59b6; }
+        .legend-line.synth { background: #e94560; }
+        .legend-line.fx { background: #27ae60; }
+        .legend-line.audio { background: #f39c12; }
+
+        .legend-text {
             font-size: 12px;
-            font-weight: 600;
-            fill: #333;
-        }
-        .comp-text-small {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-size: 10px;
-            fill: #666;
-        }
-        .conn-line {
-            stroke: #8b5a2b;
-            stroke-width: 2;
-            fill: none;
-        }
-        .conn-line-data {
-            stroke: #2196f3;
-            stroke-width: 2;
-            stroke-dasharray: 4,2;
-            fill: none;
-        }
-        .conn-line-audio {
-            stroke: #e94560;
-            stroke-width: 3;
-            fill: none;
+            color: #666;
+            font-weight: 500;
         }
 
-        /* Pin Assignment Table */
-        .pin-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
-            font-size: 13px;
-        }
-        .pin-table th {
-            background: var(--border);
-            color: #fff;
-            padding: 10px 12px;
-            text-align: left;
-            font-weight: 600;
-        }
-        .pin-table td {
-            padding: 8px 12px;
-            border-bottom: 1px solid #ddd;
-        }
-        .pin-table tr:nth-child(even) {
-            background: var(--cream);
-        }
-        .pin-table .pin-num {
-            font-family: monospace;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        /* Specs Grid */
+        /* ==================== SPECS SECTION ==================== */
         .specs-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -646,26 +856,31 @@
             font-weight: 700;
         }
 
-        /* Legend */
-        .legend {
-            display: flex;
-            gap: 24px;
+        /* Pin Table */
+        .pin-table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 16px;
-            flex-wrap: wrap;
+            font-size: 13px;
         }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
+        .pin-table th {
+            background: var(--border);
+            color: #fff;
+            padding: 10px 12px;
+            text-align: left;
         }
-        .legend-line {
-            width: 30px;
-            height: 3px;
+        .pin-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #ddd;
         }
-        .legend-line.audio { background: #e94560; }
-        .legend-line.data { background: #2196f3; stroke-dasharray: 4,2; }
-        .legend-line.power { background: #8b5a2b; }
+        .pin-table tr:nth-child(even) {
+            background: var(--cream);
+        }
+        .pin-table .pin-num {
+            font-family: monospace;
+            font-weight: 700;
+            color: var(--accent);
+        }
     </style>
 </head>
 <body>
@@ -683,528 +898,336 @@
 
         <main class="page-content">
             <h1 class="page-title">Hardware Design</h1>
-            <p class="page-subtitle">Portable music instrument combining sequencing, sampling, synthesis, and AI composition with GPS location binding</p>
+            <p class="page-subtitle">Portable music instrument with location-aware sampling, synthesis, and AI composition</p>
 
-            <!-- Physical Layout -->
-            <h2 class="section-header">Physical Layout</h2>
-            <div class="mockup-wrapper">
-                <!-- Top View -->
-                <div class="top-view">
-                    <span class="view-label">Top View</span>
-                    <div class="hardware-box">
-                        <!-- Screen -->
-                        <div class="screen-section">
-                            <span class="screen-label">7" IPS Touchscreen (1024x600)</span>
-                            <div class="screen-content">
-                                <div class="screen-header">
-                                    <span class="screen-logo">OH MY BOX</span>
+            <!-- Artistic Hardware Mockup -->
+            <div class="artistic-container">
+                <div class="device-artwork">
+                    <!-- The Enclosure -->
+                    <div class="enclosure">
+                        <!-- Display with App Mockup -->
+                        <div class="display-bezel">
+                            <div class="display-screen">
+                                <!-- App Header -->
+                                <div class="app-header">
+                                    <span class="app-logo">OH MY BOX</span>
+                                    <div class="app-transport">
+                                        <div class="app-tr-btn play">&#9654;</div>
+                                        <div class="app-tr-btn">&#9632;</div>
+                                        <div class="app-tr-btn rec">&#9679;</div>
+                                    </div>
+                                    <span class="app-tempo">120 BPM</span>
+                                    <span class="app-gps">40.7128° N</span>
                                 </div>
-                                <div class="screen-body">
-                                    <div class="screen-panel"></div>
-                                    <div class="screen-panel"></div>
-                                    <div class="screen-panel"></div>
-                                    <div class="screen-panel"></div>
-                                    <div class="screen-panel"></div>
-                                    <div class="screen-panel"></div>
-                                    <div class="screen-panel"></div>
-                                    <div class="screen-panel"></div>
+                                <!-- App Grid - 12 panels: 3 cols x 5 rows -->
+                                <div class="app-grid">
+                                    <!-- LEFT COLUMN -->
+                                    <!-- Mixer (rows 1-3) -->
+                                    <div class="app-panel app-mixer">
+                                        <span class="app-panel-title">MIXER</span>
+                                        <div class="app-mixer-channels">
+                                            <div class="app-mixer-ch"><span>MIC</span><div class="app-fader med"></div></div>
+                                            <div class="app-mixer-ch"><span>SMP</span><div class="app-fader high"></div></div>
+                                            <div class="app-mixer-ch"><span>SYN</span><div class="app-fader"></div></div>
+                                            <div class="app-mixer-ch"><span>RAD</span><div class="app-fader low"></div></div>
+                                            <div class="app-mixer-ch"><span>OUT</span><div class="app-fader high"></div></div>
+                                        </div>
+                                    </div>
+                                    <!-- EQ (rows 4-5) -->
+                                    <div class="app-panel app-eq">
+                                        <span class="app-panel-title">EQ</span>
+                                    </div>
+
+                                    <!-- MIDDLE COLUMN -->
+                                    <!-- Sequencer (rows 1-2) -->
+                                    <div class="app-panel app-seq">
+                                        <span class="app-panel-title">SEQ</span>
+                                        <div class="app-seq-grid">
+                                            <div class="app-step active"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step active"></div>
+                                            <div class="app-step playing"></div><div class="app-step"></div><div class="app-step active"></div><div class="app-step"></div>
+                                            <div class="app-step active"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step active"></div>
+                                            <div class="app-step"></div><div class="app-step"></div><div class="app-step active"></div><div class="app-step"></div>
+                                            <div class="app-step"></div><div class="app-step"></div><div class="app-step active"></div><div class="app-step"></div>
+                                            <div class="app-step"></div><div class="app-step active"></div><div class="app-step"></div><div class="app-step"></div>
+                                            <div class="app-step"></div><div class="app-step"></div><div class="app-step active"></div><div class="app-step"></div>
+                                            <div class="app-step active"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step active"></div>
+                                            <div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div>
+                                            <div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div>
+                                            <div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div>
+                                            <div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div><div class="app-step active"></div>
+                                            <div class="app-step"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step"></div>
+                                            <div class="app-step active"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step"></div>
+                                            <div class="app-step"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step"></div>
+                                            <div class="app-step active"></div><div class="app-step"></div><div class="app-step"></div><div class="app-step"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Pads (row 3) -->
+                                    <div class="app-panel app-pads">
+                                        <span class="app-panel-title">PADS</span>
+                                        <div class="app-pads-grid">
+                                            <div class="app-pad">1</div><div class="app-pad hit">2</div><div class="app-pad">3</div><div class="app-pad">4</div>
+                                            <div class="app-pad">5</div><div class="app-pad">6</div><div class="app-pad">7</div><div class="app-pad">8</div>
+                                        </div>
+                                    </div>
+                                    <!-- CTRL (row 4) -->
+                                    <div class="app-panel app-ctrl">
+                                        <span class="app-panel-title">CTRL</span>
+                                        <div class="app-ctrl-knobs">
+                                            <div class="app-ctrl-knob"></div>
+                                            <div class="app-ctrl-knob"></div>
+                                            <div class="app-ctrl-knob"></div>
+                                            <div class="app-ctrl-knob"></div>
+                                            <div class="app-ctrl-knob"></div>
+                                            <div class="app-ctrl-knob"></div>
+                                            <div class="app-ctrl-knob"></div>
+                                            <div class="app-ctrl-knob"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Scenes (row 5) -->
+                                    <div class="app-panel app-scenes">
+                                        <span class="app-panel-title">SCENES</span>
+                                        <div class="app-scene-btns">
+                                            <div class="app-scene-btn active">A</div>
+                                            <div class="app-scene-btn">B</div>
+                                            <div class="app-scene-btn">C</div>
+                                            <div class="app-scene-btn">D</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- RIGHT COLUMN -->
+                                    <!-- Synth (row 1) -->
+                                    <div class="app-panel app-synth">
+                                        <span class="app-panel-title">SYNTH</span>
+                                        <div class="app-wave-btns">
+                                            <div class="app-wave-btn">SIN</div>
+                                            <div class="app-wave-btn active">SAW</div>
+                                            <div class="app-wave-btn">SQR</div>
+                                            <div class="app-wave-btn">TRI</div>
+                                        </div>
+                                    </div>
+                                    <!-- FX (row 2) -->
+                                    <div class="app-panel app-fx">
+                                        <span class="app-panel-title">FX</span>
+                                        <div class="app-fx-knobs">
+                                            <div class="app-fx-knob"></div>
+                                            <div class="app-fx-knob"></div>
+                                            <div class="app-fx-knob"></div>
+                                            <div class="app-fx-knob"></div>
+                                        </div>
+                                    </div>
+                                    <!-- AI Gen (row 3) -->
+                                    <div class="app-panel app-ai">
+                                        <span class="app-panel-title">AI GEN</span>
+                                        <div class="app-ai-btns">
+                                            <div class="app-ai-btn active">CALM</div>
+                                            <div class="app-ai-btn">URBAN</div>
+                                            <div class="app-ai-btn">NATURE</div>
+                                            <div class="app-ai-btn">CHAOS</div>
+                                        </div>
+                                    </div>
+                                    <!-- Radio (row 4) -->
+                                    <div class="app-panel app-radio">
+                                        <span class="app-panel-title">RADIO</span>
+                                    </div>
+                                    <!-- REC (row 5) -->
+                                    <div class="app-panel app-rec">
+                                        <span class="app-panel-title">REC</span>
+                                        <div class="app-rec-btn">00:42</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Pads -->
-                        <div class="pads-section">
-                            <span class="pads-label">MPR121 Touch Pads</span>
-                            <div class="pad">1</div>
-                            <div class="pad">2</div>
-                            <div class="pad">3</div>
-                            <div class="pad">4</div>
-                            <div class="pad">5</div>
-                            <div class="pad">6</div>
-                            <div class="pad">7</div>
-                            <div class="pad">8</div>
+                        <!-- Touch Pads -->
+                        <div class="pads-area">
+                            <div class="hw-pad">1</div>
+                            <div class="hw-pad lit">2</div>
+                            <div class="hw-pad">3</div>
+                            <div class="hw-pad">4</div>
+                            <div class="hw-pad">5</div>
+                            <div class="hw-pad">6</div>
+                            <div class="hw-pad">7</div>
+                            <div class="hw-pad">8</div>
                         </div>
 
                         <!-- Encoders -->
-                        <div class="encoders-section">
-                            <span class="encoders-label">Rotary Encoders w/ Push</span>
-                            <div class="encoders-row">
-                                <div class="encoder-container">
-                                    <div class="encoder"></div>
-                                    <span class="encoder-label">VOL</span>
-                                </div>
-                                <div class="encoder-container">
-                                    <div class="encoder"></div>
-                                    <span class="encoder-label">PAN</span>
-                                </div>
-                                <div class="encoder-container">
-                                    <div class="encoder"></div>
-                                    <span class="encoder-label">FILT</span>
-                                </div>
-                                <div class="encoder-container">
-                                    <div class="encoder"></div>
-                                    <span class="encoder-label">FX</span>
-                                </div>
-                            </div>
-                            <div class="encoders-row">
-                                <div class="encoder-container">
-                                    <div class="encoder"></div>
-                                    <span class="encoder-label">ATK</span>
-                                </div>
-                                <div class="encoder-container">
-                                    <div class="encoder"></div>
-                                    <span class="encoder-label">DEC</span>
-                                </div>
-                                <div class="encoder-container">
-                                    <div class="encoder"></div>
-                                    <span class="encoder-label">SUS</span>
-                                </div>
-                                <div class="encoder-container">
-                                    <div class="encoder"></div>
-                                    <span class="encoder-label">REL</span>
-                                </div>
-                            </div>
+                        <div class="encoders-area">
+                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">VOL</span></div>
+                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">PAN</span></div>
+                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">FILT</span></div>
+                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">FX</span></div>
+                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">ATK</span></div>
+                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">DEC</span></div>
+                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">SUS</span></div>
+                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">REL</span></div>
                         </div>
 
                         <!-- Transport -->
-                        <div class="transport-section">
-                            <button class="mode-btn">MODE</button>
-                            <button class="mode-btn">SHIFT</button>
-                            <div class="transport-btn play">&#9654;</div>
-                            <div class="transport-btn stop">&#9632;</div>
-                            <div class="transport-btn rec">&#9679;</div>
+                        <div class="transport-area">
+                            <div class="hw-btn">MODE</div>
+                            <div class="hw-btn">SHIFT</div>
+                            <div class="hw-transport play">&#9654;</div>
+                            <div class="hw-transport stop">&#9632;</div>
+                            <div class="hw-transport rec">&#9679;</div>
                         </div>
+                    </div>
+
+                    <!-- Fine Line Schematics Overlay -->
+                    <svg class="schematics-overlay" viewBox="0 0 900 650">
+                        <!-- MIC Signal Path (Blue) -->
+                        <g class="mic-path">
+                            <!-- Mic input jack -->
+                            <circle cx="20" cy="180" r="8" class="node" style="color: #3498db"/>
+                            <text x="8" y="165" class="symbol symbol-mic">MIC IN</text>
+                            <!-- Signal line to processor -->
+                            <path d="M 28 180 Q 60 180 80 200 L 80 280 Q 80 320 120 340" class="signal-line line-mic"/>
+                            <!-- Preamp symbol -->
+                            <polygon points="50,175 70,185 50,195" fill="none" stroke="#3498db" stroke-width="1.5"/>
+                            <text x="52" y="210" class="schematic-label">PREAMP</text>
+                            <!-- ADC -->
+                            <rect x="85" y="270" width="30" height="20" class="schematic-box" stroke="#3498db"/>
+                            <text x="92" y="283" class="schematic-label" style="fill: #3498db">ADC</text>
+                        </g>
+
+                        <!-- RADIO Signal Path (Purple) -->
+                        <g class="radio-path">
+                            <!-- Antenna symbol -->
+                            <path d="M 20 280 L 20 260 M 10 260 L 30 260 M 15 255 L 25 255" stroke="#9b59b6" stroke-width="1.5" fill="none"/>
+                            <text x="5" y="295" class="symbol symbol-radio">RADIO</text>
+                            <!-- Signal to demodulator -->
+                            <path d="M 30 280 Q 50 280 60 300 L 60 360 Q 60 400 120 420" class="signal-line line-radio line-dashed"/>
+                            <!-- Demod box -->
+                            <rect x="40" y="310" width="35" height="18" class="schematic-box" stroke="#9b59b6"/>
+                            <text x="44" y="322" class="schematic-label" style="fill: #9b59b6">DEMOD</text>
+                        </g>
+
+                        <!-- SYNTH Signal Path (Red/Pink) -->
+                        <g class="synth-path">
+                            <!-- Oscillator waveform -->
+                            <path d="M 850 150 Q 860 130 870 150 Q 880 170 890 150" class="waveform" stroke="#e94560"/>
+                            <text x="845" y="140" class="symbol symbol-synth">OSC</text>
+                            <!-- VCF -->
+                            <rect x="830" y="180" width="35" height="18" class="schematic-box" stroke="#e94560"/>
+                            <text x="838" y="192" class="schematic-label" style="fill: #e94560">VCF</text>
+                            <!-- VCA -->
+                            <rect x="830" y="210" width="35" height="18" class="schematic-box" stroke="#e94560"/>
+                            <text x="838" y="222" class="schematic-label" style="fill: #e94560">VCA</text>
+                            <!-- Signal flow -->
+                            <path d="M 850 165 L 850 180" class="signal-line line-synth"/>
+                            <path d="M 850 198 L 850 210" class="signal-line line-synth"/>
+                            <path d="M 850 228 L 850 280 Q 850 340 780 380" class="signal-line line-synth"/>
+                            <!-- ADSR envelope -->
+                            <path d="M 880 240 L 885 220 L 890 230 L 900 230 L 905 250" stroke="#e94560" stroke-width="1" fill="none"/>
+                            <text x="878" y="260" class="schematic-label" style="fill: #e94560">ENV</text>
+                        </g>
+
+                        <!-- FX Signal Path (Green) -->
+                        <g class="fx-path">
+                            <!-- Delay line -->
+                            <rect x="830" y="320" width="40" height="18" class="schematic-box" stroke="#27ae60"/>
+                            <text x="835" y="332" class="schematic-label" style="fill: #27ae60">DELAY</text>
+                            <!-- Reverb -->
+                            <rect x="830" y="350" width="40" height="18" class="schematic-box" stroke="#27ae60"/>
+                            <text x="833" y="362" class="schematic-label" style="fill: #27ae60">REVERB</text>
+                            <!-- Filter -->
+                            <rect x="830" y="380" width="40" height="18" class="schematic-box" stroke="#27ae60"/>
+                            <text x="835" y="392" class="schematic-label" style="fill: #27ae60">FILTER</text>
+                            <!-- Connections -->
+                            <path d="M 825 329 L 800 329 Q 780 329 780 350 L 780 450" class="signal-line line-fx"/>
+                            <path d="M 825 359 L 790 359 Q 770 359 770 380 L 770 450" class="signal-line line-fx line-dashed"/>
+                            <path d="M 825 389 L 760 389 Q 740 389 740 420 L 740 450" class="signal-line line-fx"/>
+                            <text x="815" y="420" class="symbol symbol-fx">FX</text>
+                        </g>
+
+                        <!-- AUDIO OUTPUT Path (Orange/Gold) -->
+                        <g class="output-path">
+                            <!-- Master mix bus -->
+                            <rect x="400" y="520" width="100" height="25" class="schematic-box" stroke="#f39c12"/>
+                            <text x="420" y="537" class="symbol symbol-out">MASTER BUS</text>
+                            <!-- DAC -->
+                            <rect x="520" y="525" width="30" height="18" class="schematic-box" stroke="#f39c12"/>
+                            <text x="527" y="537" class="schematic-label" style="fill: #f39c12">DAC</text>
+                            <!-- Output amp -->
+                            <polygon points="570,524 590,534 570,544" fill="none" stroke="#f39c12" stroke-width="1.5"/>
+                            <!-- Output jack -->
+                            <circle cx="620" cy="534" r="8" class="node" style="color: #f39c12"/>
+                            <text x="630" y="538" class="symbol symbol-out">OUT</text>
+                            <!-- Connection lines -->
+                            <path d="M 500 532 L 520 532" class="signal-line line-audio"/>
+                            <path d="M 550 534 L 570 534" class="signal-line line-audio"/>
+                            <path d="M 590 534 L 612 534" class="signal-line line-audio"/>
+                            <!-- Headphone out -->
+                            <path d="M 580 534 L 580 560 L 620 560" class="signal-line line-audio line-dashed"/>
+                            <circle cx="628" cy="560" r="6" class="node" style="color: #f39c12"/>
+                            <text x="638" y="564" class="schematic-label" style="fill: #f39c12">HP</text>
+                        </g>
+
+                        <!-- Central Processing (CPU) -->
+                        <g class="cpu-block">
+                            <rect x="350" y="400" width="200" height="80" rx="8" fill="rgba(233,69,96,0.1)" stroke="#e94560" stroke-width="2"/>
+                            <text x="400" y="430" class="symbol" style="fill: #e94560; font-size: 12px">TEENSY 4.1</text>
+                            <text x="380" y="450" class="schematic-label">600MHz ARM / Audio DSP</text>
+                            <text x="395" y="465" class="schematic-label">Sequencer / Sampler</text>
+                        </g>
+
+                        <!-- Signal routing to CPU -->
+                        <path d="M 120 340 Q 200 340 280 400 L 350 430" class="signal-line line-mic"/>
+                        <path d="M 120 420 Q 200 420 280 440 L 350 450" class="signal-line line-radio"/>
+                        <path d="M 780 380 Q 700 400 600 430 L 550 445" class="signal-line line-synth"/>
+                        <path d="M 450 480 L 450 520" class="signal-line line-audio"/>
+
+                        <!-- Dimensions annotation -->
+                        <g class="dimensions">
+                            <line x1="100" y1="580" x2="800" y2="580" stroke="#999" stroke-width="1"/>
+                            <line x1="100" y1="575" x2="100" y2="585" stroke="#999" stroke-width="1"/>
+                            <line x1="800" y1="575" x2="800" y2="585" stroke="#999" stroke-width="1"/>
+                            <text x="420" y="600" class="schematic-label" style="font-size: 10px">250mm</text>
+                        </g>
+                    </svg>
+
+                    <!-- I/O Ports - Left Side -->
+                    <div class="io-port-group io-left">
+                        <div class="io-port"><div class="port-jack"></div><span class="port-label">LINE L</span></div>
+                        <div class="io-port"><div class="port-jack"></div><span class="port-label">LINE R</span></div>
+                        <div class="io-port"><div class="port-jack"></div><span class="port-label">MIC</span></div>
+                        <div class="io-port"><div class="port-jack"></div><span class="port-label">MIDI IN</span></div>
+                    </div>
+
+                    <!-- I/O Ports - Right Side -->
+                    <div class="io-port-group io-right">
+                        <div class="io-port"><span class="port-label">MAIN L</span><div class="port-jack"></div></div>
+                        <div class="io-port"><span class="port-label">MAIN R</span><div class="port-jack"></div></div>
+                        <div class="io-port"><span class="port-label">PHONES</span><div class="port-jack"></div></div>
+                        <div class="io-port"><span class="port-label">MIDI OUT</span><div class="port-jack"></div></div>
                     </div>
                 </div>
 
-                <!-- Side View - I/O -->
-                <div class="side-view">
-                    <span class="view-label">Side I/O Panel</span>
-                    <div class="io-panel">
-                        <div class="io-group">
-                            <span class="io-group-label">Audio In</span>
-                            <div class="io-port">
-                                <div class="port-jack trs"></div>
-                                <span class="port-name">LINE L</span>
-                            </div>
-                            <div class="io-port">
-                                <div class="port-jack trs"></div>
-                                <span class="port-name">LINE R</span>
-                            </div>
-                            <div class="io-port">
-                                <div class="port-jack trs"></div>
-                                <span class="port-name">MIC</span>
-                            </div>
-                        </div>
-                        <div class="io-group">
-                            <span class="io-group-label">Audio Out</span>
-                            <div class="io-port">
-                                <div class="port-jack"></div>
-                                <span class="port-name">MAIN L</span>
-                            </div>
-                            <div class="io-port">
-                                <div class="port-jack"></div>
-                                <span class="port-name">MAIN R</span>
-                            </div>
-                            <div class="io-port">
-                                <div class="port-jack trs"></div>
-                                <span class="port-name">PHONES</span>
-                            </div>
-                        </div>
-                        <div class="io-group">
-                            <span class="io-group-label">MIDI</span>
-                            <div class="io-port">
-                                <div class="port-jack trs"></div>
-                                <span class="port-name">IN (TRS-A)</span>
-                            </div>
-                            <div class="io-port">
-                                <div class="port-jack trs"></div>
-                                <span class="port-name">OUT (TRS-A)</span>
-                            </div>
-                        </div>
-                        <div class="io-group">
-                            <span class="io-group-label">Data</span>
-                            <div class="io-port">
-                                <div class="port-jack usb"></div>
-                                <span class="port-name">USB-C</span>
-                            </div>
-                            <div class="io-port">
-                                <div class="port-jack sd"></div>
-                                <span class="port-name">SD Card</span>
-                            </div>
-                        </div>
-                        <div class="io-group">
-                            <span class="io-group-label">Other</span>
-                            <div class="io-port">
-                                <div class="port-jack trs"></div>
-                                <span class="port-name">FOOT SW</span>
-                            </div>
-                            <div class="io-port">
-                                <div class="port-jack trs"></div>
-                                <span class="port-name">EXP PEDAL</span>
-                            </div>
-                        </div>
+                <!-- Legend -->
+                <div class="schematic-legend">
+                    <div class="legend-item">
+                        <div class="legend-line mic"></div>
+                        <span class="legend-text">Microphone</span>
                     </div>
-                </div>
-            </div>
-
-            <!-- Block Diagram -->
-            <h2 class="section-header">System Block Diagram</h2>
-            <div class="block-diagram">
-                <svg class="diagram-svg" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Main Processor -->
-                    <rect x="350" y="180" width="200" height="100" rx="8" class="comp-box-accent"/>
-                    <text x="450" y="215" text-anchor="middle" class="comp-text">TEENSY 4.1</text>
-                    <text x="450" y="235" text-anchor="middle" class="comp-text-small">600MHz ARM Cortex-M7</text>
-                    <text x="450" y="250" text-anchor="middle" class="comp-text-small">1MB RAM / 8MB Flash</text>
-                    <text x="450" y="265" text-anchor="middle" class="comp-text-small">Audio Library</text>
-
-                    <!-- Audio Codec -->
-                    <rect x="350" y="320" width="200" height="70" rx="8" class="comp-box-green"/>
-                    <text x="450" y="350" text-anchor="middle" class="comp-text">AUDIO SHIELD</text>
-                    <text x="450" y="368" text-anchor="middle" class="comp-text-small">SGTL5000 Codec</text>
-                    <text x="450" y="382" text-anchor="middle" class="comp-text-small">24-bit / 44.1kHz</text>
-
-                    <!-- WiFi/GPS Module -->
-                    <rect x="600" y="180" width="140" height="80" rx="8" class="comp-box-blue"/>
-                    <text x="670" y="210" text-anchor="middle" class="comp-text">ESP32</text>
-                    <text x="670" y="228" text-anchor="middle" class="comp-text-small">WiFi + BT</text>
-                    <text x="670" y="246" text-anchor="middle" class="comp-text-small">AI API Client</text>
-
-                    <!-- GPS -->
-                    <rect x="780" y="180" width="100" height="60" rx="8" class="comp-box"/>
-                    <text x="830" y="205" text-anchor="middle" class="comp-text">GPS</text>
-                    <text x="830" y="223" text-anchor="middle" class="comp-text-small">NEO-6M</text>
-
-                    <!-- Touch Sensor -->
-                    <rect x="160" y="180" width="140" height="60" rx="8" class="comp-box"/>
-                    <text x="230" y="205" text-anchor="middle" class="comp-text">TOUCH PADS</text>
-                    <text x="230" y="223" text-anchor="middle" class="comp-text-small">MPR121 (8ch)</text>
-
-                    <!-- Encoders -->
-                    <rect x="160" y="260" width="140" height="60" rx="8" class="comp-box"/>
-                    <text x="230" y="285" text-anchor="middle" class="comp-text">ENCODERS</text>
-                    <text x="230" y="303" text-anchor="middle" class="comp-text-small">4x Rotary + Push</text>
-
-                    <!-- Display -->
-                    <rect x="350" y="50" width="200" height="70" rx="8" class="comp-box"/>
-                    <text x="450" y="80" text-anchor="middle" class="comp-text">DISPLAY</text>
-                    <text x="450" y="98" text-anchor="middle" class="comp-text-small">7" IPS 1024x600</text>
-                    <text x="450" y="112" text-anchor="middle" class="comp-text-small">Capacitive Touch</text>
-
-                    <!-- Audio Inputs -->
-                    <rect x="20" y="320" width="120" height="100" rx="8" class="comp-box"/>
-                    <text x="80" y="345" text-anchor="middle" class="comp-text">AUDIO IN</text>
-                    <text x="80" y="365" text-anchor="middle" class="comp-text-small">Line L/R</text>
-                    <text x="80" y="380" text-anchor="middle" class="comp-text-small">Mic Input</text>
-                    <text x="80" y="395" text-anchor="middle" class="comp-text-small">Contact Mics</text>
-
-                    <!-- Audio Outputs -->
-                    <rect x="600" y="320" width="120" height="80" rx="8" class="comp-box"/>
-                    <text x="660" y="350" text-anchor="middle" class="comp-text">AUDIO OUT</text>
-                    <text x="660" y="370" text-anchor="middle" class="comp-text-small">Main L/R</text>
-                    <text x="660" y="385" text-anchor="middle" class="comp-text-small">Headphones</text>
-
-                    <!-- SD Card -->
-                    <rect x="600" y="420" width="120" height="60" rx="8" class="comp-box"/>
-                    <text x="660" y="445" text-anchor="middle" class="comp-text">SD CARD</text>
-                    <text x="660" y="463" text-anchor="middle" class="comp-text-small">64GB Samples</text>
-
-                    <!-- Power -->
-                    <rect x="160" y="380" width="140" height="70" rx="8" class="comp-box"/>
-                    <text x="230" y="405" text-anchor="middle" class="comp-text">POWER</text>
-                    <text x="230" y="423" text-anchor="middle" class="comp-text-small">3500mAh LiPo</text>
-                    <text x="230" y="438" text-anchor="middle" class="comp-text-small">USB-C Charge</text>
-
-                    <!-- MIDI -->
-                    <rect x="760" y="320" width="120" height="60" rx="8" class="comp-box"/>
-                    <text x="820" y="345" text-anchor="middle" class="comp-text">MIDI</text>
-                    <text x="820" y="363" text-anchor="middle" class="comp-text-small">TRS-A In/Out</text>
-
-                    <!-- LEDs -->
-                    <rect x="20" y="180" width="100" height="60" rx="8" class="comp-box"/>
-                    <text x="70" y="205" text-anchor="middle" class="comp-text">LEDs</text>
-                    <text x="70" y="223" text-anchor="middle" class="comp-text-small">8x RGB</text>
-
-                    <!-- Connections - I2C Data -->
-                    <path d="M 300 210 L 350 210" class="conn-line-data"/>
-                    <path d="M 300 290 L 330 290 L 330 230 L 350 230" class="conn-line-data"/>
-                    <path d="M 120 210 L 160 210" class="conn-line-data"/>
-
-                    <!-- Connections - Serial -->
-                    <path d="M 550 220 L 600 220" class="conn-line-data"/>
-                    <path d="M 740 210 L 780 210" class="conn-line-data"/>
-
-                    <!-- Connections - Audio -->
-                    <path d="M 140 370 L 350 370" class="conn-line-audio"/>
-                    <path d="M 550 355 L 600 355" class="conn-line-audio"/>
-
-                    <!-- Connections - Display -->
-                    <path d="M 450 120 L 450 180" class="conn-line-data"/>
-
-                    <!-- Connections - I2S to Codec -->
-                    <path d="M 450 280 L 450 320" class="conn-line-audio"/>
-
-                    <!-- Connections - SD Card -->
-                    <path d="M 550 250 L 580 250 L 580 450 L 600 450" class="conn-line-data"/>
-
-                    <!-- Connections - MIDI -->
-                    <path d="M 720 350 L 760 350" class="conn-line-data"/>
-
-                    <!-- Power lines -->
-                    <path d="M 230 380 L 230 350 L 300 350 L 300 280 L 350 250" class="conn-line" stroke-dasharray="4,2"/>
-
-                    <!-- Labels -->
-                    <text x="325" y="200" class="comp-text-small">I2C</text>
-                    <text x="570" y="210" class="comp-text-small">UART</text>
-                    <text x="250" y="362" class="comp-text-small">ADC</text>
-                    <text x="570" y="348" class="comp-text-small">I2S</text>
-                    <text x="455" y="305" class="comp-text-small">I2S</text>
-                </svg>
-
-                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-line radio"></div>
+                        <span class="legend-text">Radio/SDR</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line synth"></div>
+                        <span class="legend-text">Synthesizer</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line fx"></div>
+                        <span class="legend-text">Effects</span>
+                    </div>
                     <div class="legend-item">
                         <div class="legend-line audio"></div>
-                        <span>Audio Signal</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-line data" style="background: repeating-linear-gradient(90deg, #2196f3, #2196f3 4px, transparent 4px, transparent 6px);"></div>
-                        <span>Digital Data (I2C/SPI/UART)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-line power" style="background: repeating-linear-gradient(90deg, #8b5a2b, #8b5a2b 4px, transparent 4px, transparent 6px);"></div>
-                        <span>Power</span>
+                        <span class="legend-text">Audio Output</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Pin Assignments -->
-            <h2 class="section-header">Teensy 4.1 Pin Assignments</h2>
-            <table class="pin-table">
-                <thead>
-                    <tr>
-                        <th>Function</th>
-                        <th>Pins</th>
-                        <th>Protocol</th>
-                        <th>Notes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Audio Shield (I2S)</td>
-                        <td><span class="pin-num">7, 20, 21, 23</span></td>
-                        <td>I2S</td>
-                        <td>SGTL5000 codec communication</td>
-                    </tr>
-                    <tr>
-                        <td>Audio Shield (I2C)</td>
-                        <td><span class="pin-num">18 (SDA), 19 (SCL)</span></td>
-                        <td>I2C</td>
-                        <td>Codec control @ 0x0A</td>
-                    </tr>
-                    <tr>
-                        <td>Touch Sensor (MPR121)</td>
-                        <td><span class="pin-num">18 (SDA), 19 (SCL), 2 (IRQ)</span></td>
-                        <td>I2C</td>
-                        <td>Address: 0x5A</td>
-                    </tr>
-                    <tr>
-                        <td>Encoder 1</td>
-                        <td><span class="pin-num">3 (CLK), 4 (DT), 5 (SW)</span></td>
-                        <td>GPIO</td>
-                        <td>VOL encoder + push</td>
-                    </tr>
-                    <tr>
-                        <td>Encoder 2</td>
-                        <td><span class="pin-num">6 (CLK), 7 (DT), 8 (SW)</span></td>
-                        <td>GPIO</td>
-                        <td>PAN encoder + push</td>
-                    </tr>
-                    <tr>
-                        <td>Encoder 3</td>
-                        <td><span class="pin-num">9 (CLK), 10 (DT), 11 (SW)</span></td>
-                        <td>GPIO</td>
-                        <td>FILTER encoder + push</td>
-                    </tr>
-                    <tr>
-                        <td>Encoder 4</td>
-                        <td><span class="pin-num">12 (CLK), 24 (DT), 25 (SW)</span></td>
-                        <td>GPIO</td>
-                        <td>FX encoder + push</td>
-                    </tr>
-                    <tr>
-                        <td>MODE Button</td>
-                        <td><span class="pin-num">26</span></td>
-                        <td>GPIO</td>
-                        <td>Mode switch button</td>
-                    </tr>
-                    <tr>
-                        <td>SHIFT Button</td>
-                        <td><span class="pin-num">27</span></td>
-                        <td>GPIO</td>
-                        <td>Secondary function modifier</td>
-                    </tr>
-                    <tr>
-                        <td>REC Button</td>
-                        <td><span class="pin-num">28</span></td>
-                        <td>GPIO</td>
-                        <td>Record toggle</td>
-                    </tr>
-                    <tr>
-                        <td>PLAY Button</td>
-                        <td><span class="pin-num">29</span></td>
-                        <td>GPIO</td>
-                        <td>Play/Pause transport</td>
-                    </tr>
-                    <tr>
-                        <td>NeoPixel LEDs</td>
-                        <td><span class="pin-num">30</span></td>
-                        <td>WS2812</td>
-                        <td>8x RGB status LEDs</td>
-                    </tr>
-                    <tr>
-                        <td>ESP32 Communication</td>
-                        <td><span class="pin-num">16 (RX2), 17 (TX2)</span></td>
-                        <td>UART</td>
-                        <td>Serial2 @ 115200 baud</td>
-                    </tr>
-                    <tr>
-                        <td>Display</td>
-                        <td><span class="pin-num">SPI + GPIO</span></td>
-                        <td>SPI</td>
-                        <td>7" IPS via SPI bus</td>
-                    </tr>
-                    <tr>
-                        <td>SD Card</td>
-                        <td><span class="pin-num">Built-in</span></td>
-                        <td>SDIO</td>
-                        <td>Teensy 4.1 onboard slot</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- Bill of Materials -->
-            <h2 class="section-header">Bill of Materials</h2>
-            <table class="bom-table">
-                <thead>
-                    <tr>
-                        <th>Component</th>
-                        <th>Description</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Teensy 4.1</td>
-                        <td>600MHz ARM Cortex-M7, 1MB RAM</td>
-                        <td>1</td>
-                        <td class="price">$29.75</td>
-                    </tr>
-                    <tr>
-                        <td>Teensy Audio Shield</td>
-                        <td>SGTL5000 codec, line in/out, headphones</td>
-                        <td>1</td>
-                        <td class="price">$13.75</td>
-                    </tr>
-                    <tr>
-                        <td>ESP32 DevKit</td>
-                        <td>WiFi + Bluetooth for AI API</td>
-                        <td>1</td>
-                        <td class="price">$8.00</td>
-                    </tr>
-                    <tr>
-                        <td>7" IPS Display</td>
-                        <td>1024x600, Capacitive Touch, SPI</td>
-                        <td>1</td>
-                        <td class="price">$45.00</td>
-                    </tr>
-                    <tr>
-                        <td>MPR121 Touch Sensor</td>
-                        <td>12-channel capacitive touch, I2C</td>
-                        <td>1</td>
-                        <td class="price">$7.95</td>
-                    </tr>
-                    <tr>
-                        <td>Rotary Encoders</td>
-                        <td>With push button, 20 detents</td>
-                        <td>4</td>
-                        <td class="price">$11.80</td>
-                    </tr>
-                    <tr>
-                        <td>Encoder Knobs</td>
-                        <td>Aluminum, 20mm diameter</td>
-                        <td>4</td>
-                        <td class="price">$7.80</td>
-                    </tr>
-                    <tr>
-                        <td>Tactile Buttons</td>
-                        <td>12mm, with caps</td>
-                        <td>4</td>
-                        <td class="price">$6.00</td>
-                    </tr>
-                    <tr>
-                        <td>GPS Module</td>
-                        <td>NEO-6M with antenna</td>
-                        <td>1</td>
-                        <td class="price">$12.00</td>
-                    </tr>
-                    <tr>
-                        <td>NeoPixel Ring</td>
-                        <td>8x WS2812B RGB LEDs</td>
-                        <td>1</td>
-                        <td class="price">$6.00</td>
-                    </tr>
-                    <tr>
-                        <td>SD Card 64GB</td>
-                        <td>High-speed for samples</td>
-                        <td>1</td>
-                        <td class="price">$12.00</td>
-                    </tr>
-                    <tr>
-                        <td>LiPo Battery</td>
-                        <td>3500mAh 3.7V with protection</td>
-                        <td>1</td>
-                        <td class="price">$18.00</td>
-                    </tr>
-                    <tr>
-                        <td>USB-C Charge Board</td>
-                        <td>TP4056 with boost converter</td>
-                        <td>1</td>
-                        <td class="price">$4.50</td>
-                    </tr>
-                    <tr>
-                        <td>Audio Jacks</td>
-                        <td>3.5mm TRS/TS panel mount</td>
-                        <td>8</td>
-                        <td class="price">$12.00</td>
-                    </tr>
-                    <tr>
-                        <td>Enclosure</td>
-                        <td>Aluminum 250x180x50mm</td>
-                        <td>1</td>
-                        <td class="price">$35.00</td>
-                    </tr>
-                    <tr>
-                        <td>Connectors & Wire</td>
-                        <td>JST, headers, ribbon cables</td>
-                        <td>-</td>
-                        <td class="price">$15.00</td>
-                    </tr>
-                    <tr>
-                        <td>PCB Fabrication</td>
-                        <td>Custom carrier board</td>
-                        <td>1</td>
-                        <td class="price">$20.00</td>
-                    </tr>
-                    <tr class="bom-total">
-                        <td colspan="3">TOTAL (excluding tools)</td>
-                        <td>~$265</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- Specifications -->
+            <!-- Technical Specifications -->
             <h2 class="section-header">Technical Specifications</h2>
             <div class="specs-grid">
                 <div class="spec-card">
@@ -1216,7 +1239,6 @@
                         <li>8 Sample Slots (30s each)</li>
                         <li>8-Track Step Sequencer</li>
                         <li>24 Effect Types</li>
-                        <li>128 Preset Slots</li>
                     </ul>
                 </div>
                 <div class="spec-card">
@@ -1224,11 +1246,9 @@
                     <ul>
                         <li>Stereo Line In (3.5mm TRS)</li>
                         <li>Microphone In (3.5mm TRS)</li>
-                        <li>2x Contact Mic (3.5mm TS)</li>
                         <li>MIDI In (TRS-A)</li>
-                        <li>Foot Switch (6.35mm TS)</li>
-                        <li>Expression Pedal (6.35mm TRS)</li>
                         <li>USB-C (Data + Power)</li>
+                        <li>GPS Antenna (internal)</li>
                     </ul>
                 </div>
                 <div class="spec-card">
@@ -1241,21 +1261,21 @@
                     </ul>
                 </div>
                 <div class="spec-card">
-                    <h3>Wireless</h3>
+                    <h3>Controls</h3>
+                    <ul>
+                        <li>8x Touch Pads (MPR121)</li>
+                        <li>8x Rotary Encoders</li>
+                        <li>5x Function Buttons</li>
+                        <li>8x RGB LED Indicators</li>
+                    </ul>
+                </div>
+                <div class="spec-card">
+                    <h3>Connectivity</h3>
                     <ul>
                         <li>WiFi 802.11 b/g/n</li>
                         <li>Bluetooth 4.2</li>
                         <li>GPS (NEO-6M)</li>
-                        <li>AI API Connection</li>
-                    </ul>
-                </div>
-                <div class="spec-card">
-                    <h3>Power</h3>
-                    <ul>
-                        <li>USB-C 5V/3A Input</li>
-                        <li>3500mAh LiPo Battery</li>
-                        <li>Runtime: <code>5-7 hours</code></li>
-                        <li>Charge Time: <code>~3 hours</code></li>
+                        <li>AI API (Claude)</li>
                     </ul>
                 </div>
                 <div class="spec-card">
@@ -1263,11 +1283,49 @@
                     <ul>
                         <li>Size: <code>250 x 180 x 50mm</code></li>
                         <li>Weight: <code>~650g</code></li>
-                        <li>Enclosure: Aluminum</li>
                         <li>Display: 7" IPS Touch</li>
+                        <li>Battery: 5-7 hours</li>
                     </ul>
                 </div>
             </div>
+
+            <!-- Pin Assignments -->
+            <h2 class="section-header">Teensy 4.1 Pin Assignments</h2>
+            <table class="pin-table">
+                <thead>
+                    <tr><th>Function</th><th>Pins</th><th>Protocol</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Audio Shield (I2S)</td><td><span class="pin-num">7, 20, 21, 23</span></td><td>I2S</td><td>SGTL5000 codec</td></tr>
+                    <tr><td>Touch Sensor (MPR121)</td><td><span class="pin-num">18, 19, 2</span></td><td>I2C + IRQ</td><td>Address: 0x5A</td></tr>
+                    <tr><td>Encoders 1-4</td><td><span class="pin-num">3-12, 24-25</span></td><td>GPIO</td><td>CLK, DT, SW per encoder</td></tr>
+                    <tr><td>Buttons</td><td><span class="pin-num">26-29</span></td><td>GPIO</td><td>MODE, SHIFT, REC, PLAY</td></tr>
+                    <tr><td>NeoPixel LEDs</td><td><span class="pin-num">30</span></td><td>WS2812</td><td>8x RGB</td></tr>
+                    <tr><td>ESP32</td><td><span class="pin-num">16, 17</span></td><td>UART</td><td>Serial2 @ 115200</td></tr>
+                    <tr><td>SD Card</td><td><span class="pin-num">Built-in</span></td><td>SDIO</td><td>64GB for samples</td></tr>
+                </tbody>
+            </table>
+
+            <!-- Bill of Materials -->
+            <h2 class="section-header">Bill of Materials</h2>
+            <table class="bom-table">
+                <thead>
+                    <tr><th>Component</th><th>Description</th><th>Qty</th><th>Price</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Teensy 4.1</td><td>600MHz ARM Cortex-M7</td><td>1</td><td class="price">$29.75</td></tr>
+                    <tr><td>Audio Shield</td><td>SGTL5000 codec</td><td>1</td><td class="price">$13.75</td></tr>
+                    <tr><td>ESP32 DevKit</td><td>WiFi + Bluetooth</td><td>1</td><td class="price">$8.00</td></tr>
+                    <tr><td>7" Display</td><td>IPS 1024x600 Touch</td><td>1</td><td class="price">$45.00</td></tr>
+                    <tr><td>MPR121</td><td>Touch sensor IC</td><td>1</td><td class="price">$7.95</td></tr>
+                    <tr><td>Encoders</td><td>Rotary with push</td><td>8</td><td class="price">$23.60</td></tr>
+                    <tr><td>GPS Module</td><td>NEO-6M</td><td>1</td><td class="price">$12.00</td></tr>
+                    <tr><td>Battery</td><td>3500mAh LiPo</td><td>1</td><td class="price">$18.00</td></tr>
+                    <tr><td>Enclosure</td><td>Aluminum 250x180x50</td><td>1</td><td class="price">$35.00</td></tr>
+                    <tr><td>Misc</td><td>Jacks, wire, PCB</td><td>-</td><td class="price">$60.00</td></tr>
+                    <tr class="bom-total"><td colspan="3">TOTAL</td><td>~$265</td></tr>
+                </tbody>
+            </table>
 
         </main>
     </div>
