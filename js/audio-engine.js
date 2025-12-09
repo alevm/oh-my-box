@@ -9,11 +9,14 @@ class AudioEngine {
 
         // Channel gains
         this.channels = {
-            mic: { gain: null, level: 0.8, muted: false },
-            samples: { gain: null, level: 0.8, muted: false },
-            synth: { gain: null, level: 0.8, muted: false },
-            radio: { gain: null, level: 0.8, muted: false }
+            mic: { gain: null, level: 0.8, muted: false, eq: null },
+            samples: { gain: null, level: 0.8, muted: false, eq: null },
+            synth: { gain: null, level: 0.8, muted: false, eq: null },
+            radio: { gain: null, level: 0.8, muted: false, eq: null }
         };
+
+        // Master EQ
+        this.masterEq = null;
 
         // Destination for recording
         this.recordingDestination = null;
@@ -60,12 +63,20 @@ class AudioEngine {
             this.recordingDestination = this.ctx.createMediaStreamDestination();
             this.masterGain.connect(this.recordingDestination);
 
-            // Create channel gains
+            // Create master EQ (before master gain)
+            this.masterEq = this.createEQ();
+            this.masterEq.output.connect(this.masterGain);
+
+            // Create channel gains with per-channel EQ
             for (const name of Object.keys(this.channels)) {
                 const channel = this.channels[name];
                 channel.gain = this.ctx.createGain();
                 channel.gain.gain.value = channel.level;
-                channel.gain.connect(this.masterGain);
+
+                // Create per-channel EQ
+                channel.eq = this.createEQ();
+                channel.gain.connect(channel.eq.input);
+                channel.eq.output.connect(this.masterEq.input);
 
                 // Create analyser for each channel
                 channel.analyser = this.ctx.createAnalyser();
@@ -156,6 +167,72 @@ class AudioEngine {
         if (channelGain) {
             sourceNode.connect(channelGain);
         }
+    }
+
+    // Create a 3-band EQ
+    createEQ() {
+        const low = this.ctx.createBiquadFilter();
+        low.type = 'lowshelf';
+        low.frequency.value = 320;
+        low.gain.value = 0;
+
+        const mid = this.ctx.createBiquadFilter();
+        mid.type = 'peaking';
+        mid.frequency.value = 1000;
+        mid.Q.value = 0.5;
+        mid.gain.value = 0;
+
+        const high = this.ctx.createBiquadFilter();
+        high.type = 'highshelf';
+        high.frequency.value = 3200;
+        high.gain.value = 0;
+
+        // Chain: input -> low -> mid -> high -> output
+        low.connect(mid);
+        mid.connect(high);
+
+        return {
+            input: low,
+            output: high,
+            low: low,
+            mid: mid,
+            high: high
+        };
+    }
+
+    // Set EQ for a channel or master
+    setEQ(target, band, value) {
+        let eq;
+        if (target === 'master') {
+            eq = this.masterEq;
+        } else {
+            eq = this.channels[target]?.eq;
+        }
+
+        if (!eq) return;
+
+        const filter = eq[band];
+        if (filter) {
+            filter.gain.setTargetAtTime(value, this.ctx.currentTime, 0.02);
+        }
+    }
+
+    // Get current EQ values for a channel
+    getEQ(target) {
+        let eq;
+        if (target === 'master') {
+            eq = this.masterEq;
+        } else {
+            eq = this.channels[target]?.eq;
+        }
+
+        if (!eq) return { low: 0, mid: 0, high: 0 };
+
+        return {
+            low: eq.low.gain.value,
+            mid: eq.mid.gain.value,
+            high: eq.high.gain.value
+        };
     }
 }
 

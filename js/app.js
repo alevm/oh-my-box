@@ -73,6 +73,7 @@ class App {
         this.setupTransport();
         this.setupTempo();
         this.setupMixer();
+        this.setupEQ();
         this.setupOctaTrackSequencer();
         this.setupPLockEditor();
         this.setupDubMode();
@@ -247,6 +248,62 @@ class App {
         if (masterFader) {
             masterFader.addEventListener('input', () => {
                 window.audioEngine.setMasterLevel(masterFader.value / 100);
+            });
+        }
+    }
+
+    // EQ with channel selector
+    setupEQ() {
+        const channelSelect = document.getElementById('eqChannel');
+        const eqLow = document.getElementById('eqLow');
+        const eqMid = document.getElementById('eqMid');
+        const eqHigh = document.getElementById('eqHigh');
+        const eqLowVal = document.getElementById('eqLowVal');
+        const eqMidVal = document.getElementById('eqMidVal');
+        const eqHighVal = document.getElementById('eqHighVal');
+
+        this.currentEqChannel = 'master';
+
+        // Update sliders when channel changes
+        const updateSliders = () => {
+            const eq = window.audioEngine.getEQ(this.currentEqChannel);
+            if (eqLow) eqLow.value = eq.low;
+            if (eqMid) eqMid.value = eq.mid;
+            if (eqHigh) eqHigh.value = eq.high;
+            if (eqLowVal) eqLowVal.textContent = Math.round(eq.low);
+            if (eqMidVal) eqMidVal.textContent = Math.round(eq.mid);
+            if (eqHighVal) eqHighVal.textContent = Math.round(eq.high);
+        };
+
+        if (channelSelect) {
+            channelSelect.addEventListener('change', () => {
+                this.currentEqChannel = channelSelect.value;
+                updateSliders();
+            });
+        }
+
+        // EQ slider handlers
+        if (eqLow) {
+            eqLow.addEventListener('input', () => {
+                const val = parseFloat(eqLow.value);
+                window.audioEngine.setEQ(this.currentEqChannel, 'low', val);
+                if (eqLowVal) eqLowVal.textContent = Math.round(val);
+            });
+        }
+
+        if (eqMid) {
+            eqMid.addEventListener('input', () => {
+                const val = parseFloat(eqMid.value);
+                window.audioEngine.setEQ(this.currentEqChannel, 'mid', val);
+                if (eqMidVal) eqMidVal.textContent = Math.round(val);
+            });
+        }
+
+        if (eqHigh) {
+            eqHigh.addEventListener('input', () => {
+                const val = parseFloat(eqHigh.value);
+                window.audioEngine.setEQ(this.currentEqChannel, 'high', val);
+                if (eqHighVal) eqHighVal.textContent = Math.round(val);
             });
         }
     }
@@ -716,7 +773,7 @@ class App {
 
     // Scenes with crossfader
     setupScenes() {
-        const sceneBtns = document.querySelectorAll('.scenes-xfade-panel .scene-btn');
+        const sceneBtns = document.querySelectorAll('.scenes-panel .scene-btn');
         const saveBtn = document.getElementById('saveScene');
         const crossfader = document.getElementById('sceneCrossfader');
         const scopeSelect = document.getElementById('sceneScope');
@@ -754,7 +811,7 @@ class App {
         // Save button
         if (saveBtn) {
             saveBtn.addEventListener('click', () => {
-                const activeBtn = document.querySelector('.scenes-xfade-panel .scene-btn.active');
+                const activeBtn = document.querySelector('.scenes-panel .scene-btn.active');
                 if (activeBtn) {
                     const idx = parseInt(activeBtn.dataset.scene);
                     window.sceneManager.saveScene(idx);
@@ -1103,7 +1160,28 @@ class App {
         // Update sequencer display
         this.updateOctSteps();
 
+        // Auto-tune to a local radio station
+        this.tuneLocalRadio();
+
         console.log(`Generated ${vibe} composition: tempo=${settings.tempo}, delay=${settings.delay}, grain=${settings.grain}`);
+    }
+
+    // Tune to a local radio station based on GPS
+    async tuneLocalRadio() {
+        const station = await window.radioPlayer?.autoTuneLocal();
+        if (station) {
+            console.log('Auto-tuned to local station:', station.name);
+            // Update station list UI
+            const stationList = document.getElementById('stationList');
+            if (stationList) {
+                stationList.innerHTML = '';
+                const item = document.createElement('div');
+                item.className = 'station-item playing';
+                item.textContent = `📻 ${station.name}`;
+                item.title = station.genre || station.country;
+                stationList.appendChild(item);
+            }
+        }
     }
 
     // Radio

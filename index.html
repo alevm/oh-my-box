@@ -120,7 +120,16 @@
 
                 <!-- Equalizer -->
                 <div class="panel eq-panel">
-                    <div class="panel-title">EQ</div>
+                    <div class="eq-header">
+                        <span class="panel-title">EQ</span>
+                        <select id="eqChannel">
+                            <option value="master">OUT</option>
+                            <option value="mic">MIC</option>
+                            <option value="samples">SMP</option>
+                            <option value="synth">SYN</option>
+                            <option value="radio">RAD</option>
+                        </select>
+                    </div>
                     <div class="eq-sliders">
                         <div class="eq-band"><span>LO</span><input type="range" class="eq-slider" id="eqLow" min="-12" max="12" value="0" orient="vertical"><span id="eqLowVal">0</span></div>
                         <div class="eq-band"><span>MID</span><input type="range" class="eq-slider" id="eqMid" min="-12" max="12" value="0" orient="vertical"><span id="eqMidVal">0</span></div>

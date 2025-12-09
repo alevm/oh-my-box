@@ -118,6 +118,83 @@ class RadioPlayer {
             this.audio.volume = level;
         }
     }
+
+    // Search for local stations based on GPS location
+    async searchLocalStations() {
+        const gps = window.gpsTracker?.getPosition();
+        if (!gps) {
+            console.log('No GPS data for local radio search');
+            return [];
+        }
+
+        try {
+            // Use RadioBrowser geo search
+            const params = new URLSearchParams();
+            params.append('limit', '10');
+            params.append('order', 'clickcount');
+            params.append('reverse', 'true');
+            params.append('hidebroken', 'true');
+
+            // Search by coordinates (within ~100km radius)
+            const response = await fetch(`${this.apiBase}/stations/search?${params}&geo_lat=${gps.lat}&geo_long=${gps.lng}&geo_radius=100000`);
+
+            if (!response.ok) {
+                // Fallback: try reverse geocoding to get country
+                return await this.searchByCountryFromGPS(gps);
+            }
+
+            const stations = await response.json();
+
+            if (stations.length === 0) {
+                // No local stations found, try country search
+                return await this.searchByCountryFromGPS(gps);
+            }
+
+            return stations.map(s => ({
+                id: s.stationuuid,
+                name: s.name,
+                url: s.url_resolved || s.url,
+                genre: s.tags?.split(',')[0] || 'Unknown',
+                country: s.country,
+                codec: s.codec,
+                bitrate: s.bitrate,
+                distance: s.geo_distance
+            }));
+
+        } catch (err) {
+            console.error('Local radio search failed:', err);
+            return [];
+        }
+    }
+
+    // Fallback: search by country using GPS reverse geocoding
+    async searchByCountryFromGPS(gps) {
+        try {
+            // Use Nominatim for reverse geocoding (free)
+            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${gps.lat}&lon=${gps.lng}&format=json`);
+            const data = await response.json();
+
+            const countryCode = data.address?.country_code?.toUpperCase();
+            if (countryCode) {
+                console.log('Found country from GPS:', countryCode);
+                return await this.searchStations('', countryCode);
+            }
+        } catch (err) {
+            console.error('Reverse geocoding failed:', err);
+        }
+        return [];
+    }
+
+    // Auto-tune to a random local station
+    async autoTuneLocal() {
+        const stations = await this.searchLocalStations();
+        if (stations.length > 0) {
+            const station = stations[Math.floor(Math.random() * Math.min(5, stations.length))];
+            await this.play(station);
+            return station;
+        }
+        return null;
+    }
 }
 
 // Global instance

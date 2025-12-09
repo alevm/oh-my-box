@@ -207,6 +207,8 @@ html, body {
 
 /* EQ */
 .eq-panel { }
+.eq-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.eq-header select { font-size: 9px; padding: 2px 4px; border: 1px solid var(--border); border-radius: 3px; background: var(--panel-alt); }
 .eq-sliders { display: flex; justify-content: space-around; gap: 8px; }
 .eq-band { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .eq-band span { font-size: 8px; color: var(--text-light); }
