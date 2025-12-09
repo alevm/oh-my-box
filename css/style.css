@@ -175,14 +175,43 @@ html, body {
 
 /* Dark panels for screen elements */
 .device > .seq-panel,
-.device > .pads-panel {
+.device > .pads-panel,
+.device > .knobs-panel {
     background: #1a1a1a;
     border-color: #333;
 }
 
 .device > .seq-panel .panel-title,
-.device > .pads-panel .panel-title {
+.device > .pads-panel .panel-title,
+.device > .knobs-panel .panel-title {
     color: #0f0;
+}
+
+.device > .knobs-panel .ctrl-header select {
+    background: #333;
+    color: #0f0;
+    border-color: #444;
+}
+
+.device > .knobs-panel .knob-group span {
+    color: #0f0;
+}
+
+/* Blue left column */
+.device > .mixer-panel,
+.device > .eq-panel {
+    background: #1a2a4a;
+    border-color: #2a4a7a;
+}
+
+.device > .mixer-panel .panel-title,
+.device > .eq-panel .panel-title {
+    color: #6af;
+}
+
+.device > .mixer-panel .ch-name,
+.device > .eq-panel .eq-band span {
+    color: #8bf;
 }
 
 .panel {
