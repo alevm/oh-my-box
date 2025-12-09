@@ -1162,19 +1162,11 @@
                             <text x="638" y="564" class="schematic-label" style="fill: #f39c12">HP</text>
                         </g>
 
-                        <!-- Central Processing (CPU) -->
-                        <g class="cpu-block">
-                            <rect x="350" y="400" width="200" height="80" rx="8" fill="rgba(233,69,96,0.1)" stroke="#e94560" stroke-width="2"/>
-                            <text x="400" y="430" class="symbol" style="fill: #e94560; font-size: 12px">TEENSY 4.1</text>
-                            <text x="380" y="450" class="schematic-label">600MHz ARM / Audio DSP</text>
-                            <text x="395" y="465" class="schematic-label">Sequencer / Sampler</text>
-                        </g>
-
-                        <!-- Signal routing to CPU -->
-                        <path d="M 120 340 Q 200 340 280 400 L 350 430" class="signal-line line-mic"/>
-                        <path d="M 120 420 Q 200 420 280 440 L 350 450" class="signal-line line-radio"/>
-                        <path d="M 780 380 Q 700 400 600 430 L 550 445" class="signal-line line-synth"/>
-                        <path d="M 450 480 L 450 520" class="signal-line line-audio"/>
+                        <!-- Signal routing to master bus -->
+                        <path d="M 120 340 Q 200 340 300 400 L 400 520" class="signal-line line-mic"/>
+                        <path d="M 120 420 Q 200 420 320 480 L 400 525" class="signal-line line-radio"/>
+                        <path d="M 780 380 Q 700 420 550 480 L 500 525" class="signal-line line-synth"/>
+                        <path d="M 760 450 Q 650 480 550 510 L 500 530" class="signal-line line-fx"/>
 
                         <!-- Dimensions annotation -->
                         <g class="dimensions">
