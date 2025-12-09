@@ -129,10 +129,10 @@ html, body {
 .device {
     display: grid;
     grid-template-columns: 200px 1fr 1fr;
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
     gap: 4px;
     padding: 6px;
-    height: 620px;
+    height: 680px;
     overflow: hidden;
     background: var(--border);
     border-radius: 8px;
@@ -148,20 +148,21 @@ html, body {
     flex-direction: column;
 }
 
-/* Left column: Mixer spans 2 rows, EQ spans 2 rows */
-.device > .mixer-panel { grid-column: 1; grid-row: 1 / 3; }
-.device > .eq-panel { grid-column: 1; grid-row: 3 / 5; }
+/* Left column: Mixer spans 3 rows, EQ spans 2 rows */
+.device > .mixer-panel { grid-column: 1; grid-row: 1 / 4; }
+.device > .eq-panel { grid-column: 1; grid-row: 4 / 6; }
 
 /* Middle column */
 .device > .seq-panel { grid-column: 2; grid-row: 1 / 3; }
 .device > .pads-panel:not(.pads2) { grid-column: 2; grid-row: 3; }
 .device > .knobs-panel { grid-column: 2; grid-row: 4; }
+.device > .fx-panel { grid-column: 2; grid-row: 5; }
 
 /* Right column */
 .device > .synth-panel { grid-column: 3; grid-row: 1; }
-.device > .radio-panel { grid-column: 3; grid-row: 2; }
-.device > .fx-panel { grid-column: 3; grid-row: 3; }
-.device > .scenes-panel { grid-column: 3; grid-row: 4; }
+.device > .scenes-panel { grid-column: 3; grid-row: 2; }
+.device > .ai-panel { grid-column: 3; grid-row: 3; }
+.device > .radio-panel { grid-column: 3; grid-row: 4 / 6; }
 
 /* Hide PADS B, LOCATION, REC for now - merge into others */
 .device > .pads2,
@@ -173,17 +174,19 @@ html, body {
     display: none;
 }
 
-/* MIDDLE COLUMN - Pastel Gray/Warm (SEQ/PADS/CTRL) */
+/* MIDDLE COLUMN - Pastel Gray/Warm (SEQ/PADS/CTRL/FX) */
 .device > .seq-panel,
 .device > .pads-panel,
-.device > .knobs-panel {
+.device > .knobs-panel,
+.device > .fx-panel {
     background: #e8e8e8 !important;
     border-color: #c0c0c0 !important;
 }
 
 .device > .seq-panel .panel-title,
 .device > .pads-panel .panel-title,
-.device > .knobs-panel .panel-title {
+.device > .knobs-panel .panel-title,
+.device > .fx-panel .panel-title {
     color: #2c3e50 !important;
 }
 
@@ -214,10 +217,10 @@ html, body {
     color: #2874a6;
 }
 
-/* RIGHT COLUMN - Pastel Violet/Purple (Synth/Radio/FX/Scenes) */
+/* RIGHT COLUMN - Pastel Violet/Purple (Synth/Radio/FX/Scenes/AI) */
 .device > .synth-panel,
 .device > .radio-panel,
-.device > .fx-panel,
+.device > .ai-panel,
 .device > .scenes-panel {
     background: #e8daef !important;
     border-color: #c9a0dc !important;
@@ -226,7 +229,7 @@ html, body {
 
 .synth-panel .panel-title,
 .radio-panel .panel-title,
-.fx-panel .panel-title,
+.ai-panel .panel-title,
 .scenes-panel .panel-title {
     color: #6c3483 !important;
 }
@@ -258,6 +261,47 @@ html, body {
 }
 
 .scenes-panel .scene-actions button {
+    background: #8e44ad !important;
+    border-color: #6c3483 !important;
+    color: #fff !important;
+}
+
+/* Button groups for selectors */
+.src-btns, .kit-btns, .target-btns, .ch-btns {
+    display: flex;
+    gap: 2px;
+}
+
+.src-btn, .kit-btn, .target-btn, .ch-btn {
+    padding: 2px 6px;
+    font-size: 8px;
+    font-weight: 600;
+    border: 1px solid #999;
+    border-radius: 3px;
+    background: #f0f0f0;
+    color: #333;
+    cursor: pointer;
+}
+
+.src-btn.active, .kit-btn.active, .target-btn.active, .ch-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+/* AI panel buttons styling */
+.ai-panel .vibe-btn {
+    background: #d7bde2 !important;
+    border-color: #af7ac5 !important;
+    color: #4a235a !important;
+}
+
+.ai-panel .vibe-btn.active {
+    background: #8e44ad !important;
+    color: #fff !important;
+}
+
+.ai-panel .ai-btn {
     background: #8e44ad !important;
     border-color: #6c3483 !important;
     color: #fff !important;

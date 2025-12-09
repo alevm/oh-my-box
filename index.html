@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="screen-orientation" content="landscape">
     <title>Oh My Box</title>
-    <link rel="stylesheet" href="css/style.css?v=126">
+    <link rel="stylesheet" href="css/style.css?v=127">
 </head>
 <body>
     <!-- Full-page map background -->
@@ -44,7 +44,12 @@
                 <div class="seq-header">
                     <span class="panel-title">SEQ</span>
                     <div class="seq-controls">
-                        <select id="seqSource"><option value="sampler">SMP</option><option value="synth">SYN</option><option value="radio">RAD</option><option value="mic">MIC</option></select>
+                        <div class="src-btns">
+                            <button class="src-btn active" data-src="sampler">SMP</button>
+                            <button class="src-btn" data-src="synth">SYN</button>
+                            <button class="src-btn" data-src="radio">RAD</button>
+                            <button class="src-btn" data-src="mic">MIC</button>
+                        </div>
                         <button id="seqRandom" class="seq-btn mini">RND</button>
                         <button id="seqClear" class="seq-btn mini">CLR</button>
                         <button id="eucGen" class="seq-btn mini">EUC</button>
@@ -91,24 +96,35 @@
             </div>
             <div class="panel scenes-panel">
                 <div class="panel-title">SCENES</div>
-                <div class="scene-grid">
-                    <button class="scene-btn active" data-scene="0">1</button>
-                    <button class="scene-btn" data-scene="1">2</button>
-                    <button class="scene-btn" data-scene="2">3</button>
-                    <button class="scene-btn" data-scene="3">4</button>
-                    <button class="scene-btn" data-scene="4">5</button>
-                    <button class="scene-btn" data-scene="5">6</button>
-                    <button class="scene-btn" data-scene="6">7</button>
-                    <button class="scene-btn" data-scene="7">8</button>
+                <div class="scene-row">
+                    <button class="scene-btn active" data-scene="0">A</button>
+                    <button class="scene-btn" data-scene="1">B</button>
+                    <button class="scene-btn" data-scene="2">C</button>
+                    <button class="scene-btn" data-scene="3">D</button>
                 </div>
+                <div class="xfade-row"><span id="xfadeLeft">A</span><input type="range" id="sceneCrossfader" class="xfader" min="0" max="100" value="0"><span id="xfadeRight">B</span></div>
                 <div class="scene-actions"><button id="saveScene">SAVE</button><button id="loadScene">LOAD</button></div>
+            </div>
+            <div class="panel ai-panel">
+                <div class="panel-title">AI GEN</div>
+                <div class="vibe-btns">
+                    <button class="vibe-btn active" data-vibe="calm">C</button>
+                    <button class="vibe-btn" data-vibe="urban">U</button>
+                    <button class="vibe-btn" data-vibe="nature">N</button>
+                    <button class="vibe-btn" data-vibe="chaos">X</button>
+                </div>
+                <button id="aiGenerate" class="ai-btn">GENERATE</button>
             </div>
 
             <!-- Row 2: PADS | PADS2 | CTRL | FX -->
             <div class="panel pads-panel">
                 <div class="pads-header">
                     <span class="panel-title">PADS A</span>
-                    <select id="sampleBank"><option value="kit1">Kit1</option><option value="kit2">Kit2</option><option value="kit3">Kit3</option></select>
+                    <div class="kit-btns">
+                        <button class="kit-btn active" data-kit="kit1">1</button>
+                        <button class="kit-btn" data-kit="kit2">2</button>
+                        <button class="kit-btn" data-kit="kit3">3</button>
+                    </div>
                 </div>
                 <div class="pads-grid">
                     <button class="pad" data-pad="0">1</button>
@@ -140,7 +156,11 @@
             <div class="panel knobs-panel">
                 <div class="ctrl-header">
                     <span class="panel-title">CTRL</span>
-                    <select id="ctrlTarget"><option value="fx">FX</option><option value="synth">SYN</option><option value="sampler">SMP</option></select>
+                    <div class="target-btns">
+                        <button class="target-btn active" data-target="fx">FX</button>
+                        <button class="target-btn" data-target="synth">SYN</button>
+                        <button class="target-btn" data-target="sampler">SMP</button>
+                    </div>
                 </div>
                 <div class="knobs-grid">
                     <div class="knob-group"><div class="knob" id="knobFreq" data-param="freq" data-min="20" data-max="2000" data-value="220"></div><span>FREQ</span></div>
@@ -177,7 +197,16 @@
                 <div class="map-coords" id="miniMapCoords">--</div>
             </div>
             <div class="panel eq-panel">
-                <div class="eq-header"><span class="panel-title">EQ</span><select id="eqChannel"><option value="master">OUT</option><option value="mic">MIC</option><option value="samples">SMP</option><option value="synth">SYN</option><option value="radio">RAD</option></select></div>
+                <div class="eq-header">
+                    <span class="panel-title">EQ</span>
+                    <div class="ch-btns">
+                        <button class="ch-btn active" data-ch="master">OUT</button>
+                        <button class="ch-btn" data-ch="mic">MIC</button>
+                        <button class="ch-btn" data-ch="samples">SMP</button>
+                        <button class="ch-btn" data-ch="synth">SYN</button>
+                        <button class="ch-btn" data-ch="radio">RAD</button>
+                    </div>
+                </div>
                 <div class="eq-sliders">
                     <div class="eq-band"><span>LO</span><input type="range" class="eq-slider" id="eqLow" min="-12" max="12" value="0" orient="vertical"><span id="eqLowVal">0</span></div>
                     <div class="eq-band"><span>MID</span><input type="range" class="eq-slider" id="eqMid" min="-12" max="12" value="0" orient="vertical"><span id="eqMidVal">0</span></div>
