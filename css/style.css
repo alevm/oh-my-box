@@ -1,4 +1,4 @@
-/* Oh My Box v1.0.2 */
+/* Oh My Box v1.0.3 */
 
 * {
     margin: 0;
@@ -30,6 +30,7 @@ html, body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 14px;
     color: var(--text);
+    -webkit-overflow-scrolling: touch;
 }
 
 /* ===== FULL-PAGE BACKGROUND ===== */
@@ -139,6 +140,7 @@ html, body {
     writing-mode: vertical-lr;
     direction: rtl;
     width: 100%;
+    touch-action: none;
     flex: 1;
     margin: 4px 0;
     cursor: pointer;
@@ -212,6 +214,7 @@ html, body {
     writing-mode: vertical-lr;
     direction: rtl;
     height: 60px;
+    touch-action: none;
     width: 20px;
     cursor: pointer;
 }
@@ -227,6 +230,7 @@ html, body {
     background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
     border: 2px solid var(--border);
     position: relative;
+    touch-action: none;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
@@ -342,6 +346,12 @@ html, body {
 
 /* ===== MOBILE RESPONSIVE ===== */
 @media (max-width: 768px) {
+    html, body {
+        overflow: auto;
+        height: auto;
+        min-height: 100%;
+    }
+
     #app {
         width: 100%;
         height: auto;
@@ -442,6 +452,8 @@ html, body {
     .knob {
         width: 50px;
         height: 50px;
+        touch-action: none;
+        cursor: pointer;
     }
 
     .seq-btn, .vibe-btn, .scene-btn, .wave-btn {

@@ -1,5 +1,15 @@
 # Oh My Box - Changelog
 
+## v1.0.3 (2025-12-09)
+
+### Mobile Touch & Scroll Fixes
+- Fixed mobile scrolling - body now scrollable on mobile
+- Added touch-action: none to knobs for proper touch interaction
+- Added touch-action to faders and EQ sliders
+- CTRL knobs now respond to touch gestures on mobile
+
+---
+
 ## v1.0.2 (2025-12-09)
 
 ### Mobile Fixes
