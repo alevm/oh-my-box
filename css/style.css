@@ -1,4 +1,4 @@
-/* Oh My Box v0.7.24 - equal columns 2-4 */
+/* Oh My Box v0.7.25 - add missing station/rec lists, fix layout */
 
 * {
     margin: 0;
@@ -267,12 +267,20 @@ html, body {
 .radio-row { display: flex; gap: 3px; }
 .radio-row input { flex: 1; height: 22px; padding: 0 4px; border: 1px solid var(--border); border-radius: 3px; font-size: 9px; }
 .radio-row button { width: 24px; height: 22px; border: 1px solid var(--border); border-radius: 3px; background: var(--panel-alt); font-size: 10px; cursor: pointer; }
+.station-list { margin-top: 4px; max-height: 60px; overflow-y: auto; }
+.station-item { padding: 3px 4px; font-size: 8px; cursor: pointer; border-radius: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.station-item:hover { background: var(--panel-alt); }
+.station-item.playing { background: var(--green); color: #fff; }
 
 /* REC */
 .rec-panel { }
 .rec-row { display: flex; align-items: center; gap: 6px; }
 .rec-row span:nth-child(2) { font-size: 11px; font-weight: 600; color: var(--accent); }
 .rec-list-btn { height: 20px; padding: 0 8px; border: 1px solid var(--border); border-radius: 3px; background: var(--panel-alt); font-size: 8px; cursor: pointer; margin-left: auto; }
+.rec-list { margin-top: 4px; max-height: 60px; overflow-y: auto; }
+.rec-item { display: flex; align-items: center; gap: 4px; padding: 2px 4px; font-size: 8px; }
+.rec-item-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rec-item button { width: 18px; height: 16px; border: 1px solid var(--border); border-radius: 2px; background: var(--panel-alt); font-size: 8px; cursor: pointer; }
 
 /* ===== COL 4: SYNTH + SCENES + FX ===== */
 .synth-panel { }
