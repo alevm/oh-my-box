@@ -3,9 +3,9 @@
 ## Layout Requirements
 
 ### Grid Structure
-- [ ] 4-column layout: Mixer, SEQ/EQ, Controls, Synth/FX
-- [ ] PADS span full bottom across all columns
-- [ ] App uses 75% of screen width, centered
+- [x] 4-column layout: Mixer, SEQ/EQ, Controls, Synth/FX
+- [x] PADS span full bottom across all columns
+- [x] App uses 75% of screen width, centered
 - [ ] All columns resizable (user can adjust widths)
 - [ ] Column sizes saved to localStorage
 
@@ -17,8 +17,13 @@
 - Equal distribution for columns 2-4
 
 ### Background
-- Vin Mariani image as page background
-- Brightness/filter adjustable via theme
+- [x] Vin Mariani image as page background
+- [ ] Brightness/filter adjustable via theme
+
+### Mobile
+- [x] Responsive layout for mobile (max-width: 768px)
+- [x] Touch support for knobs/faders
+- [x] Scrollable content on mobile
 
 ---
 
@@ -42,7 +47,8 @@
 ### Equalizer
 - [x] 3-band EQ (LO, MID, HI)
 - [x] Vertical sliders
-- [ ] EQ affects master output
+- [x] Channel selector (OUT, MIC, SMP, SYN, RAD)
+- [x] Per-channel EQ in audio routing
 
 ### Pads
 - [x] 8 pads in a row
@@ -53,24 +59,28 @@
 ### CTRL Knobs
 - [x] FREQ, FILT, DLY, GRN
 - [x] Drag to adjust
+- [x] Touch support on mobile
 - [ ] Visual feedback on value
 
 ### Location
 - [x] GPS coordinates display
 - [x] Mini map image
 - [ ] Auto-refresh position
-- [ ] Reverse geocoding (city name)
+- [x] Reverse geocoding (for local radio search)
 
 ### AI Gen
 - [x] Vibe buttons (Calm, Urban, Nature, Chaos)
 - [x] Generate button
-- [ ] Actually generate patterns based on vibe
+- [x] Generates patterns based on vibe
+- [x] Sets tempo, FX, mixer levels based on vibe
+- [x] Auto-tunes to local radio station
 
 ### Radio
 - [x] Search input
 - [x] Play/Stop buttons
 - [x] Station list (search results)
-- [ ] Currently playing indicator
+- [x] Local station search via GPS
+- [x] Currently playing indicator
 - [ ] Favorites
 
 ### Synth
@@ -84,7 +94,8 @@
 - [x] A/B/C/D buttons
 - [x] Crossfader
 - [x] Save button
-- [x] Scope selector (ALL, mixer, fx)
+- [x] Scope selector (ALL, mixer, seq, fx)
+- [x] Scene recall working
 - [ ] Scene morphing with crossfader
 
 ### FX
@@ -141,11 +152,10 @@
 
 1. Resizable columns with save to admin
 2. VU meters
-3. Full EQ integration with audio engine
-4. Better synth with ADSR
-5. Scene morphing
-6. FX presets
-7. Recording management (delete, rename)
-8. Offline mode
-9. PWA support
-10. MIDI support
+3. Better synth with ADSR
+4. Scene morphing with crossfader
+5. FX presets
+6. Recording management (delete, rename)
+7. Offline mode
+8. PWA support
+9. MIDI support
