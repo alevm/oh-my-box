@@ -176,12 +176,87 @@
                 </div>
             </div>
             <div class="panel synth-panel">
-                <div class="synth-header"><span class="panel-title">SYNTH</span><button id="synthToggle" class="power-btn" title="Turn synth on/off">OFF</button></div>
-                <div class="wave-btns">
-                    <button class="wave-btn active" data-wave="sine" title="Sine wave - smooth, pure tone">SIN</button>
-                    <button class="wave-btn" data-wave="triangle" title="Triangle wave - soft, mellow tone">TRI</button>
-                    <button class="wave-btn" data-wave="sawtooth" title="Sawtooth wave - bright, buzzy tone">SAW</button>
-                    <button class="wave-btn" data-wave="square" title="Square wave - hollow, retro tone">SQR</button>
+                <div class="synth-header">
+                    <span class="panel-title">SYNTH</span>
+                    <div class="synth-header-ctrls">
+                        <button id="synthToggle" class="power-btn" title="Turn synth on/off">OFF</button>
+                        <button id="synthPresetSave" class="preset-btn" title="Save current synth preset">SAV</button>
+                        <button id="synthPresetLoad" class="preset-btn" title="Load synth preset">LOD</button>
+                    </div>
+                </div>
+                <div class="synth-scope" id="synthScope" title="Oscilloscope - visual waveform display">
+                    <canvas id="scopeCanvas" width="120" height="40"></canvas>
+                </div>
+                <div class="synth-section">
+                    <div class="synth-row">
+                        <div class="osc-group">
+                            <span class="osc-label">OSC1</span>
+                            <div class="wave-btns" data-osc="1">
+                                <button class="wave-btn active" data-wave="sine" title="Sine wave">SIN</button>
+                                <button class="wave-btn" data-wave="triangle" title="Triangle wave">TRI</button>
+                                <button class="wave-btn" data-wave="sawtooth" title="Sawtooth wave">SAW</button>
+                                <button class="wave-btn" data-wave="square" title="Square wave">SQR</button>
+                            </div>
+                        </div>
+                        <div class="osc-group">
+                            <span class="osc-label">OSC2</span>
+                            <div class="wave-btns" data-osc="2">
+                                <button class="wave-btn" data-wave="sine" title="Sine wave">SIN</button>
+                                <button class="wave-btn active" data-wave="triangle" title="Triangle wave">TRI</button>
+                                <button class="wave-btn" data-wave="sawtooth" title="Sawtooth wave">SAW</button>
+                                <button class="wave-btn" data-wave="square" title="Square wave">SQR</button>
+                            </div>
+                            <div class="osc2-params">
+                                <span title="Detune OSC2">DET</span>
+                                <input type="range" id="osc2Detune" min="-100" max="100" value="7" title="Detune OSC2 in cents (-100 to +100)">
+                                <span id="osc2DetuneVal">7</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="synth-row">
+                        <div class="pitch-group">
+                            <div class="pitch-param"><span title="Octave shift">OCT</span><input type="range" id="synthOctave" min="-2" max="2" value="0" title="Octave shift (-2 to +2)"><span id="synthOctVal">0</span></div>
+                            <div class="pitch-param"><span title="Fine tune">FINE</span><input type="range" id="synthFine" min="-50" max="50" value="0" title="Fine tune in cents"><span id="synthFineVal">0</span></div>
+                            <div class="pitch-param"><span title="Portamento/Glide">GLIDE</span><input type="range" id="synthGlide" min="0" max="500" value="0" title="Glide time (ms)"><span id="synthGlideVal">0</span></div>
+                        </div>
+                    </div>
+                    <div class="synth-row">
+                        <div class="filter-group">
+                            <span class="filter-label">FILTER</span>
+                            <div class="filter-type-btns">
+                                <button class="flt-btn active" data-flt="lowpass" title="Lowpass filter">LP</button>
+                                <button class="flt-btn" data-flt="highpass" title="Highpass filter">HP</button>
+                                <button class="flt-btn" data-flt="bandpass" title="Bandpass filter">BP</button>
+                            </div>
+                            <div class="filter-params">
+                                <div class="flt-param"><span>CUT</span><input type="range" id="filterCutoff" min="20" max="20000" value="2000" title="Filter cutoff frequency"><span id="filterCutVal">2k</span></div>
+                                <div class="flt-param"><span>RES</span><input type="range" id="filterRes" min="0" max="30" value="1" title="Filter resonance"><span id="filterResVal">1</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="synth-row">
+                        <div class="lfo-group">
+                            <span class="lfo-label">LFO</span>
+                            <div class="lfo-params">
+                                <div class="lfo-param"><span>RATE</span><input type="range" id="lfoRate" min="0" max="20" value="0" step="0.1" title="LFO rate (Hz)"><span id="lfoRateVal">0</span></div>
+                                <div class="lfo-param"><span>DEP</span><input type="range" id="lfoDepth" min="0" max="100" value="0" title="LFO depth"><span id="lfoDepthVal">0</span></div>
+                            </div>
+                            <div class="lfo-target-btns">
+                                <button class="lfo-btn active" data-target="pitch" title="Modulate pitch (vibrato)">PIT</button>
+                                <button class="lfo-btn" data-target="filter" title="Modulate filter (wah)">FLT</button>
+                                <button class="lfo-btn" data-target="amp" title="Modulate amplitude (tremolo)">AMP</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="synth-row">
+                        <div class="unison-group">
+                            <span class="unison-label">UNISON</span>
+                            <div class="unison-params">
+                                <div class="uni-param"><span>VOICES</span><input type="range" id="unisonVoices" min="1" max="8" value="1" title="Number of unison voices"><span id="unisonVoicesVal">1</span></div>
+                                <div class="uni-param"><span>SPREAD</span><input type="range" id="unisonSpread" min="0" max="50" value="10" title="Unison detune spread"><span id="unisonSpreadVal">10</span></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="adsr-row">
                     <div class="adsr-param"><span title="Attack time">A</span><input type="range" id="adsrAttack" min="0" max="1000" value="10" title="Attack - time to reach full volume (ms)"><span id="adsrAVal">10</span></div>

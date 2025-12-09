@@ -1465,14 +1465,133 @@ class App {
             toggle.textContent = playing ? 'ON' : 'OFF';
         });
 
-        // Waveform buttons
-        document.querySelectorAll('.wave-btn').forEach(btn => {
+        // OSC1 Waveform buttons
+        document.querySelectorAll('.wave-btns[data-osc="1"] .wave-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                window.synth.setWaveform(btn.dataset.wave);
-                document.querySelectorAll('.wave-btn').forEach(b => b.classList.remove('active'));
+                window.synth.setOsc1Waveform(btn.dataset.wave);
+                document.querySelectorAll('.wave-btns[data-osc="1"] .wave-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
             });
         });
+
+        // OSC2 Waveform buttons
+        document.querySelectorAll('.wave-btns[data-osc="2"] .wave-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.synth.setOsc2Waveform(btn.dataset.wave);
+                document.querySelectorAll('.wave-btns[data-osc="2"] .wave-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // OSC2 Detune
+        const osc2Detune = document.getElementById('osc2Detune');
+        const osc2DetuneVal = document.getElementById('osc2DetuneVal');
+        if (osc2Detune) {
+            osc2Detune.addEventListener('input', () => {
+                const val = parseInt(osc2Detune.value);
+                window.synth.setOsc2Detune(val);
+                if (osc2DetuneVal) osc2DetuneVal.textContent = val;
+            });
+        }
+
+        // Pitch controls
+        const pitchControls = [
+            { id: 'synthOctave', valId: 'synthOctVal', setter: 'setOctave' },
+            { id: 'synthFine', valId: 'synthFineVal', setter: 'setFineTune' },
+            { id: 'synthGlide', valId: 'synthGlideVal', setter: 'setGlide' }
+        ];
+        pitchControls.forEach(({ id, valId, setter }) => {
+            const slider = document.getElementById(id);
+            const valDisplay = document.getElementById(valId);
+            if (slider) {
+                slider.addEventListener('input', () => {
+                    const val = parseInt(slider.value);
+                    window.synth[setter](val);
+                    if (valDisplay) valDisplay.textContent = val;
+                });
+            }
+        });
+
+        // Filter type buttons
+        document.querySelectorAll('.flt-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.synth.setFilterType(btn.dataset.flt);
+                document.querySelectorAll('.flt-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Filter cutoff and resonance
+        const filterCutoff = document.getElementById('filterCutoff');
+        const filterCutVal = document.getElementById('filterCutVal');
+        if (filterCutoff) {
+            filterCutoff.addEventListener('input', () => {
+                const val = parseInt(filterCutoff.value);
+                window.synth.setFilterCutoff(val);
+                if (filterCutVal) filterCutVal.textContent = val >= 1000 ? (val/1000).toFixed(1) + 'k' : val;
+            });
+        }
+
+        const filterRes = document.getElementById('filterRes');
+        const filterResVal = document.getElementById('filterResVal');
+        if (filterRes) {
+            filterRes.addEventListener('input', () => {
+                const val = parseInt(filterRes.value);
+                window.synth.setFilterResonance(val);
+                if (filterResVal) filterResVal.textContent = val;
+            });
+        }
+
+        // LFO controls
+        const lfoRate = document.getElementById('lfoRate');
+        const lfoRateVal = document.getElementById('lfoRateVal');
+        if (lfoRate) {
+            lfoRate.addEventListener('input', () => {
+                const val = parseFloat(lfoRate.value);
+                window.synth.setLFORate(val);
+                if (lfoRateVal) lfoRateVal.textContent = val.toFixed(1);
+            });
+        }
+
+        const lfoDepth = document.getElementById('lfoDepth');
+        const lfoDepthVal = document.getElementById('lfoDepthVal');
+        if (lfoDepth) {
+            lfoDepth.addEventListener('input', () => {
+                const val = parseInt(lfoDepth.value);
+                window.synth.setLFODepth(val);
+                if (lfoDepthVal) lfoDepthVal.textContent = val;
+            });
+        }
+
+        // LFO target buttons
+        document.querySelectorAll('.lfo-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.synth.setLFOTarget(btn.dataset.target);
+                document.querySelectorAll('.lfo-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Unison controls
+        const unisonVoices = document.getElementById('unisonVoices');
+        const unisonVoicesVal = document.getElementById('unisonVoicesVal');
+        if (unisonVoices) {
+            unisonVoices.addEventListener('input', () => {
+                const val = parseInt(unisonVoices.value);
+                window.synth.setUnisonVoices(val);
+                if (unisonVoicesVal) unisonVoicesVal.textContent = val;
+            });
+        }
+
+        const unisonSpread = document.getElementById('unisonSpread');
+        const unisonSpreadVal = document.getElementById('unisonSpreadVal');
+        if (unisonSpread) {
+            unisonSpread.addEventListener('input', () => {
+                const val = parseInt(unisonSpread.value);
+                window.synth.setUnisonSpread(val);
+                if (unisonSpreadVal) unisonSpreadVal.textContent = val;
+            });
+        }
 
         // ADSR sliders
         const adsrControls = [
@@ -1492,6 +1611,138 @@ class App {
                     if (valDisplay) valDisplay.textContent = val;
                 });
             }
+        });
+
+        // Preset buttons
+        const presetSave = document.getElementById('synthPresetSave');
+        const presetLoad = document.getElementById('synthPresetLoad');
+        if (presetSave) {
+            presetSave.addEventListener('click', () => {
+                const name = prompt('Preset name:', 'Preset ' + (window.synth.getPresets().length + 1));
+                if (name) {
+                    window.synth.savePreset(name);
+                    console.log('Saved preset:', name);
+                }
+            });
+        }
+        if (presetLoad) {
+            presetLoad.addEventListener('click', () => {
+                const presets = window.synth.getPresets();
+                if (presets.length === 0) {
+                    alert('No presets saved');
+                    return;
+                }
+                const list = presets.map((p, i) => `${i + 1}. ${p.name}`).join('\n');
+                const idx = prompt('Select preset:\n' + list, '1');
+                if (idx) {
+                    window.synth.loadPreset(parseInt(idx) - 1);
+                    this.updateSynthUI();
+                }
+            });
+        }
+
+        // Oscilloscope
+        this.setupOscilloscope();
+    }
+
+    // Oscilloscope visualization
+    setupOscilloscope() {
+        const canvas = document.getElementById('scopeCanvas');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+
+        const drawScope = () => {
+            const analyser = window.synth?.getAnalyser();
+            if (!analyser) {
+                requestAnimationFrame(drawScope);
+                return;
+            }
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            analyser.getByteTimeDomainData(dataArray);
+
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = '#00ff88';
+            ctx.beginPath();
+
+            const sliceWidth = width / bufferLength;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+                const v = dataArray[i] / 128.0;
+                const y = v * height / 2;
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+
+                x += sliceWidth;
+            }
+
+            ctx.lineTo(width, height / 2);
+            ctx.stroke();
+
+            requestAnimationFrame(drawScope);
+        };
+
+        drawScope();
+    }
+
+    // Update synth UI from state
+    updateSynthUI() {
+        const state = window.synth?.getState();
+        if (!state) return;
+
+        // Update OSC1 waveform buttons
+        document.querySelectorAll('.wave-btns[data-osc="1"] .wave-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.wave === state.osc1.waveform);
+        });
+
+        // Update OSC2 waveform buttons
+        document.querySelectorAll('.wave-btns[data-osc="2"] .wave-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.wave === state.osc2.waveform);
+        });
+
+        // Update sliders and values
+        const updateSlider = (id, valId, value, formatter = v => v) => {
+            const slider = document.getElementById(id);
+            const valEl = document.getElementById(valId);
+            if (slider) slider.value = value;
+            if (valEl) valEl.textContent = formatter(value);
+        };
+
+        updateSlider('osc2Detune', 'osc2DetuneVal', state.osc2.detune);
+        updateSlider('synthOctave', 'synthOctVal', state.pitch.octave);
+        updateSlider('synthFine', 'synthFineVal', state.pitch.fine);
+        updateSlider('synthGlide', 'synthGlideVal', state.pitch.glide);
+        updateSlider('filterCutoff', 'filterCutVal', state.filter.cutoff, v => v >= 1000 ? (v/1000).toFixed(1) + 'k' : v);
+        updateSlider('filterRes', 'filterResVal', state.filter.resonance);
+        updateSlider('lfoRate', 'lfoRateVal', state.lfo.rate, v => v.toFixed(1));
+        updateSlider('lfoDepth', 'lfoDepthVal', state.lfo.depth);
+        updateSlider('unisonVoices', 'unisonVoicesVal', state.unison.voices);
+        updateSlider('unisonSpread', 'unisonSpreadVal', state.unison.spread);
+        updateSlider('adsrAttack', 'adsrAVal', state.adsr.attack);
+        updateSlider('adsrDecay', 'adsrDVal', state.adsr.decay);
+        updateSlider('adsrSustain', 'adsrSVal', state.adsr.sustain);
+        updateSlider('adsrRelease', 'adsrRVal', state.adsr.release);
+
+        // Update filter type buttons
+        document.querySelectorAll('.flt-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.flt === state.filter.type);
+        });
+
+        // Update LFO target buttons
+        document.querySelectorAll('.lfo-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.target === state.lfo.target);
         });
     }
 
