@@ -17,6 +17,10 @@
         <!-- Top Bar: Transport + Info -->
         <header class="top-bar">
             <div class="logo">OH MY BOX</div>
+            <nav class="nav-links">
+                <a href="requirements.html" class="nav-link">Requirements</a>
+                <a href="hardware-mockup.html" class="nav-link">Hardware</a>
+            </nav>
             <div class="transport">
                 <button id="btnPlay" class="tr-btn play" title="Play/Pause sequencer (Space)">▶</button>
                 <button id="btnStop" class="tr-btn stop" title="Stop sequencer">■</button>
@@ -266,15 +270,68 @@
                 </div>
             </div>
             <div class="panel scenes-panel">
-                <div class="panel-title">SCENES</div>
-                <div class="scene-row">
-                    <button class="scene-btn active" data-scene="0" title="Scene A - store/recall mixer & FX settings">A</button>
-                    <button class="scene-btn" data-scene="1" title="Scene B - store/recall mixer & FX settings">B</button>
-                    <button class="scene-btn" data-scene="2" title="Scene C - store/recall mixer & FX settings">C</button>
-                    <button class="scene-btn" data-scene="3" title="Scene D - store/recall mixer & FX settings">D</button>
+                <div class="scene-header">
+                    <span class="panel-title">SCENES</span>
+                    <div class="scene-tools">
+                        <button id="sceneCopy" class="scene-tool-btn" title="Copy selected scene">CPY</button>
+                        <button id="scenePaste" class="scene-tool-btn" title="Paste to selected scene">PST</button>
+                        <button id="sceneLock" class="scene-tool-btn" title="Lock scene (prevent changes)">🔓</button>
+                    </div>
                 </div>
-                <div class="xfade-row"><span id="xfadeLeft">A</span><input type="range" id="sceneCrossfader" class="xfader" min="0" max="100" value="0" title="Crossfade between two scenes"><span id="xfadeRight">B</span></div>
-                <div class="scene-actions"><button id="saveScene" title="Save current settings to selected scene">SAVE</button><button id="loadScene" title="Load settings from selected scene">LOAD</button></div>
+                <div class="scene-row">
+                    <div class="scene-slot" data-scene="0">
+                        <button class="scene-btn active" data-scene="0" title="Scene A">A</button>
+                        <div class="scene-preview" id="scenePreviewA"></div>
+                        <span class="scene-name" id="sceneNameA" title="Double-click to rename">---</span>
+                    </div>
+                    <div class="scene-slot" data-scene="1">
+                        <button class="scene-btn" data-scene="1" title="Scene B">B</button>
+                        <div class="scene-preview" id="scenePreviewB"></div>
+                        <span class="scene-name" id="sceneNameB" title="Double-click to rename">---</span>
+                    </div>
+                    <div class="scene-slot" data-scene="2">
+                        <button class="scene-btn" data-scene="2" title="Scene C">C</button>
+                        <div class="scene-preview" id="scenePreviewC"></div>
+                        <span class="scene-name" id="sceneNameC" title="Double-click to rename">---</span>
+                    </div>
+                    <div class="scene-slot" data-scene="3">
+                        <button class="scene-btn" data-scene="3" title="Scene D">D</button>
+                        <div class="scene-preview" id="scenePreviewD"></div>
+                        <span class="scene-name" id="sceneNameD" title="Double-click to rename">---</span>
+                    </div>
+                </div>
+                <div class="xfade-section">
+                    <div class="xfade-row">
+                        <span id="xfadeLeft" class="xfade-label">A</span>
+                        <input type="range" id="sceneCrossfader" class="xfader" min="0" max="100" value="0" title="Crossfade between two scenes">
+                        <span id="xfadeRight" class="xfade-label">B</span>
+                    </div>
+                    <div class="xfade-assign">
+                        <select id="xfadeLeftScene" title="Left scene for crossfader">
+                            <option value="0">A</option>
+                            <option value="1">B</option>
+                            <option value="2">C</option>
+                            <option value="3">D</option>
+                        </select>
+                        <span>↔</span>
+                        <select id="xfadeRightScene" title="Right scene for crossfader">
+                            <option value="0">A</option>
+                            <option value="1" selected>B</option>
+                            <option value="2">C</option>
+                            <option value="3">D</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="auto-scene">
+                    <span class="auto-label">AUTO</span>
+                    <input type="range" id="autoSceneTime" min="0" max="32" value="0" title="Auto-switch time (bars, 0=off)">
+                    <span id="autoSceneTimeVal">OFF</span>
+                    <button id="autoSceneToggle" class="auto-btn" title="Enable auto scene switching">▶</button>
+                </div>
+                <div class="scene-actions">
+                    <button id="saveScene" title="Save current settings to selected scene">SAVE</button>
+                    <button id="loadScene" title="Load settings from selected scene">LOAD</button>
+                </div>
             </div>
             <div class="panel ai-panel">
                 <div class="panel-title">AI GEN</div>

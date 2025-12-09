@@ -127,6 +127,22 @@ html, body {
 .admin-btn { width: 44px; height: 44px; border: 2px solid var(--border); border-radius: 6px; background: var(--cream); cursor: pointer; font-size: 20px; }
 .version { font-size: 13px; color: var(--text-light); margin-left: auto; }
 
+/* Navigation Links */
+.nav-links { display: flex; gap: 8px; }
+.nav-link {
+    padding: 8px 14px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    background: var(--cream);
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.15s ease;
+}
+.nav-link:hover { background: var(--border); color: #fff; }
+.nav-link.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
 /* ===== GRID LAYOUT - 3 Columns ===== */
 .device {
     display: grid;
