@@ -1,5 +1,19 @@
 # Oh My Box - Changelog
 
+## v1.1.0 (2025-12-09)
+
+### Major Features
+- Full-width layout (100% of screen)
+- Resizable columns with drag handles (saved to localStorage)
+- VU meters for all mixer channels
+- Synth ADSR envelope controls (Attack, Decay, Sustain, Release)
+- Scene morphing with crossfader
+- FX presets (save/load)
+- Recording management (delete, rename via double-click)
+- Knob value tooltip (shows value while dragging)
+
+---
+
 ## v1.0.4 (2025-12-09)
 
 ### EQ & Audio

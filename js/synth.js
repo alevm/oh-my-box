@@ -21,6 +21,14 @@ class Synth {
             filterRes: 1
         };
 
+        // ADSR envelope (in milliseconds, sustain is 0-100%)
+        this.adsr = {
+            attack: 10,
+            decay: 100,
+            sustain: 70,
+            release: 200
+        };
+
         this.noiseBuffer = null;
     }
 
@@ -189,24 +197,69 @@ class Synth {
         }
     }
 
-    // Trigger a short note (for sequencer)
-    triggerNote(frequency, duration = 0.1) {
+    // Trigger a short note (for sequencer) with ADSR
+    triggerNote(frequency, duration = null) {
         const ctx = window.audioEngine.getContext();
         if (!ctx) return;
+
+        const now = ctx.currentTime;
+        const { attack, decay, sustain, release } = this.adsr;
+
+        // Convert ms to seconds
+        const attackTime = attack / 1000;
+        const decayTime = decay / 1000;
+        const releaseTime = release / 1000;
+        const sustainLevel = sustain / 100 * 0.6;
+
+        // Calculate total duration if not provided
+        const noteDuration = duration || (attackTime + decayTime + 0.1);
 
         const osc = ctx.createOscillator();
         osc.type = this.params.waveform;
         osc.frequency.value = frequency;
 
-        const gain = ctx.createGain();
-        gain.gain.setValueAtTime(0.6, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        // Apply filter
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = this.params.filterCutoff;
+        filter.Q.value = this.params.filterRes;
 
-        osc.connect(gain);
+        const gain = ctx.createGain();
+
+        // ADSR envelope
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.exponentialRampToValueAtTime(0.6, now + attackTime); // Attack
+        gain.gain.exponentialRampToValueAtTime(Math.max(0.001, sustainLevel), now + attackTime + decayTime); // Decay to Sustain
+        gain.gain.setValueAtTime(Math.max(0.001, sustainLevel), now + noteDuration); // Hold sustain
+        gain.gain.exponentialRampToValueAtTime(0.001, now + noteDuration + releaseTime); // Release
+
+        osc.connect(filter);
+        filter.connect(gain);
         window.audioEngine.connectToChannel(gain, 'synth');
 
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + duration + 0.05);
+        osc.start(now);
+        osc.stop(now + noteDuration + releaseTime + 0.05);
+    }
+
+    // ADSR setters
+    setAttack(ms) {
+        this.adsr.attack = ms;
+    }
+
+    setDecay(ms) {
+        this.adsr.decay = ms;
+    }
+
+    setSustain(percent) {
+        this.adsr.sustain = percent;
+    }
+
+    setRelease(ms) {
+        this.adsr.release = ms;
+    }
+
+    getADSR() {
+        return { ...this.adsr };
     }
 }
 

@@ -5,9 +5,9 @@
 ### Grid Structure
 - [x] 4-column layout: Mixer, SEQ/EQ, Controls, Synth/FX
 - [x] PADS span full bottom across all columns
-- [x] App uses 75% of screen width, centered
-- [ ] All columns resizable (user can adjust widths)
-- [ ] Column sizes saved to localStorage
+- [x] App uses 100% of screen width
+- [x] All columns resizable (user can adjust widths)
+- [x] Column sizes saved to localStorage
 
 ### Column Sizing
 - Mixer: 200px fixed (must show all 5 channels: MIC, SMP, SYN, RAD, OUT)
@@ -33,7 +33,7 @@
 - [x] 5 vertical faders (MIC, SMP, SYN, RAD, OUT)
 - [x] Mute buttons for each channel
 - [x] All channels fully visible
-- [ ] VU meters for each channel
+- [x] VU meters for each channel
 
 ### Sequencer
 - [x] 8 tracks x 16 steps
@@ -60,7 +60,7 @@
 - [x] FREQ, FILT, DLY, GRN
 - [x] Drag to adjust
 - [x] Touch support on mobile
-- [ ] Visual feedback on value
+- [x] Visual feedback on value (tooltip)
 
 ### Location
 - [x] GPS coordinates display
@@ -87,7 +87,7 @@
 - [x] ON/OFF toggle
 - [x] Waveform selection (SIN, TRI, SAW, SQR)
 - [x] Matrix routing
-- [ ] ADSR envelope
+- [x] ADSR envelope
 - [ ] Multiple oscillators
 
 ### Scenes
@@ -96,19 +96,19 @@
 - [x] Save button
 - [x] Scope selector (ALL, mixer, seq, fx)
 - [x] Scene recall working
-- [ ] Scene morphing with crossfader
+- [x] Scene morphing with crossfader
 
 ### FX
 - [x] Delay, Grain, Glitch, Crush sliders
 - [x] Punch-in FX buttons (STT, REV, FLT, TPE)
-- [ ] FX presets save/load
+- [x] FX presets save/load
 
 ### Recordings
 - [x] Recording counter
 - [x] LIST button
 - [x] Recording list with play/download
-- [ ] Delete recordings
-- [ ] Rename recordings
+- [x] Delete recordings
+- [x] Rename recordings (double-click)
 
 ---
 
@@ -150,12 +150,8 @@
 
 ## Pending Features
 
-1. Resizable columns with save to admin
-2. VU meters
-3. Better synth with ADSR
-4. Scene morphing with crossfader
-5. FX presets
-6. Recording management (delete, rename)
-7. Offline mode
-8. PWA support
-9. MIDI support
+1. Multiple oscillators for synth
+2. Radio favorites
+3. Offline mode / PWA support
+4. MIDI controller support
+5. Pad velocity sensitivity

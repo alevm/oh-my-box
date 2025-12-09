@@ -28,7 +28,9 @@ class App {
             seqTracks: 8,
             seqSteps: 16,
             selectedKit: 'kit1',
-            synthPreset: 'default'
+            synthPreset: 'default',
+            columnWidths: null,  // Will store [mixer, seq, mid, right] in px
+            fxPresets: []
         };
         try {
             const saved = localStorage.getItem('ohmybox_settings');
@@ -88,6 +90,8 @@ class App {
         this.setupRecordings();
         this.setupAdminModal();
         this.setupKeyboardShortcuts();
+        this.setupResizableColumns();
+        this.setupVUMeters();
 
         // GPS display and map background
         window.gpsTracker.addListener(() => this.updateGPS());
@@ -667,6 +671,130 @@ class App {
         });
     }
 
+    // Resizable columns
+    setupResizableColumns() {
+        const device = document.querySelector('.device');
+        const cols = document.querySelectorAll('.col-mixer, .col-seq, .col-mid');
+
+        // Add resize handles to columns (except last)
+        cols.forEach((col, idx) => {
+            const handle = document.createElement('div');
+            handle.className = 'col-resize';
+            handle.dataset.col = idx;
+            col.appendChild(handle);
+        });
+
+        // Load saved widths
+        if (this.settings.columnWidths) {
+            this.applyColumnWidths(this.settings.columnWidths);
+        }
+
+        // Drag handling
+        let dragging = null;
+        let startX = 0;
+        let startWidths = [];
+
+        document.addEventListener('mousedown', (e) => {
+            if (e.target.classList.contains('col-resize')) {
+                dragging = parseInt(e.target.dataset.col);
+                startX = e.clientX;
+                startWidths = this.getColumnWidths();
+                e.target.classList.add('active');
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (dragging !== null) {
+                const delta = e.clientX - startX;
+                const newWidths = [...startWidths];
+                newWidths[dragging] = Math.max(100, startWidths[dragging] + delta);
+                // Take from next column
+                if (dragging < 3) {
+                    newWidths[dragging + 1] = Math.max(100, startWidths[dragging + 1] - delta);
+                }
+                this.applyColumnWidths(newWidths);
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (dragging !== null) {
+                document.querySelectorAll('.col-resize').forEach(h => h.classList.remove('active'));
+                this.settings.columnWidths = this.getColumnWidths();
+                this.saveSettings();
+                dragging = null;
+            }
+        });
+    }
+
+    getColumnWidths() {
+        const cols = document.querySelectorAll('.col-mixer, .col-seq, .col-mid, .col-right');
+        return Array.from(cols).map(col => col.offsetWidth);
+    }
+
+    applyColumnWidths(widths) {
+        const device = document.querySelector('.device');
+        if (device && widths.length === 4) {
+            device.style.setProperty('--col-mixer', widths[0] + 'px');
+            device.style.setProperty('--col-seq', widths[1] + 'px');
+            device.style.setProperty('--col-mid', widths[2] + 'px');
+            device.style.setProperty('--col-right', widths[3] + 'px');
+        }
+    }
+
+    // VU Meters
+    setupVUMeters() {
+        // Add VU meter elements to each channel
+        const channels = ['Mic', 'Samples', 'Synth', 'Radio', 'Master'];
+        channels.forEach(name => {
+            const ch = document.querySelector(`.ch:has(#fader${name}), .ch:has(#mute${name})`);
+            if (!ch) return;
+
+            // Check if VU already exists
+            if (ch.querySelector('.vu-meter')) return;
+
+            const vu = document.createElement('div');
+            vu.className = 'vu-meter';
+            vu.id = `vu${name}`;
+            vu.innerHTML = '<div class="vu-fill"></div>';
+            ch.insertBefore(vu, ch.firstChild);
+        });
+
+        // Start meter animation
+        this.vuAnimationId = requestAnimationFrame(() => this.updateVUMeters());
+    }
+
+    updateVUMeters() {
+        const channels = [
+            { name: 'Mic', key: 'mic' },
+            { name: 'Samples', key: 'samples' },
+            { name: 'Synth', key: 'synth' },
+            { name: 'Radio', key: 'radio' },
+            { name: 'Master', key: 'master' }
+        ];
+
+        channels.forEach(({ name, key }) => {
+            const vu = document.getElementById(`vu${name}`);
+            if (vu) {
+                const level = window.audioEngine?.getMeterLevel(key) || 0;
+                const fill = vu.querySelector('.vu-fill');
+                if (fill) {
+                    fill.style.height = level + '%';
+                    // Color based on level
+                    if (level > 90) {
+                        fill.style.background = '#e74c3c';
+                    } else if (level > 70) {
+                        fill.style.background = '#f1c40f';
+                    } else {
+                        fill.style.background = '#27ae60';
+                    }
+                }
+            }
+        });
+
+        this.vuAnimationId = requestAnimationFrame(() => this.updateVUMeters());
+    }
+
     // Knobs
     setupKnobs() {
         const knobs = document.querySelectorAll('.knob');
@@ -677,8 +805,17 @@ class App {
             const max = parseFloat(knob.dataset.max);
             let value = parseFloat(knob.dataset.value);
 
+            // Add value tooltip element
+            let valueEl = knob.querySelector('.knob-value');
+            if (!valueEl) {
+                valueEl = document.createElement('div');
+                valueEl.className = 'knob-value';
+                knob.appendChild(valueEl);
+            }
+
             // Set initial rotation
             this.updateKnobRotation(knob, value, min, max);
+            valueEl.textContent = Math.round(value);
 
             let isDragging = false;
             let startY = 0;
@@ -686,6 +823,7 @@ class App {
 
             const onStart = (e) => {
                 isDragging = true;
+                knob.classList.add('dragging');
                 startY = e.clientY || e.touches?.[0]?.clientY || 0;
                 startValue = value;
                 e.preventDefault();
@@ -700,10 +838,12 @@ class App {
                 this.updateKnobRotation(knob, value, min, max);
                 this.applyKnobValue(param, value);
                 knob.dataset.value = value;
+                valueEl.textContent = Math.round(value);
             };
 
             const onEnd = () => {
                 isDragging = false;
+                knob.classList.remove('dragging');
             };
 
             knob.addEventListener('mousedown', onStart);
@@ -757,6 +897,26 @@ class App {
                 document.querySelectorAll('.wave-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
             });
+        });
+
+        // ADSR sliders
+        const adsrControls = [
+            { id: 'adsrAttack', valId: 'adsrAVal', setter: 'setAttack' },
+            { id: 'adsrDecay', valId: 'adsrDVal', setter: 'setDecay' },
+            { id: 'adsrSustain', valId: 'adsrSVal', setter: 'setSustain' },
+            { id: 'adsrRelease', valId: 'adsrRVal', setter: 'setRelease' }
+        ];
+
+        adsrControls.forEach(({ id, valId, setter }) => {
+            const slider = document.getElementById(id);
+            const valDisplay = document.getElementById(valId);
+            if (slider) {
+                slider.addEventListener('input', () => {
+                    const val = parseInt(slider.value);
+                    window.synth[setter](val);
+                    if (valDisplay) valDisplay.textContent = val;
+                });
+            }
         });
     }
 
@@ -939,20 +1099,68 @@ class App {
         // FX presets
         if (presetSelect) {
             presetSelect.addEventListener('change', () => {
-                // TODO: Load FX preset
-                console.log('Load FX preset:', presetSelect.value);
+                const idx = parseInt(presetSelect.value);
+                if (idx > 0 && this.settings.fxPresets[idx - 1]) {
+                    this.loadFxPreset(this.settings.fxPresets[idx - 1]);
+                }
             });
+            this.updateFxPresetList();
         }
 
         if (saveFxBtn) {
             saveFxBtn.addEventListener('click', () => {
-                // TODO: Save current FX as preset
-                console.log('Save FX preset');
+                this.saveFxPreset();
             });
         }
 
         // Punch-in FX buttons
         this.setupPunchFX();
+    }
+
+    // Save current FX settings as preset
+    saveFxPreset() {
+        const preset = {
+            delay: parseInt(document.getElementById('fxDelay')?.value || 0),
+            grain: parseInt(document.getElementById('fxGrain')?.value || 0),
+            glitch: parseInt(document.getElementById('fxGlitch')?.value || 0),
+            crush: parseInt(document.getElementById('fxCrush')?.value || 16),
+            name: `FX${this.settings.fxPresets.length + 1}`
+        };
+        this.settings.fxPresets.push(preset);
+        this.saveSettings();
+        this.updateFxPresetList();
+        console.log('Saved FX preset:', preset.name);
+    }
+
+    // Load FX preset
+    loadFxPreset(preset) {
+        if (!preset) return;
+
+        const delay = document.getElementById('fxDelay');
+        const grain = document.getElementById('fxGrain');
+        const glitch = document.getElementById('fxGlitch');
+        const crush = document.getElementById('fxCrush');
+
+        if (delay) { delay.value = preset.delay; window.mangleEngine?.setDelayMix(preset.delay); }
+        if (grain) { grain.value = preset.grain; window.mangleEngine?.setGrain(preset.grain, 50, 0); }
+        if (glitch) { glitch.value = preset.glitch; window.mangleEngine?.setGlitch(preset.glitch, 100, 'stutter'); }
+        if (crush) { crush.value = preset.crush; window.mangleEngine?.setBitDepth(preset.crush); }
+
+        console.log('Loaded FX preset:', preset.name);
+    }
+
+    // Update FX preset dropdown
+    updateFxPresetList() {
+        const select = document.getElementById('fxPreset');
+        if (!select) return;
+
+        select.innerHTML = '<option value="0">--</option>';
+        this.settings.fxPresets.forEach((preset, idx) => {
+            const opt = document.createElement('option');
+            opt.value = idx + 1;
+            opt.textContent = preset.name;
+            select.appendChild(opt);
+        });
     }
 
     // Punch-in FX (hold for temporary effect)
@@ -1271,9 +1479,10 @@ class App {
 
         recList.innerHTML = recordings.map((rec) => `
             <div class="rec-item" data-id="${rec.id}">
-                <span class="rec-item-name">${rec.name || 'Rec'}</span>
+                <span class="rec-item-name" data-id="${rec.id}">${rec.name || 'Rec'}</span>
                 ${rec.url ? `<button class="rec-item-play" data-id="${rec.id}">▶</button>` : ''}
                 ${rec.blob ? `<button class="rec-item-dl" data-id="${rec.id}">↓</button>` : ''}
+                <button class="rec-item-del" data-id="${rec.id}">✕</button>
             </div>
         `).join('');
 
@@ -1296,6 +1505,30 @@ class App {
                 e.stopPropagation();
                 const id = btn.dataset.id;
                 window.sessionRecorder.downloadRecording(id);
+            });
+        });
+
+        // Delete buttons
+        recList.querySelectorAll('.rec-item-del').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.dataset.id;
+                window.sessionRecorder.deleteRecording(id);
+                this.updateRecordingsList();
+                this.updateRecCount();
+            });
+        });
+
+        // Rename on double-click
+        recList.querySelectorAll('.rec-item-name').forEach(span => {
+            span.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                const id = span.dataset.id;
+                const newName = prompt('Rename recording:', span.textContent);
+                if (newName && newName.trim()) {
+                    window.sessionRecorder.renameRecording(id, newName.trim());
+                    this.updateRecordingsList();
+                }
             });
         });
     }

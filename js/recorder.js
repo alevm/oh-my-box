@@ -163,6 +163,14 @@ class SessionRecorder {
         }
     }
 
+    renameRecording(id, newName) {
+        const recording = this.recordings.find(r => r.id === id);
+        if (recording) {
+            recording.name = newName;
+            this.saveRecordings();
+        }
+    }
+
     downloadRecording(id) {
         const recording = this.recordings.find(r => r.id === id);
         if (!recording || !recording.blob) return;
