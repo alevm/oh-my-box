@@ -3,16 +3,17 @@
 ## v1.3.0 (2025-12-09)
 
 ### 3-Column Layout Redesign
-- **New 3-column layout** with color-coded sections:
-  - **Left (Blue #0d1b2a)**: MIXER + EQ - cyan accents
-  - **Middle (Black #1a1a1a)**: SEQ + PADS + CTRL - green LED style
-  - **Right (Purple #1a0a2e)**: SYNTH + RADIO + FX + SCENES - magenta accents
-- **CTRL target selector**: Route knobs to FX, Synth, or Sampler
-- **SCENES redesign**: 8-button grid (1-8) with SAVE/LOAD
-- **REC panel update**: Shows last recording with map icon
-- **PADS A/B**: Dual pad banks (1-8 and 9-16)
-- Removed secondary transport from screen column
-- Improved visual hierarchy with distinct column colors
+- **New 3-column layout** with pastel color-coded sections:
+  - **Left (Pastel Blue #d6eaf8)**: MIXER + EQ
+  - **Middle (Pastel Gray #e8e8e8)**: SEQ + PADS + CTRL + FX
+  - **Right (Pastel Violet #e8daef)**: SYNTH + SCENES + AI GEN + RADIO
+- **CTRL panel**: 6 knobs (FREQ, FILT, DLY, GRN, RES, DRV) with target selector buttons
+- **Analog-style RADIO**: Tuning knob with FM frequency display, SCAN button
+- **AI GEN panel**: Restored with vibe buttons (C/U/N/X) and Generate
+- **SCENES**: A/B/C/D with crossfader restored
+- **All dropdowns converted to buttons**: SEQ source, Kit, CTRL target, EQ channel
+- Improved readability with larger panel titles (12px)
+- Removed REC panel from main layout (available in Admin)
 
 ---
 

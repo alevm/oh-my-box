@@ -167,6 +167,8 @@
                     <div class="knob-group"><div class="knob" id="knobFilter" data-param="filter" data-min="20" data-max="8000" data-value="4000"></div><span>FILT</span></div>
                     <div class="knob-group"><div class="knob" id="knobDelay" data-param="delay" data-min="0" data-max="100" data-value="0"></div><span>DLY</span></div>
                     <div class="knob-group"><div class="knob" id="knobGrain" data-param="grain" data-min="0" data-max="100" data-value="0"></div><span>GRN</span></div>
+                    <div class="knob-group"><div class="knob" id="knobReso" data-param="reso" data-min="0" data-max="100" data-value="0"></div><span>RES</span></div>
+                    <div class="knob-group"><div class="knob" id="knobDrive" data-param="drive" data-min="0" data-max="100" data-value="0"></div><span>DRV</span></div>
                 </div>
             </div>
             <div class="panel fx-panel">
@@ -188,7 +190,15 @@
             <!-- Row 3: RADIO | LOCATION | AI GEN | REC -->
             <div class="panel radio-panel">
                 <div class="panel-title">RADIO</div>
-                <div class="radio-row"><input type="text" id="radioSearch" placeholder="Search..."><button id="radioGo">▶</button><button id="radioStop" disabled>■</button></div>
+                <div class="radio-dial">
+                    <div class="freq-display" id="radioFreq">88.0 FM</div>
+                    <div class="knob" id="radioTuner" data-param="tune" data-min="88" data-max="108" data-value="88"></div>
+                </div>
+                <div class="radio-controls">
+                    <button id="radioScan" class="radio-btn">SCAN</button>
+                    <button id="radioGo" class="radio-btn">▶</button>
+                    <button id="radioStop" class="radio-btn" disabled>■</button>
+                </div>
                 <div class="station-list" id="stationList"></div>
             </div>
             <div class="panel map-panel">
