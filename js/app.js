@@ -1183,6 +1183,18 @@ class App {
                 window.mangleEngine?.setGrain(value, 50, 0);
                 document.getElementById('fxGrain').value = value;
                 break;
+            case 'reso':
+                window.synth?.setResonance?.(value);
+                break;
+            case 'drive':
+                window.mangleEngine?.setDrive?.(value);
+                break;
+            case 'pan':
+                window.audioEngine?.setPan?.(this.knobTarget, value / 100);
+                break;
+            case 'vol':
+                window.audioEngine?.setChannelLevel?.(this.knobTarget, value / 100);
+                break;
         }
     }
 

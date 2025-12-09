@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="screen-orientation" content="landscape">
     <title>Oh My Box</title>
-    <link rel="stylesheet" href="css/style.css?v=129">
+    <link rel="stylesheet" href="css/style.css?v=130">
 </head>
 <body>
     <!-- Full-page map background -->
@@ -29,12 +29,12 @@
             </div>
             <button id="btnHelp" class="help-btn" title="Keyboard Shortcuts">?</button>
             <div class="gps-box" id="gpsBox">
-                <span class="gps-icon">◎</span>
+                <div class="mini-map" id="miniMap"><div class="mini-map-img" id="miniMapImg"></div></div>
                 <span id="gpsText">--</span>
             </div>
             <div class="time-box" id="timeDisplay">00:00</div>
             <button id="btnAdmin" class="admin-btn" title="Settings">⚙</button>
-            <div class="version">v1.5.0</div>
+            <div class="version">v1.6.0</div>
         </header>
 
         <!-- Main Device Area - 12 Equal Tiles (4x3) -->
@@ -180,6 +180,8 @@
                     <div class="knob-group"><div class="knob" id="knobGrain" data-param="grain" data-min="0" data-max="100" data-value="0"></div><span>GRN</span></div>
                     <div class="knob-group"><div class="knob" id="knobReso" data-param="reso" data-min="0" data-max="100" data-value="0"></div><span>RES</span></div>
                     <div class="knob-group"><div class="knob" id="knobDrive" data-param="drive" data-min="0" data-max="100" data-value="0"></div><span>DRV</span></div>
+                    <div class="knob-group"><div class="knob" id="knobPan" data-param="pan" data-min="-100" data-max="100" data-value="0"></div><span>PAN</span></div>
+                    <div class="knob-group"><div class="knob" id="knobVol" data-param="vol" data-min="0" data-max="100" data-value="80"></div><span>VOL</span></div>
                 </div>
             </div>
             <div class="panel fx-panel">
