@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="screen-orientation" content="landscape">
     <title>Oh My Box</title>
-    <link rel="stylesheet" href="css/style.css?v=0725">
+    <link rel="stylesheet" href="css/style.css?v=0726">
 </head>
 <body>
     <!-- Full-page map background -->
@@ -32,7 +32,7 @@
             </div>
             <div class="time-box" id="timeDisplay">00:00</div>
             <button id="btnAdmin" class="admin-btn" title="Settings">⚙</button>
-            <div class="version">v0.7.25</div>
+            <div class="version">v0.7.26</div>
         </header>
 
         <!-- Main Device Area - Grid Layout -->
@@ -334,6 +334,15 @@
                     </div>
                     <input type="file" id="uploadKit" accept="audio/*" multiple hidden>
                     <button id="uploadKitBtn" class="settings-btn">Upload Kit</button>
+                </div>
+                <div class="settings-section">
+                    <div class="settings-title">SYNTH PRESETS</div>
+                    <div class="synth-presets" id="synthPresets">
+                        <div class="preset-item active" data-preset="default">Default</div>
+                        <div class="preset-item" data-preset="bass">Bass</div>
+                        <div class="preset-item" data-preset="lead">Lead</div>
+                        <div class="preset-item" data-preset="pad">Pad</div>
+                    </div>
                 </div>
                 <div class="settings-section">
                     <div class="settings-title">THEME</div>
