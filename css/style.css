@@ -619,8 +619,8 @@ html, body {
 
 /* SCENES */
 .scenes-panel { }
-.scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 6px; flex: 1; }
-.scene-btn { height: 34px; border: 2px solid var(--border); border-radius: 4px; background: var(--panel-alt); font-size: 14px; font-weight: 600; cursor: pointer; }
+.scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 6px; flex: 1; }
+.scene-btn { height: 44px; border: 2px solid var(--border); border-radius: 6px; background: var(--panel-alt); font-size: 16px; font-weight: 700; cursor: pointer; }
 .scene-btn.active { background: var(--accent); color: #fff; }
 .scene-row { display: flex; gap: 4px; margin-bottom: 6px; }
 .xfade-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
