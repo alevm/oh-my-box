@@ -637,14 +637,14 @@ html, body {
 /* SCENES */
 .scenes-panel { }
 .scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 6px; flex: 1; }
-.scene-btn { height: 44px; border: 2px solid var(--border); border-radius: 6px; background: var(--panel-alt); font-size: 16px; font-weight: 700; cursor: pointer; }
+.scene-btn { flex: 1; height: 56px; border: 2px solid var(--border); border-radius: 6px; background: var(--panel-alt); font-size: 20px; font-weight: 700; cursor: pointer; }
 .scene-btn.active { background: var(--accent); color: #fff; }
-.scene-row { display: flex; gap: 4px; margin-bottom: 6px; }
-.xfade-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
-.xfade-row span { font-size: 13px; font-weight: 600; }
-.xfader { flex: 1; height: 10px; }
+.scene-row { display: flex; gap: 6px; margin-bottom: 8px; }
+.xfade-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.xfade-row span { font-size: 14px; font-weight: 600; }
+.xfader { flex: 1; height: 12px; }
 .scene-actions { display: flex; gap: 6px; }
-.scene-actions button { flex: 1; height: 34px; border: 2px solid var(--green); border-radius: 4px; background: var(--green); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; }
+.scene-actions button { flex: 1; height: 38px; border: 2px solid var(--green); border-radius: 4px; background: var(--green); color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; }
 .scene-actions select { flex: 1; height: 30px; font-size: 13px; border: 2px solid var(--border); border-radius: 4px; }
 
 /* FX */
