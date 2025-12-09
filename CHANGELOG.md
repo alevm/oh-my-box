@@ -1,5 +1,22 @@
 # Oh My Box - Changelog
 
+## v1.0.4 (2025-12-09)
+
+### EQ & Audio
+- Added per-channel 3-band EQ (LO/MID/HI)
+- Channel selector: OUT, MIC, SMP, SYN, RAD
+- EQ affects audio routing chain
+
+### Scenes
+- Fixed scenes panel (buttons now work)
+
+### Radio
+- AI Generate now auto-tunes to local radio based on GPS
+- Uses RadioBrowser API geo search
+- Fallback to country search via reverse geocoding
+
+---
+
 ## v1.0.3 (2025-12-09)
 
 ### Mobile Touch & Scroll Fixes
