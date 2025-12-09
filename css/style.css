@@ -129,7 +129,7 @@ html, body {
 .device {
     flex: 1;
     display: grid;
-    grid-template-columns: auto 140px 1fr 1fr;
+    grid-template-columns: minmax(350px, 1.5fr) 140px 1fr 1fr;
     gap: 0;
     padding: 6px;
     min-height: 0;
@@ -162,7 +162,7 @@ html, body {
     flex-direction: column;
     gap: 4px;
     border-radius: 6px 0 0 6px;
-    justify-content: flex-start;
+    align-self: start;
 }
 
 .col-screen .panel {
