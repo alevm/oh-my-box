@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="screen-orientation" content="landscape">
     <title>Oh My Box</title>
-    <link rel="stylesheet" href="css/style.css?v=0719">
+    <link rel="stylesheet" href="css/style.css?v=0720">
 </head>
 <body>
     <!-- Full-page map background -->
@@ -32,7 +32,7 @@
             </div>
             <div class="time-box" id="timeDisplay">00:00</div>
             <button id="btnAdmin" class="admin-btn" title="Settings">⚙</button>
-            <div class="version">v0.7.19</div>
+            <div class="version">v0.7.20</div>
         </header>
 
         <!-- Main Device Area - Grid Layout -->
@@ -115,6 +115,16 @@
                             </select>
                             <input type="number" id="trigCondValue" min="1" max="100" value="100">
                         </div>
+                    </div>
+                </div>
+
+                <!-- Equalizer -->
+                <div class="panel eq-panel">
+                    <div class="panel-title">EQ</div>
+                    <div class="eq-sliders">
+                        <div class="eq-band"><span>LO</span><input type="range" class="eq-slider" id="eqLow" min="-12" max="12" value="0" orient="vertical"><span id="eqLowVal">0</span></div>
+                        <div class="eq-band"><span>MID</span><input type="range" class="eq-slider" id="eqMid" min="-12" max="12" value="0" orient="vertical"><span id="eqMidVal">0</span></div>
+                        <div class="eq-band"><span>HI</span><input type="range" class="eq-slider" id="eqHigh" min="-12" max="12" value="0" orient="vertical"><span id="eqHighVal">0</span></div>
                     </div>
                 </div>
             </section>
