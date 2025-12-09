@@ -127,12 +127,11 @@ html, body {
 
 /* ===== GRID LAYOUT - Hardware Style ===== */
 .device {
-    flex: 1;
     display: grid;
     grid-template-columns: minmax(350px, 1.5fr) 140px 1fr 1fr;
     gap: 0;
     padding: 6px;
-    min-height: 0;
+    height: 420px;
     overflow: hidden;
     background: var(--border);
     border-radius: 8px;
