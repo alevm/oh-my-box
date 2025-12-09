@@ -1,4 +1,4 @@
-/* Oh My Box v1.0.0 */
+/* Oh My Box v1.0.1 */
 
 * {
     margin: 0;
@@ -339,3 +339,138 @@ html, body {
 .theme-options { display: flex; gap: 6px; }
 .theme-btn { flex: 1; height: 28px; border: 1px solid var(--border); border-radius: 4px; background: var(--panel-alt); font-size: 9px; cursor: pointer; }
 .theme-btn.active { background: var(--accent); color: #fff; }
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+    #app {
+        width: 100%;
+        height: 100%;
+        max-height: none;
+        border-radius: 0;
+        border: none;
+    }
+
+    .top-bar {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 6px;
+        gap: 6px;
+    }
+
+    .device {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        overflow-y: auto;
+        padding: 4px;
+        gap: 4px;
+    }
+
+    .col-mixer,
+    .col-seq,
+    .col-mid,
+    .col-right,
+    .pads-section {
+        grid-column: 1;
+    }
+
+    .col-mixer {
+        order: 5;
+    }
+
+    .col-seq {
+        order: 1;
+    }
+
+    .col-mid {
+        order: 2;
+    }
+
+    .col-right {
+        order: 3;
+    }
+
+    .pads-section {
+        order: 4;
+        position: sticky;
+        bottom: 0;
+        background: var(--panel);
+        padding: 8px;
+        border-top: 2px solid var(--border);
+    }
+
+    .mixer-panel {
+        flex-direction: row;
+    }
+
+    .mixer-channels {
+        flex-direction: row;
+        height: 80px;
+    }
+
+    .v-fader {
+        writing-mode: horizontal-tb;
+        direction: ltr;
+        height: 20px;
+        width: 100%;
+    }
+
+    .pads-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .pad {
+        aspect-ratio: 1;
+        min-height: 50px;
+        font-size: 14px;
+    }
+
+    .panel {
+        padding: 8px;
+    }
+
+    .panel-title {
+        font-size: 11px;
+    }
+
+    .knobs-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .knob {
+        width: 50px;
+        height: 50px;
+    }
+
+    .seq-btn, .vibe-btn, .scene-btn, .wave-btn {
+        height: 32px;
+        font-size: 10px;
+    }
+
+    .oct-track {
+        height: 28px;
+    }
+
+    .oct-step {
+        min-width: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pads-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4px;
+    }
+
+    .pad {
+        min-height: 40px;
+        font-size: 12px;
+    }
+
+    .knobs-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .seq-controls {
+        flex-wrap: wrap;
+    }
+}

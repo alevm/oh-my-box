@@ -1,5 +1,17 @@
 # Oh My Box - Changelog
 
+## v1.0.1 (2025-12-09)
+
+### Mobile Support
+- Added responsive CSS for mobile devices (max-width: 768px)
+- Single column layout on mobile
+- Pads sticky at bottom (4x2 grid)
+- Horizontal mixer faders on mobile
+- Larger touch targets for buttons
+- Scrollable content area
+
+---
+
 ## v1.0.0 (2025-12-09)
 
 ### Layout
