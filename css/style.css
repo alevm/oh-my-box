@@ -1,4 +1,4 @@
-/* Oh My Box v0.7.16 - UX improvements: bigger pads, knobs, fonts */
+/* Oh My Box v0.7.17 - 8x1 pads, wider right column */
 
 * {
     margin: 0;
@@ -99,7 +99,7 @@ html, body {
 .device {
     flex: 1;
     display: grid;
-    grid-template-columns: 90px 1fr 1fr 1fr;
+    grid-template-columns: 80px 1.2fr 1fr 1.4fr;
     grid-template-rows: 1fr auto;
     gap: 6px;
     padding: 6px;
@@ -193,8 +193,8 @@ html, body {
 .pads-panel { }
 .pads-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .pads-header select { height: 18px; font-size: 8px; border: 1px solid var(--border); border-radius: 3px; }
-.pads-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.pad { width: 100%; aspect-ratio: 1.5; border: none; border-radius: 8px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%); color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; }
+.pads-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+.pad { width: 100%; aspect-ratio: 1; max-height: 50px; border: none; border-radius: 6px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%); color: #fff; font-size: 11px; font-weight: 700; cursor: pointer; }
 .pad:nth-child(odd) { background: linear-gradient(135deg, #9b59b6 0%, #7d3c98 100%); }
 .pad:active { transform: scale(0.95); }
 
