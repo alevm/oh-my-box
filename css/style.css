@@ -1,4 +1,4 @@
-/* Oh My Box v0.7.17 - 8x1 pads, wider right column */
+/* Oh My Box v0.7.18 - pads full baseline, improved mixer */
 
 * {
     margin: 0;
@@ -107,11 +107,11 @@ html, body {
 }
 
 .col { display: flex; flex-direction: column; gap: 6px; }
-.col-mixer { grid-row: 1 / 3; }
+.col-mixer { }
 .col-seq { }
 .col-mid { }
 .col-right { }
-.pads-section { grid-column: 2 / 5; }
+.pads-section { grid-column: 1 / 5; }
 
 .panel {
     background: var(--panel);
@@ -129,26 +129,28 @@ html, body {
 
 /* ===== COL 1: MIXER ===== */
 .mixer-panel { flex: 1; }
-.mixer-channels { display: flex; gap: 2px; height: 100%; }
+.mixer-channels { display: flex; gap: 4px; height: 100%; }
 .ch { display: flex; flex-direction: column; align-items: center; flex: 1; }
-.ch-name { font-size: 9px; font-weight: 600; color: var(--text-light); }
+.ch-name { font-size: 8px; font-weight: 700; color: var(--text-light); margin-bottom: 2px; }
 .v-fader {
     writing-mode: vertical-lr;
     direction: rtl;
-    width: 16px;
+    width: 100%;
     flex: 1;
-    margin: 2px 0;
+    margin: 4px 0;
+    cursor: pointer;
 }
 .mute {
-    width: 20px; height: 18px;
+    width: 100%; height: 20px;
     border: 1px solid var(--border);
     border-radius: 3px;
     background: var(--panel-alt);
-    font-size: 9px;
+    font-size: 8px;
+    font-weight: 600;
     cursor: pointer;
 }
 .mute.active { background: var(--accent); color: #fff; }
-.ch.master .ch-name { color: var(--green); }
+.ch.master .ch-name { color: var(--green); font-weight: 800; }
 
 /* ===== COL 2: SEQUENCER ===== */
 .seq-panel { flex: 0.75; display: flex; flex-direction: column; }
