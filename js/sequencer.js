@@ -25,6 +25,7 @@ class Sequencer {
 
         this.selectedTrack = 0;
         this.stepCallback = null;
+        this.onPadTrigger = null;  // Callback for pad visual feedback
 
         // Playback counters for trig conditions
         this.playCount = 0;  // How many times pattern has looped
@@ -287,6 +288,10 @@ class Sequencer {
                         slice: pLocks.slice,
                         velocity: velocity / 100
                     });
+                    // Visual feedback for pads
+                    if (this.onPadTrigger && trackIndex < 8) {
+                        this.onPadTrigger(trackIndex);
+                    }
                 }
                 break;
             case 'radio':

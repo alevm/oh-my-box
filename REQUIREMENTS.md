@@ -54,6 +54,7 @@
 - [x] 8 pads in a row
 - [x] Trigger samples on press
 - [x] Kit selection dropdown
+- [x] Visual feedback on trigger (flash animation)
 - [ ] Velocity sensitivity
 
 ### CTRL Knobs
@@ -148,6 +149,48 @@
 
 ---
 
+## UI/UX Requirements
+
+### Transport Controls
+- [x] Play/Stop/Record buttons
+- [x] Large, prominent transport buttons
+- [x] Visual feedback on active state
+- [x] Tempo TAP button (detects BPM from taps)
+
+### Keyboard Shortcuts
+- [x] Keyboard shortcuts help modal ([?] button)
+- [x] SPACE for play/pause
+- [x] R for record
+- [x] ESC for stop all
+- [x] 1-8 for pad triggers
+- [x] Arrow keys for track selection
+- [x] D for dub mode toggle
+- [x] F (hold) for fill mode
+- [x] Q/W/E/T (hold) for punch FX
+
+---
+
+## Hardware Compatibility
+
+### Target: Oh My Box Hardware Device
+The web interface is designed as a prototype for a hardware device. Key design decisions:
+
+- **Button Layout**: Keyboard shortcuts mirror hardware button positions
+- **Hold-to-Activate**: Fill and Punch FX use hold pattern (momentary buttons)
+- **LED Feedback**: Pad flash timing (150ms) designed for LED response
+- **Tap Tempo**: Algorithm compatible with hardware button debounce
+- **Transport**: Large buttons match hardware tactile controls
+- **No Mouse-Only Features**: All controls accessible via keyboard/touch
+
+### Future Hardware Features (Design Prepared)
+- [ ] Mode switching (PLAY/SEQ/MIX/GEN views)
+- [ ] Physical encoder for knobs
+- [ ] Dedicated scene buttons with LEDs
+- [ ] Hardware crossfader
+- [ ] External MIDI sync
+
+---
+
 ## Pending Features
 
 1. Multiple oscillators for synth
@@ -155,3 +198,4 @@
 3. Offline mode / PWA support
 4. MIDI controller support
 5. Pad velocity sensitivity
+6. Mode switching (PLAY/SEQ/MIX/GEN)

@@ -1,4 +1,4 @@
-// Oh My Box v1.0.0 - Main Application Controller
+// Oh My Box v1.2.0 - Main Application Controller
 
 class App {
     constructor() {
@@ -17,6 +17,10 @@ class App {
 
         // Shift key state for P-Lock access
         this.shiftHeld = false;
+
+        // Tap tempo state
+        this.tapTimes = [];
+        this.lastTapTime = 0;
     }
 
     loadSettings() {
@@ -92,6 +96,8 @@ class App {
         this.setupKeyboardShortcuts();
         this.setupResizableColumns();
         this.setupVUMeters();
+        this.setupTapTempo();
+        this.setupHelpModal();
 
         // GPS display and map background
         window.gpsTracker.addListener(() => this.updateGPS());
@@ -108,7 +114,7 @@ class App {
         this.applySettings();
 
         this.initialized = true;
-        console.log('App v1.0.0 initialized');
+        console.log('App v1.2.0 initialized');
     }
 
     applySettings() {
@@ -153,26 +159,35 @@ class App {
     // Transport
     setupTransport() {
         const btnPlay = document.getElementById('btnPlay');
+        const btnPlay2 = document.getElementById('btnPlay2');
         const btnStop = document.getElementById('btnStop');
+        const btnStop2 = document.getElementById('btnStop2');
         const btnRecord = document.getElementById('btnRecord');
+        const btnRecord2 = document.getElementById('btnRecord2');
 
-        btnPlay.addEventListener('click', () => {
+        const playHandler = () => {
             if (window.sequencer.isPlaying()) {
                 window.sequencer.stop();
-                btnPlay.classList.remove('active');
+                btnPlay?.classList.remove('active');
+                btnPlay2?.classList.remove('active');
             } else {
                 window.sequencer.play();
-                btnPlay.classList.add('active');
+                btnPlay?.classList.add('active');
+                btnPlay2?.classList.add('active');
             }
-        });
+            // Update tempo display
+            this.updateTempoDisplay();
+        };
 
-        btnStop.addEventListener('click', () => {
+        const stopHandler = () => {
             window.sequencer.stop();
-            btnPlay.classList.remove('active');
+            btnPlay?.classList.remove('active');
+            btnPlay2?.classList.remove('active');
 
             if (window.sessionRecorder.isRecording()) {
                 window.sessionRecorder.stop();
-                btnRecord.classList.remove('active');
+                btnRecord?.classList.remove('active');
+                btnRecord2?.classList.remove('active');
                 this.stopTimeDisplay();
             }
 
@@ -182,19 +197,37 @@ class App {
 
             document.getElementById('synthToggle').classList.remove('active');
             document.getElementById('synthToggle').textContent = 'OFF';
-        });
+        };
 
-        btnRecord.addEventListener('click', () => {
+        const recordHandler = () => {
             if (window.sessionRecorder.isRecording()) {
                 window.sessionRecorder.stop();
-                btnRecord.classList.remove('active');
+                btnRecord?.classList.remove('active');
+                btnRecord2?.classList.remove('active');
                 this.stopTimeDisplay();
             } else {
                 window.sessionRecorder.start();
-                btnRecord.classList.add('active');
+                btnRecord?.classList.add('active');
+                btnRecord2?.classList.add('active');
                 this.startTimeDisplay();
             }
-        });
+        };
+
+        // Primary transport (header)
+        btnPlay?.addEventListener('click', playHandler);
+        btnStop?.addEventListener('click', stopHandler);
+        btnRecord?.addEventListener('click', recordHandler);
+
+        // Secondary transport (screen column)
+        btnPlay2?.addEventListener('click', playHandler);
+        btnStop2?.addEventListener('click', stopHandler);
+        btnRecord2?.addEventListener('click', recordHandler);
+    }
+
+    updateTempoDisplay() {
+        const tempo = window.sequencer?.getTempo() || 120;
+        const tempoDisplay = document.getElementById('tempoDisplay2');
+        if (tempoDisplay) tempoDisplay.textContent = tempo;
     }
 
     startTimeDisplay() {
@@ -469,6 +502,7 @@ class App {
 
             const trigger = () => {
                 pad.classList.add('active');
+                this.flashPad(index);
                 window.sampler.trigger(index);
 
                 // Record in dub mode if sequencer is playing
@@ -494,6 +528,25 @@ class App {
             this.settings.selectedKit = e.target.value;
             this.saveSettings();
         });
+
+        // Register callback for sequencer-triggered pads
+        if (window.sequencer) {
+            window.sequencer.onPadTrigger = (padIndex) => {
+                this.flashPad(padIndex);
+            };
+        }
+    }
+
+    // Flash pad animation
+    flashPad(index) {
+        const pad = document.querySelector(`.pad[data-pad="${index}"]`);
+        if (pad) {
+            pad.classList.remove('flash');
+            // Force reflow to restart animation
+            void pad.offsetWidth;
+            pad.classList.add('flash');
+            setTimeout(() => pad.classList.remove('flash'), 150);
+        }
     }
 
     // P-Lock Editor
@@ -653,14 +706,103 @@ class App {
 
     // Keyboard shortcuts
     setupKeyboardShortcuts() {
+        // Key state tracking for hold-to-activate (Fill, Punch FX)
+        this.keysHeld = {};
+
         document.addEventListener('keydown', (e) => {
+            // Ignore if typing in input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
             if (e.key === 'Shift') {
                 this.shiftHeld = true;
             }
 
-            // Escape closes P-Lock editor
-            if (e.key === 'Escape' && this.plockEditing) {
-                this.closePLockEditor();
+            // Escape closes P-Lock editor or stops all
+            if (e.key === 'Escape') {
+                if (this.plockEditing) {
+                    this.closePLockEditor();
+                } else {
+                    // Stop all
+                    document.getElementById('btnStop')?.click();
+                }
+            }
+
+            // Space = Play/Pause
+            if (e.key === ' ' || e.code === 'Space') {
+                e.preventDefault();
+                document.getElementById('btnPlay')?.click();
+            }
+
+            // R = Record
+            if (e.key === 'r' || e.key === 'R') {
+                document.getElementById('btnRecord')?.click();
+            }
+
+            // Number keys 1-8 trigger pads
+            if (e.key >= '1' && e.key <= '8') {
+                const padIndex = parseInt(e.key) - 1;
+                const pad = document.querySelector(`.pad[data-pad="${padIndex}"]`);
+                if (pad) {
+                    pad.classList.add('active');
+                    this.flashPad(padIndex);
+                    window.sampler?.trigger(padIndex);
+                }
+            }
+
+            // Arrow keys for track selection
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                const newTrack = Math.max(0, this.selectedTrack - 1);
+                this.selectTrack(newTrack);
+            }
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const newTrack = Math.min(7, this.selectedTrack + 1);
+                this.selectTrack(newTrack);
+            }
+
+            // D = Dub mode toggle
+            if (e.key === 'd' || e.key === 'D') {
+                document.getElementById('dubToggle')?.click();
+            }
+
+            // F = Fill (hold)
+            if ((e.key === 'f' || e.key === 'F') && !this.keysHeld['f']) {
+                this.keysHeld['f'] = true;
+                window.sequencer?.setFillMode(true);
+                document.getElementById('fillBtn')?.classList.add('active');
+            }
+
+            // Punch FX keys (hold)
+            if ((e.key === 'q' || e.key === 'Q') && !this.keysHeld['q']) {
+                this.keysHeld['q'] = true;
+                this.applyPunchFX('stutter', true);
+                document.querySelector('.punch-btn[data-fx="stutter"]')?.classList.add('active');
+            }
+            if ((e.key === 'w' || e.key === 'W') && !this.keysHeld['w']) {
+                this.keysHeld['w'] = true;
+                this.applyPunchFX('reverse', true);
+                document.querySelector('.punch-btn[data-fx="reverse"]')?.classList.add('active');
+            }
+            if ((e.key === 'e' || e.key === 'E') && !this.keysHeld['e']) {
+                this.keysHeld['e'] = true;
+                this.applyPunchFX('filter', true);
+                document.querySelector('.punch-btn[data-fx="filter"]')?.classList.add('active');
+            }
+            if ((e.key === 't' || e.key === 'T') && !this.keysHeld['t']) {
+                this.keysHeld['t'] = true;
+                this.applyPunchFX('tape', true);
+                document.querySelector('.punch-btn[data-fx="tape"]')?.classList.add('active');
+            }
+
+            // G = Generate AI pattern
+            if (e.key === 'g' || e.key === 'G') {
+                document.getElementById('aiGenerate')?.click();
+            }
+
+            // ? = Show help
+            if (e.key === '?') {
+                document.getElementById('helpModal')?.classList.remove('hidden');
             }
         });
 
@@ -668,7 +810,133 @@ class App {
             if (e.key === 'Shift') {
                 this.shiftHeld = false;
             }
+
+            // Release number keys for pads
+            if (e.key >= '1' && e.key <= '8') {
+                const padIndex = parseInt(e.key) - 1;
+                const pad = document.querySelector(`.pad[data-pad="${padIndex}"]`);
+                if (pad) pad.classList.remove('active');
+            }
+
+            // Release Fill
+            if (e.key === 'f' || e.key === 'F') {
+                this.keysHeld['f'] = false;
+                window.sequencer?.setFillMode(false);
+                document.getElementById('fillBtn')?.classList.remove('active');
+            }
+
+            // Release Punch FX
+            if (e.key === 'q' || e.key === 'Q') {
+                this.keysHeld['q'] = false;
+                this.applyPunchFX('stutter', false);
+                document.querySelector('.punch-btn[data-fx="stutter"]')?.classList.remove('active');
+            }
+            if (e.key === 'w' || e.key === 'W') {
+                this.keysHeld['w'] = false;
+                this.applyPunchFX('reverse', false);
+                document.querySelector('.punch-btn[data-fx="reverse"]')?.classList.remove('active');
+            }
+            if (e.key === 'e' || e.key === 'E') {
+                this.keysHeld['e'] = false;
+                this.applyPunchFX('filter', false);
+                document.querySelector('.punch-btn[data-fx="filter"]')?.classList.remove('active');
+            }
+            if (e.key === 't' || e.key === 'T') {
+                this.keysHeld['t'] = false;
+                this.applyPunchFX('tape', false);
+                document.querySelector('.punch-btn[data-fx="tape"]')?.classList.remove('active');
+            }
         });
+    }
+
+    // Tap Tempo
+    setupTapTempo() {
+        const tapBtn = document.getElementById('btnTap');
+        const tapBtn2 = document.getElementById('btnTap2');
+
+        const handleTap = (btn) => {
+            const now = performance.now();
+
+            // Reset if more than 2 seconds since last tap
+            if (now - this.lastTapTime > 2000) {
+                this.tapTimes = [];
+            }
+
+            this.tapTimes.push(now);
+            this.lastTapTime = now;
+
+            // Visual feedback for all tap buttons
+            [tapBtn, tapBtn2].forEach(b => {
+                if (b) {
+                    b.classList.add('tap-active');
+                    setTimeout(() => b.classList.remove('tap-active'), 100);
+                }
+            });
+
+            // Calculate tempo from last 4 taps
+            if (this.tapTimes.length >= 2) {
+                const intervals = [];
+                for (let i = 1; i < Math.min(this.tapTimes.length, 5); i++) {
+                    intervals.push(this.tapTimes[i] - this.tapTimes[i - 1]);
+                }
+                const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+                const bpm = Math.round(60000 / avgInterval);
+
+                // Clamp to valid range
+                const clampedBpm = Math.max(60, Math.min(200, bpm));
+
+                // Apply tempo
+                window.sequencer?.setTempo(clampedBpm);
+                const tempoSlider = document.getElementById('tempoSlider');
+                const tempoVal = document.getElementById('tempoVal');
+                const tempoDisplay2 = document.getElementById('tempoDisplay2');
+                if (tempoSlider) tempoSlider.value = clampedBpm;
+                if (tempoVal) tempoVal.textContent = clampedBpm;
+                if (tempoDisplay2) tempoDisplay2.textContent = clampedBpm;
+            }
+
+            // Keep only last 5 taps
+            if (this.tapTimes.length > 5) {
+                this.tapTimes.shift();
+            }
+        };
+
+        if (tapBtn) {
+            tapBtn.addEventListener('click', () => handleTap(tapBtn));
+            tapBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTap(tapBtn); });
+        }
+        if (tapBtn2) {
+            tapBtn2.addEventListener('click', () => handleTap(tapBtn2));
+            tapBtn2.addEventListener('touchstart', (e) => { e.preventDefault(); handleTap(tapBtn2); });
+        }
+    }
+
+    // Help Modal
+    setupHelpModal() {
+        const helpBtn = document.getElementById('btnHelp');
+        const modal = document.getElementById('helpModal');
+        const closeBtn = document.getElementById('closeHelp');
+
+        if (helpBtn && modal) {
+            helpBtn.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+            });
+        }
+
+        if (closeBtn && modal) {
+            closeBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+        }
+
+        // Close on backdrop click
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        }
     }
 
     // Resizable columns

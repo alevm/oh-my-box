@@ -1,5 +1,48 @@
 # Oh My Box - Changelog
 
+## v1.2.1 (2025-12-09)
+
+### Hardware Layout Redesign
+- **4-column layout** matching hardware target design:
+  - Column 1 (Screen): Transport + Sequencer + Pads with dark LED styling
+  - Column 2: Mixer + EQ stacked
+  - Column 3: CTRL knobs, AI Gen, Radio, Location
+  - Column 4: Synth, Scenes, FX, REC
+- **Dark LED screen** for sequencer/pads area (green on black)
+- **Secondary transport controls** in screen column
+- **Dual TAP tempo buttons** (header + screen)
+- Sequencer tracks now have LED-style green/yellow coloring
+
+---
+
+## v1.2.0 (2025-12-09)
+
+### UX Improvements (Phase 1 - Hardware-Ready)
+- **Pad flash animation**: Pads now visually flash when triggered (manual or sequencer)
+- **Bigger transport controls**: Play/Stop/Record buttons larger and more prominent with better visual feedback
+- **Tempo TAP button**: Tap to detect BPM (averages last 4 taps, auto-reset after 2s)
+- **Keyboard shortcuts help**: Press [?] or click help button to view all shortcuts
+- **Full keyboard control**:
+  - SPACE: Play/Pause
+  - R: Record
+  - ESC: Stop all
+  - 1-8: Trigger pads
+  - Arrow Up/Down: Select track
+  - D: Toggle dub mode
+  - F (hold): Fill mode
+  - Q/W/E/T (hold): Punch FX (Stutter/Reverse/Filter/Tape)
+  - G: Generate AI pattern
+  - ?: Show help
+
+### Hardware Compatibility Notes
+These UX changes are designed to map to physical controls on the target hardware device:
+- TAP button maps to dedicated tempo tap button
+- Keyboard shortcuts mirror hardware button layout
+- Pad flash timing designed for LED feedback latency
+- Hold-to-activate pattern matches momentary button behavior
+
+---
+
 ## v1.1.0 (2025-12-09)
 
 ### Major Features
