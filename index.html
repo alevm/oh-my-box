@@ -100,11 +100,11 @@
                 <div class="panel mixer-panel">
                     <div class="panel-title">MIXER</div>
                     <div class="mixer-channels">
-                        <div class="ch"><span class="ch-name">MIC</span><input type="range" class="v-fader" id="faderMic" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteMic">M</button></div>
-                        <div class="ch"><span class="ch-name">SMP</span><input type="range" class="v-fader" id="faderSamples" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteSamples">M</button></div>
-                        <div class="ch"><span class="ch-name">SYN</span><input type="range" class="v-fader" id="faderSynth" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteSynth">M</button></div>
-                        <div class="ch"><span class="ch-name">RAD</span><input type="range" class="v-fader" id="faderRadio" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteRadio">M</button></div>
-                        <div class="ch master"><span class="ch-name">OUT</span><input type="range" class="v-fader" id="faderMaster" min="0" max="100" value="90" orient="vertical"></div>
+                        <div class="ch"><span class="ch-name">MIC</span><div class="vu-meter"><div class="vu-fill" id="vuMic"></div></div><input type="range" class="v-fader" id="faderMic" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteMic">M</button></div>
+                        <div class="ch"><span class="ch-name">SMP</span><div class="vu-meter"><div class="vu-fill" id="vuSamples"></div></div><input type="range" class="v-fader" id="faderSamples" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteSamples">M</button></div>
+                        <div class="ch"><span class="ch-name">SYN</span><div class="vu-meter"><div class="vu-fill" id="vuSynth"></div></div><input type="range" class="v-fader" id="faderSynth" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteSynth">M</button></div>
+                        <div class="ch"><span class="ch-name">RAD</span><div class="vu-meter"><div class="vu-fill" id="vuRadio"></div></div><input type="range" class="v-fader" id="faderRadio" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteRadio">M</button></div>
+                        <div class="ch master"><span class="ch-name">OUT</span><div class="vu-meter"><div class="vu-fill" id="vuMaster"></div></div><input type="range" class="v-fader" id="faderMaster" min="0" max="100" value="90" orient="vertical"></div>
                     </div>
                 </div>
                 <div class="panel eq-panel">
