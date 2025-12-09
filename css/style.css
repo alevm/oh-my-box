@@ -173,12 +173,12 @@ html, body {
     display: none;
 }
 
-/* Dark panels for screen elements */
+/* Middle Column - Dark Gray (SEQ/PADS/CTRL) */
 .device > .seq-panel,
 .device > .pads-panel,
 .device > .knobs-panel {
-    background: #1a1a1a;
-    border-color: #333;
+    background: #2a2a2a;
+    border-color: #444;
 }
 
 .device > .seq-panel .panel-title,
@@ -197,11 +197,11 @@ html, body {
     color: #0f0;
 }
 
-/* LEFT COLUMN - Deep Blue (Mixer/EQ) */
+/* LEFT COLUMN - Blue (Mixer/EQ) */
 .device > .mixer-panel,
 .device > .eq-panel {
-    background: #0d1b2a;
-    border-color: #1b3a5a;
+    background: #1e3a5f;
+    border-color: #2a5080;
 }
 
 .device > .mixer-panel .panel-title,
@@ -214,14 +214,14 @@ html, body {
     color: #90e0ef;
 }
 
-/* RIGHT COLUMN - Deep Purple (Synth/Radio/FX/Scenes) */
+/* RIGHT COLUMN - Purple (Synth/Radio/FX/Scenes) */
 .device > .synth-panel,
 .device > .radio-panel,
 .device > .fx-panel,
 .device > .scenes-panel {
-    background: #1a0a2e !important;
-    border-color: #3a1a5e !important;
-    color: #ce93d8;
+    background: #3d1a5c !important;
+    border-color: #5a2a80 !important;
+    color: #e0c0f0;
 }
 
 .synth-panel .panel-title,
@@ -234,9 +234,9 @@ html, body {
 .synth-panel .wave-btn,
 .scenes-panel .scene-btn,
 .fx-panel .punch-btn {
-    background: #2a1a4e !important;
-    border-color: #4a2a7e !important;
-    color: #e0b0ff !important;
+    background: #5a3080 !important;
+    border-color: #7a40a0 !important;
+    color: #f0e0ff !important;
 }
 
 .synth-panel .wave-btn.active,
@@ -247,9 +247,9 @@ html, body {
 
 .radio-panel input,
 .radio-panel button {
-    background: #2a1a4e !important;
-    border-color: #4a2a7e !important;
-    color: #e0b0ff !important;
+    background: #5a3080 !important;
+    border-color: #7a40a0 !important;
+    color: #f0e0ff !important;
 }
 
 .fx-panel .fx-row span,
