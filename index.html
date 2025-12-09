@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="screen-orientation" content="landscape">
     <title>Oh My Box</title>
-    <link rel="stylesheet" href="css/style.css?v=122">
+    <link rel="stylesheet" href="css/style.css?v=123">
 </head>
 <body>
     <!-- Full-page map background -->
@@ -37,172 +37,149 @@
             <div class="version">v1.2.1</div>
         </header>
 
-        <!-- Main Device Area - Hardware Layout -->
+        <!-- Main Device Area - 12 Equal Tiles (4x3) -->
         <main class="device">
+            <!-- Row 1 -->
+            <div class="panel seq-panel">
+                <div class="seq-header">
+                    <span class="panel-title">SEQ</span>
+                    <div class="seq-controls">
+                        <select id="seqSource"><option value="sampler">SMP</option><option value="synth">SYN</option><option value="radio">RAD</option><option value="mic">MIC</option></select>
+                        <button id="seqRandom" class="seq-btn mini">RND</button>
+                        <button id="seqClear" class="seq-btn mini">CLR</button>
+                        <button id="eucGen" class="seq-btn mini">EUC</button>
+                        <button id="dubToggle" class="seq-btn mini dub-btn">DUB</button>
+                        <button id="fillBtn" class="seq-btn mini fill-btn">FILL</button>
+                    </div>
+                </div>
+                <div class="oct-tracks" id="octTracks"></div>
+                <div id="plockEditor" class="plock-editor hidden">
+                    <div class="plock-header"><span class="plock-title">STEP <span id="plockStepNum">1</span></span><button id="plockClose" class="plock-close">×</button></div>
+                    <div class="plock-params">
+                        <div class="plock-row"><span>PITCH</span><input type="range" id="plockPitch" min="-24" max="24" value="0"><span id="plockPitchVal">0</span></div>
+                        <div class="plock-row"><span>SLICE</span><input type="range" id="plockSlice" min="0" max="15" value="0"><span id="plockSliceVal">0</span></div>
+                        <div class="plock-row"><span>FILT</span><input type="range" id="plockFilter" min="0" max="100" value="50"><span id="plockFilterVal">50</span></div>
+                        <div class="plock-row"><span>DECAY</span><input type="range" id="plockDecay" min="0" max="100" value="50"><span id="plockDecayVal">50</span></div>
+                    </div>
+                    <div class="trig-cond"><span>TRIG</span><select id="trigCondType"><option value="always">ALWAYS</option><option value="probability">PROB %</option><option value="fill">FILL</option><option value="notFill">!FILL</option><option value="nth">NTH</option><option value="neighbor">NEIGH</option></select><input type="number" id="trigCondValue" min="1" max="100" value="100"></div>
+                </div>
+            </div>
+            <div class="panel mixer-panel">
+                <div class="panel-title">MIXER</div>
+                <div class="mixer-channels">
+                    <div class="ch"><span class="ch-name">MIC</span><div class="vu-meter"><div class="vu-fill" id="vuMic"></div></div><input type="range" class="v-fader" id="faderMic" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteMic">M</button></div>
+                    <div class="ch"><span class="ch-name">SMP</span><div class="vu-meter"><div class="vu-fill" id="vuSamples"></div></div><input type="range" class="v-fader" id="faderSamples" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteSamples">M</button></div>
+                    <div class="ch"><span class="ch-name">SYN</span><div class="vu-meter"><div class="vu-fill" id="vuSynth"></div></div><input type="range" class="v-fader" id="faderSynth" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteSynth">M</button></div>
+                    <div class="ch"><span class="ch-name">RAD</span><div class="vu-meter"><div class="vu-fill" id="vuRadio"></div></div><input type="range" class="v-fader" id="faderRadio" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteRadio">M</button></div>
+                    <div class="ch master"><span class="ch-name">OUT</span><div class="vu-meter"><div class="vu-fill" id="vuMaster"></div></div><input type="range" class="v-fader" id="faderMaster" min="0" max="100" value="90" orient="vertical"></div>
+                </div>
+            </div>
+            <div class="panel knobs-panel">
+                <div class="panel-title">CTRL</div>
+                <div class="knobs-grid">
+                    <div class="knob-group"><div class="knob" id="knobFreq" data-param="freq" data-min="20" data-max="2000" data-value="220"></div><span>FREQ</span></div>
+                    <div class="knob-group"><div class="knob" id="knobFilter" data-param="filter" data-min="20" data-max="8000" data-value="4000"></div><span>FILT</span></div>
+                    <div class="knob-group"><div class="knob" id="knobDelay" data-param="delay" data-min="0" data-max="100" data-value="0"></div><span>DLY</span></div>
+                    <div class="knob-group"><div class="knob" id="knobGrain" data-param="grain" data-min="0" max="100" data-value="0"></div><span>GRN</span></div>
+                </div>
+            </div>
+            <div class="panel synth-panel">
+                <div class="synth-header"><span class="panel-title">SYNTH</span><button id="synthToggle" class="power-btn">OFF</button></div>
+                <div class="wave-btns">
+                    <button class="wave-btn active" data-wave="sine">SIN</button>
+                    <button class="wave-btn" data-wave="triangle">TRI</button>
+                    <button class="wave-btn" data-wave="sawtooth">SAW</button>
+                    <button class="wave-btn" data-wave="square">SQR</button>
+                </div>
+                <div class="adsr-row">
+                    <div class="adsr-param"><span>A</span><input type="range" id="adsrAttack" min="0" max="1000" value="10"><span id="adsrAVal">10</span></div>
+                    <div class="adsr-param"><span>D</span><input type="range" id="adsrDecay" min="0" max="1000" value="100"><span id="adsrDVal">100</span></div>
+                    <div class="adsr-param"><span>S</span><input type="range" id="adsrSustain" min="0" max="100" value="70"><span id="adsrSVal">70</span></div>
+                    <div class="adsr-param"><span>R</span><input type="range" id="adsrRelease" min="0" max="2000" value="200"><span id="adsrRVal">200</span></div>
+                </div>
+            </div>
 
-            <!-- COL 1: LED Screen (Sequencer + Pads with Transport on top) -->
-            <section class="col col-screen">
-                <!-- Transport bar for this column -->
-                <div class="screen-transport">
-                    <button id="btnPlay2" class="tr-btn play">▶</button>
-                    <button id="btnStop2" class="tr-btn stop">■</button>
-                    <button id="btnRecord2" class="tr-btn rec">●</button>
-                    <span class="tempo-display" id="tempoDisplay2">120</span>
-                    <button id="btnTap2" class="tap-btn">TAP</button>
+            <!-- Row 2 -->
+            <div class="panel pads-panel">
+                <div class="pads-header">
+                    <span class="panel-title">PADS</span>
+                    <select id="sampleBank"><option value="kit1">Kit1</option><option value="kit2">Kit2</option><option value="kit3">Kit3</option></select>
                 </div>
-                <!-- Sequencer -->
-                <div class="panel seq-panel">
-                    <div class="seq-header">
-                        <span class="panel-title">SEQ</span>
-                        <div class="seq-controls">
-                            <select id="seqSource"><option value="sampler">SMP</option><option value="synth">SYN</option><option value="radio">RAD</option><option value="mic">MIC</option></select>
-                            <button id="seqRandom" class="seq-btn mini">RND</button>
-                            <button id="seqClear" class="seq-btn mini">CLR</button>
-                            <button id="eucGen" class="seq-btn mini">EUC</button>
-                            <button id="dubToggle" class="seq-btn mini dub-btn">DUB</button>
-                            <button id="fillBtn" class="seq-btn mini fill-btn">FILL</button>
-                        </div>
-                    </div>
-                    <div class="oct-tracks" id="octTracks"></div>
-                    <!-- P-Lock Editor -->
-                    <div id="plockEditor" class="plock-editor hidden">
-                        <div class="plock-header"><span class="plock-title">STEP <span id="plockStepNum">1</span></span><button id="plockClose" class="plock-close">×</button></div>
-                        <div class="plock-params">
-                            <div class="plock-row"><span>PITCH</span><input type="range" id="plockPitch" min="-24" max="24" value="0"><span id="plockPitchVal">0</span></div>
-                            <div class="plock-row"><span>SLICE</span><input type="range" id="plockSlice" min="0" max="15" value="0"><span id="plockSliceVal">0</span></div>
-                            <div class="plock-row"><span>FILT</span><input type="range" id="plockFilter" min="0" max="100" value="50"><span id="plockFilterVal">50</span></div>
-                            <div class="plock-row"><span>DECAY</span><input type="range" id="plockDecay" min="0" max="100" value="50"><span id="plockDecayVal">50</span></div>
-                        </div>
-                        <div class="trig-cond"><span>TRIG</span><select id="trigCondType"><option value="always">ALWAYS</option><option value="probability">PROB %</option><option value="fill">FILL</option><option value="notFill">!FILL</option><option value="nth">NTH</option><option value="neighbor">NEIGH</option></select><input type="number" id="trigCondValue" min="1" max="100" value="100"></div>
-                    </div>
+                <div class="pads-grid">
+                    <button class="pad" data-pad="0">1</button>
+                    <button class="pad" data-pad="1">2</button>
+                    <button class="pad" data-pad="2">3</button>
+                    <button class="pad" data-pad="3">4</button>
+                    <button class="pad" data-pad="4">5</button>
+                    <button class="pad" data-pad="5">6</button>
+                    <button class="pad" data-pad="6">7</button>
+                    <button class="pad" data-pad="7">8</button>
                 </div>
-                <!-- Pads -->
-                <div class="panel pads-panel">
-                    <div class="pads-header">
-                        <span class="panel-title">PADS</span>
-                        <select id="sampleBank"><option value="kit1">Kit1</option><option value="kit2">Kit2</option><option value="kit3">Kit3</option></select>
-                    </div>
-                    <div class="pads-grid">
-                        <button class="pad" data-pad="0">1</button>
-                        <button class="pad" data-pad="1">2</button>
-                        <button class="pad" data-pad="2">3</button>
-                        <button class="pad" data-pad="3">4</button>
-                        <button class="pad" data-pad="4">5</button>
-                        <button class="pad" data-pad="5">6</button>
-                        <button class="pad" data-pad="6">7</button>
-                        <button class="pad" data-pad="7">8</button>
-                    </div>
+            </div>
+            <div class="panel eq-panel">
+                <div class="eq-header"><span class="panel-title">EQ</span><select id="eqChannel"><option value="master">OUT</option><option value="mic">MIC</option><option value="samples">SMP</option><option value="synth">SYN</option><option value="radio">RAD</option></select></div>
+                <div class="eq-sliders">
+                    <div class="eq-band"><span>LO</span><input type="range" class="eq-slider" id="eqLow" min="-12" max="12" value="0" orient="vertical"><span id="eqLowVal">0</span></div>
+                    <div class="eq-band"><span>MID</span><input type="range" class="eq-slider" id="eqMid" min="-12" max="12" value="0" orient="vertical"><span id="eqMidVal">0</span></div>
+                    <div class="eq-band"><span>HI</span><input type="range" class="eq-slider" id="eqHigh" min="-12" max="12" value="0" orient="vertical"><span id="eqHighVal">0</span></div>
                 </div>
-            </section>
+            </div>
+            <div class="panel ai-panel">
+                <div class="panel-title">AI GEN</div>
+                <div class="vibe-btns">
+                    <button class="vibe-btn active" data-vibe="calm">C</button>
+                    <button class="vibe-btn" data-vibe="urban">U</button>
+                    <button class="vibe-btn" data-vibe="nature">N</button>
+                    <button class="vibe-btn" data-vibe="chaos">X</button>
+                </div>
+                <button id="aiGenerate" class="ai-btn">GENERATE</button>
+            </div>
+            <div class="panel scenes-panel">
+                <div class="panel-title">SCENES</div>
+                <div class="scene-row">
+                    <button class="scene-btn active" data-scene="0">A</button>
+                    <button class="scene-btn" data-scene="1">B</button>
+                    <button class="scene-btn" data-scene="2">C</button>
+                    <button class="scene-btn" data-scene="3">D</button>
+                </div>
+                <div class="xfade-row"><span id="xfadeLeft">A</span><input type="range" id="sceneCrossfader" class="xfader" min="0" max="100" value="0"><span id="xfadeRight">B</span></div>
+                <div class="scene-actions"><button id="saveScene">SAVE</button><select id="sceneScope"><option value="all">ALL</option><option value="mixer">MIX</option><option value="seq">SEQ</option><option value="fx">FX</option></select></div>
+            </div>
 
-            <!-- COL 2: Mixer + EQ -->
-            <section class="col col-mixer">
-                <div class="panel mixer-panel">
-                    <div class="panel-title">MIXER</div>
-                    <div class="mixer-channels">
-                        <div class="ch"><span class="ch-name">MIC</span><div class="vu-meter"><div class="vu-fill" id="vuMic"></div></div><input type="range" class="v-fader" id="faderMic" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteMic">M</button></div>
-                        <div class="ch"><span class="ch-name">SMP</span><div class="vu-meter"><div class="vu-fill" id="vuSamples"></div></div><input type="range" class="v-fader" id="faderSamples" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteSamples">M</button></div>
-                        <div class="ch"><span class="ch-name">SYN</span><div class="vu-meter"><div class="vu-fill" id="vuSynth"></div></div><input type="range" class="v-fader" id="faderSynth" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteSynth">M</button></div>
-                        <div class="ch"><span class="ch-name">RAD</span><div class="vu-meter"><div class="vu-fill" id="vuRadio"></div></div><input type="range" class="v-fader" id="faderRadio" min="0" max="100" value="80" orient="vertical"><button class="mute" id="muteRadio">M</button></div>
-                        <div class="ch master"><span class="ch-name">OUT</span><div class="vu-meter"><div class="vu-fill" id="vuMaster"></div></div><input type="range" class="v-fader" id="faderMaster" min="0" max="100" value="90" orient="vertical"></div>
-                    </div>
+            <!-- Row 3 -->
+            <div class="panel radio-panel">
+                <div class="panel-title">RADIO</div>
+                <div class="radio-row"><input type="text" id="radioSearch" placeholder="Search..."><button id="radioGo">▶</button><button id="radioStop" disabled>■</button></div>
+                <div class="station-list" id="stationList"></div>
+            </div>
+            <div class="panel map-panel">
+                <div class="panel-title">LOCATION</div>
+                <div class="map-box" id="miniMap"><div class="map-img" id="miniMapImg"></div></div>
+                <div class="map-coords" id="miniMapCoords">--</div>
+            </div>
+            <div class="panel fx-panel">
+                <div class="fx-header"><span class="panel-title">FX</span><select id="fxPreset"><option value="0">--</option></select><button id="saveFx">+</button></div>
+                <div class="fx-params">
+                    <div class="fx-row"><span>DLY</span><input type="range" id="fxDelay" min="0" max="100" value="0"></div>
+                    <div class="fx-row"><span>GRN</span><input type="range" id="fxGrain" min="0" max="100" value="0"></div>
+                    <div class="fx-row"><span>GLI</span><input type="range" id="fxGlitch" min="0" max="100" value="0"></div>
+                    <div class="fx-row"><span>CRU</span><input type="range" id="fxCrush" min="1" max="16" value="16"></div>
                 </div>
-                <div class="panel eq-panel">
-                    <div class="eq-header"><span class="panel-title">EQ</span><select id="eqChannel"><option value="master">OUT</option><option value="mic">MIC</option><option value="samples">SMP</option><option value="synth">SYN</option><option value="radio">RAD</option></select></div>
-                    <div class="eq-sliders">
-                        <div class="eq-band"><span>LO</span><input type="range" class="eq-slider" id="eqLow" min="-12" max="12" value="0" orient="vertical"><span id="eqLowVal">0</span></div>
-                        <div class="eq-band"><span>MID</span><input type="range" class="eq-slider" id="eqMid" min="-12" max="12" value="0" orient="vertical"><span id="eqMidVal">0</span></div>
-                        <div class="eq-band"><span>HI</span><input type="range" class="eq-slider" id="eqHigh" min="-12" max="12" value="0" orient="vertical"><span id="eqHighVal">0</span></div>
-                    </div>
+                <div class="punch-fx">
+                    <button class="punch-btn" data-fx="stutter">STT</button>
+                    <button class="punch-btn" data-fx="reverse">REV</button>
+                    <button class="punch-btn" data-fx="filter">FLT</button>
+                    <button class="punch-btn" data-fx="tape">TPE</button>
                 </div>
-            </section>
-
-            <!-- COL 3: CTRL + AI + Radio + Location -->
-            <section class="col col-ctrl">
-                <div class="panel knobs-panel">
-                    <div class="panel-title">CTRL</div>
-                    <div class="knobs-grid">
-                        <div class="knob-group"><div class="knob" id="knobFreq" data-param="freq" data-min="20" data-max="2000" data-value="220"></div><span>FREQ</span></div>
-                        <div class="knob-group"><div class="knob" id="knobFilter" data-param="filter" data-min="20" data-max="8000" data-value="4000"></div><span>FILT</span></div>
-                        <div class="knob-group"><div class="knob" id="knobDelay" data-param="delay" data-min="0" data-max="100" data-value="0"></div><span>DLY</span></div>
-                        <div class="knob-group"><div class="knob" id="knobGrain" data-param="grain" data-min="0" data-max="100" data-value="0"></div><span>GRN</span></div>
-                    </div>
+            </div>
+            <div class="panel rec-panel">
+                <div class="rec-row">
+                    <span class="panel-title">REC</span>
+                    <span id="recCount">0</span>
+                    <button id="recListBtn" class="rec-list-btn">LIST</button>
                 </div>
-                <div class="panel ai-panel">
-                    <div class="panel-title">AI GEN</div>
-                    <div class="vibe-btns">
-                        <button class="vibe-btn active" data-vibe="calm">C</button>
-                        <button class="vibe-btn" data-vibe="urban">U</button>
-                        <button class="vibe-btn" data-vibe="nature">N</button>
-                        <button class="vibe-btn" data-vibe="chaos">X</button>
-                    </div>
-                    <button id="aiGenerate" class="ai-btn">GENERATE</button>
-                </div>
-                <div class="panel radio-panel">
-                    <div class="panel-title">RADIO</div>
-                    <div class="radio-row"><input type="text" id="radioSearch" placeholder="Search..."><button id="radioGo">▶</button><button id="radioStop" disabled>■</button></div>
-                    <div class="station-list" id="stationList"></div>
-                </div>
-                <div class="panel map-panel">
-                    <div class="panel-title">LOCATION</div>
-                    <div class="map-box" id="miniMap"><div class="map-img" id="miniMapImg"></div></div>
-                    <div class="map-coords" id="miniMapCoords">--</div>
-                </div>
-            </section>
-
-            <!-- COL 4: Synth + Scenes + FX + REC -->
-            <section class="col col-synth">
-                <div class="panel synth-panel">
-                    <div class="synth-header"><span class="panel-title">SYNTH</span><button id="synthToggle" class="power-btn">OFF</button></div>
-                    <div class="wave-btns">
-                        <button class="wave-btn active" data-wave="sine">SIN</button>
-                        <button class="wave-btn" data-wave="triangle">TRI</button>
-                        <button class="wave-btn" data-wave="sawtooth">SAW</button>
-                        <button class="wave-btn" data-wave="square">SQR</button>
-                    </div>
-                    <div class="adsr-row">
-                        <div class="adsr-param"><span>A</span><input type="range" id="adsrAttack" min="0" max="1000" value="10"><span id="adsrAVal">10</span></div>
-                        <div class="adsr-param"><span>D</span><input type="range" id="adsrDecay" min="0" max="1000" value="100"><span id="adsrDVal">100</span></div>
-                        <div class="adsr-param"><span>S</span><input type="range" id="adsrSustain" min="0" max="100" value="70"><span id="adsrSVal">70</span></div>
-                        <div class="adsr-param"><span>R</span><input type="range" id="adsrRelease" min="0" max="2000" value="200"><span id="adsrRVal">200</span></div>
-                    </div>
-                </div>
-                <div class="panel scenes-panel">
-                    <div class="panel-title">SCENES</div>
-                    <div class="scene-row">
-                        <button class="scene-btn active" data-scene="0">A</button>
-                        <button class="scene-btn" data-scene="1">B</button>
-                        <button class="scene-btn" data-scene="2">C</button>
-                        <button class="scene-btn" data-scene="3">D</button>
-                    </div>
-                    <div class="xfade-row"><span id="xfadeLeft">A</span><input type="range" id="sceneCrossfader" class="xfader" min="0" max="100" value="0"><span id="xfadeRight">B</span></div>
-                    <div class="scene-actions"><button id="saveScene">SAVE</button><select id="sceneScope"><option value="all">ALL</option><option value="mixer">MIX</option><option value="seq">SEQ</option><option value="fx">FX</option></select></div>
-                </div>
-                <div class="panel fx-panel">
-                    <div class="fx-header"><span class="panel-title">FX</span><select id="fxPreset"><option value="0">--</option></select><button id="saveFx">+</button></div>
-                    <div class="fx-params">
-                        <div class="fx-row"><span>DLY</span><input type="range" id="fxDelay" min="0" max="100" value="0"></div>
-                        <div class="fx-row"><span>GRN</span><input type="range" id="fxGrain" min="0" max="100" value="0"></div>
-                        <div class="fx-row"><span>GLI</span><input type="range" id="fxGlitch" min="0" max="100" value="0"></div>
-                        <div class="fx-row"><span>CRU</span><input type="range" id="fxCrush" min="1" max="16" value="16"></div>
-                    </div>
-                    <div class="punch-fx">
-                        <button class="punch-btn" data-fx="stutter">STT</button>
-                        <button class="punch-btn" data-fx="reverse">REV</button>
-                        <button class="punch-btn" data-fx="filter">FLT</button>
-                        <button class="punch-btn" data-fx="tape">TPE</button>
-                    </div>
-                </div>
-                <div class="panel rec-panel">
-                    <div class="rec-row">
-                        <span class="panel-title">REC</span>
-                        <span id="recCount">0</span>
-                        <button id="recListBtn" class="rec-list-btn">LIST</button>
-                    </div>
-                    <div class="rec-list" id="recList"></div>
-                </div>
-            </section>
-
+                <div class="rec-list" id="recList"></div>
+            </div>
         </main>
     </div>
 

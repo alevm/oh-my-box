@@ -125,129 +125,39 @@ html, body {
 .admin-btn { width: 24px; height: 24px; border: 1px solid var(--border); border-radius: 4px; background: var(--cream); cursor: pointer; }
 .version { font-size: 9px; color: var(--text-light); margin-left: auto; }
 
-/* ===== GRID LAYOUT - Hardware Style ===== */
+/* ===== GRID LAYOUT - 12 Equal Tiles ===== */
 .device {
     display: grid;
-    grid-template-columns: minmax(350px, 1.5fr) 140px 1fr 1fr;
-    gap: 0;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 4px;
     padding: 6px;
-    height: 420px;
+    height: 480px;
     overflow: hidden;
     background: var(--border);
     border-radius: 8px;
 }
 
-/* Column containers */
-.col {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    min-height: 0;
-    overflow: hidden;
-    background: var(--border);
-}
-
-/* All columns get panel background */
-.col-mixer, .col-ctrl, .col-synth {
+.device > .panel {
     background: var(--panel);
-    border-left: 2px solid var(--border);
-}
-
-/* COL 1: Screen (Sequencer + Pads) */
-.col-screen {
-    background: #1a1a1a;
-    padding: 6px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    border-radius: 6px 0 0 6px;
-}
-
-.col-screen .panel {
-    background: transparent;
-    border: none;
-}
-
-.col-screen .panel-title {
-    color: #0f0;
-}
-
-.col-screen .seq-panel {
-    flex: 1;
-    min-height: 200px;
-}
-
-.col-screen .pads-panel {
-    flex-shrink: 0;
-}
-
-/* Screen transport bar */
-.screen-transport {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px;
-    background: #222;
-    border-radius: 4px;
-}
-
-.screen-transport .tr-btn {
-    width: 32px;
-    height: 28px;
-}
-
-.tempo-display {
-    font-size: 14px;
-    font-weight: 700;
-    color: #0f0;
-    font-family: monospace;
-    padding: 0 8px;
-}
-
-/* COL 2: Mixer + EQ */
-.col-mixer {
-    padding: 6px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.col-mixer .mixer-panel {
-    flex: 2;
-    border: none;
-    background: transparent;
-    min-height: 150px;
-}
-
-.col-mixer .eq-panel {
-    flex: 1;
-    border: none;
-    background: transparent;
-    border-top: 1px solid var(--border);
-    padding-top: 6px;
-    min-height: 100px;
-}
-
-/* COL 3 & 4: Control columns - Eurorack style equal panels */
-.col-ctrl, .col-synth {
-    padding: 6px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.col-ctrl .panel, .col-synth .panel {
-    flex: 1;
     border: 1px solid var(--border);
-    background: var(--panel);
     border-radius: 4px;
     padding: 8px;
-    min-height: 80px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Last column rounded corner */
-.col-synth {
-    border-radius: 0 6px 6px 0;
+/* Dark panels for screen elements */
+.device > .seq-panel,
+.device > .pads-panel {
+    background: #1a1a1a;
+    border-color: #333;
+}
+
+.device > .seq-panel .panel-title,
+.device > .pads-panel .panel-title {
+    color: #0f0;
 }
 
 .panel {
