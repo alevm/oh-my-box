@@ -1,5 +1,15 @@
 # Oh My Box - Changelog
 
+## v1.0.2 (2025-12-09)
+
+### Mobile Fixes
+- Removed sticky pads - all content scrolls naturally
+- Fixed overflow issues causing panel overlap
+- Changed to flexbox layout on mobile for proper stacking
+- Increased gap between panels
+
+---
+
 ## v1.0.1 (2025-12-09)
 
 ### Mobile Support
