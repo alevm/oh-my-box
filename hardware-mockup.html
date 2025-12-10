@@ -103,7 +103,7 @@
             height: 580px;
         }
 
-        /* The main enclosure - 250x180mm realistic (scaled ~2.5x for display) */
+        /* The main enclosure - 200x140mm (scaled ~3.5x for display) */
         .enclosure {
             position: absolute;
             top: 30px;
@@ -523,16 +523,16 @@
             box-shadow: 0 0 10px #e94560;
         }
 
-        /* Encoders - RIGHT COLUMN (matches webapp CTRL/KNOBS panel) */
+        /* Encoders - RIGHT COLUMN (4x context-sensitive) */
         .encoders-area {
             position: absolute;
             top: 200px;
             right: 30px;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            gap: 10px 14px;
-            width: 220px;
+            gap: 12px;
+            width: 140px;
             height: 150px;
             z-index: 2;
         }
@@ -1226,16 +1226,12 @@
                             <div class="hw-pattern-btn">H</div>
                         </div>
 
-                        <!-- Encoders - RIGHT COLUMN (CTRL + SYNTH) -->
+                        <!-- Encoders - RIGHT COLUMN (4x context-sensitive) -->
                         <div class="encoders-area">
                             <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">VOL</span></div>
                             <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">PAN</span></div>
                             <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">FILT</span></div>
-                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">RES</span></div>
-                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">ATK</span></div>
-                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">DEC</span></div>
-                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">SUS</span></div>
-                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">REL</span></div>
+                            <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">FX</span></div>
                         </div>
 
                         <!-- FX Punch Buttons (matches webapp FX panel) -->
@@ -1531,9 +1527,9 @@
                     <h3>Controls</h3>
                     <ul>
                         <li>8x Touch Pads (MPR121)</li>
-                        <li>8x Rotary Encoders</li>
-                        <li>5x Function Buttons</li>
-                        <li>8x RGB LED Indicators</li>
+                        <li>4x Rotary Encoders (context-sensitive)</li>
+                        <li>3x Transport Buttons (Play/Stop/Rec)</li>
+                        <li>4x RGB LED Indicators</li>
                     </ul>
                 </div>
                 <div class="spec-card">
@@ -1548,9 +1544,9 @@
                 <div class="spec-card">
                     <h3>Physical</h3>
                     <ul>
-                        <li>Size: <code>250 x 180 x 50mm</code></li>
-                        <li>Weight: <code>~650g</code></li>
-                        <li>Display: 7" IPS Touch</li>
+                        <li>Size: <code>200 x 140 x 45mm</code></li>
+                        <li>Weight: <code>~600g</code></li>
+                        <li>Display: 5" IPS Touch (800x480)</li>
                         <li>Battery: 5-7 hours</li>
                     </ul>
                 </div>
@@ -1573,24 +1569,44 @@
                 </tbody>
             </table>
 
-            <!-- Bill of Materials -->
-            <h2 class="section-header">Bill of Materials</h2>
+            <!-- Bill of Materials (v3.0 Compromise) -->
+            <h2 class="section-header">Bill of Materials v3.0</h2>
+            <p style="color:#888; font-size:12px; margin-bottom:10px;">See HARDWARE-SPEC.txt for detailed breakdown</p>
             <table class="bom-table">
                 <thead>
                     <tr><th>Component</th><th>Description</th><th>Qty</th><th>Price</th></tr>
                 </thead>
                 <tbody>
+                    <tr><td colspan="4" style="background:#1a1a1a;color:#27ae60;font-weight:700;">PROCESSORS & AUDIO</td></tr>
                     <tr><td>Teensy 4.1</td><td>600MHz ARM Cortex-M7</td><td>1</td><td class="price">$29.75</td></tr>
                     <tr><td>Audio Shield</td><td>SGTL5000 codec</td><td>1</td><td class="price">$13.75</td></tr>
-                    <tr><td>ESP32 DevKit</td><td>WiFi + Bluetooth</td><td>1</td><td class="price">$8.00</td></tr>
-                    <tr><td>7" Display</td><td>IPS 1024x600 Touch</td><td>1</td><td class="price">$45.00</td></tr>
-                    <tr><td>MPR121</td><td>Touch sensor IC</td><td>1</td><td class="price">$7.95</td></tr>
-                    <tr><td>Encoders</td><td>Rotary with push</td><td>8</td><td class="price">$23.60</td></tr>
-                    <tr><td>GPS Module</td><td>NEO-6M</td><td>1</td><td class="price">$12.00</td></tr>
-                    <tr><td>Battery</td><td>3500mAh LiPo</td><td>1</td><td class="price">$18.00</td></tr>
-                    <tr><td>Enclosure</td><td>Aluminum 250x180x50</td><td>1</td><td class="price">$35.00</td></tr>
-                    <tr><td>Misc</td><td>Jacks, wire, PCB</td><td>-</td><td class="price">$60.00</td></tr>
-                    <tr class="bom-total"><td colspan="3">TOTAL</td><td>~$265</td></tr>
+                    <tr><td>ESP32-WROOM</td><td>WiFi/BT module</td><td>1</td><td class="price">$8.00</td></tr>
+                    <tr><td>microSD Card</td><td>64GB sample storage</td><td>1</td><td class="price">$12.00</td></tr>
+                    <tr><td colspan="4" style="background:#1a1a1a;color:#3498db;font-weight:700;">DISPLAY</td></tr>
+                    <tr><td>5" IPS Display</td><td>800x480 Capacitive Touch</td><td>1</td><td class="price">$35.00</td></tr>
+                    <tr><td>Display Driver</td><td>SSD1963 board</td><td>1</td><td class="price">$8.00</td></tr>
+                    <tr><td colspan="4" style="background:#1a1a1a;color:#9b59b6;font-weight:700;">USER INTERFACE</td></tr>
+                    <tr><td>MPR121 Breakout</td><td>12-ch touch sensor</td><td>1</td><td class="price">$7.95</td></tr>
+                    <tr><td>Copper Tape</td><td>Conductive, for pads</td><td>1</td><td class="price">$6.00</td></tr>
+                    <tr><td>Rotary Encoders</td><td>With push button</td><td>4</td><td class="price">$11.80</td></tr>
+                    <tr><td>Encoder Knobs</td><td>Aluminum 18mm</td><td>4</td><td class="price">$6.00</td></tr>
+                    <tr><td>Tactile Buttons</td><td>Transport (6x6mm)</td><td>3</td><td class="price">$1.50</td></tr>
+                    <tr><td>RGB LEDs</td><td>WS2812 indicators</td><td>4</td><td class="price">$2.00</td></tr>
+                    <tr><td colspan="4" style="background:#1a1a1a;color:#e67e22;font-weight:700;">CONNECTIVITY & POWER</td></tr>
+                    <tr><td>GPS Module</td><td>NEO-6M with antenna</td><td>1</td><td class="price">$12.00</td></tr>
+                    <tr><td>Audio Jacks</td><td>3.5mm stereo</td><td>3</td><td class="price">$4.50</td></tr>
+                    <tr><td>USB-C Connector</td><td>Power + data</td><td>1</td><td class="price">$2.00</td></tr>
+                    <tr><td>LiPo Battery</td><td>3500mAh 3.7V</td><td>1</td><td class="price">$18.00</td></tr>
+                    <tr><td>TP4056 Charger</td><td>USB-C charging</td><td>1</td><td class="price">$2.00</td></tr>
+                    <tr><td>5V Boost</td><td>Battery converter</td><td>1</td><td class="price">$3.00</td></tr>
+                    <tr><td colspan="4" style="background:#1a1a1a;color:#95a5a6;font-weight:700;">ENCLOSURE & MISC</td></tr>
+                    <tr><td>Enclosure</td><td>Aluminum 200x140x45mm</td><td>1</td><td class="price">$28.00</td></tr>
+                    <tr><td>Acrylic Panel</td><td>Laser-cut top</td><td>1</td><td class="price">$12.00</td></tr>
+                    <tr><td>Hardware</td><td>Screws, standoffs, feet</td><td>-</td><td class="price">$7.00</td></tr>
+                    <tr><td>Wire/Connectors</td><td>Internal wiring</td><td>-</td><td class="price">$8.00</td></tr>
+                    <tr class="bom-total"><td colspan="3">TOTAL (Parts)</td><td>~$240</td></tr>
+                    <tr><td colspan="3" style="color:#888;">+ Shipping/Tax</td><td style="color:#888;">~$40</td></tr>
+                    <tr class="bom-total" style="color:#27ae60;"><td colspan="3">GRAND TOTAL</td><td>~$280</td></tr>
                 </tbody>
             </table>
 

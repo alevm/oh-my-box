@@ -7,10 +7,6 @@
     <style>
         :root {
             --bg: #f5f0e8;
-            --panel: #faf8f5;
-            --border: #8b5a2b;
-            --text: #2c2416;
-            --text-light: #6b5a4a;
             --accent: #e94560;
             --pastel-blue: #d6eaf8;
             --pastel-gray: #e8e8e8;
@@ -23,7 +19,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
             background: var(--bg);
             min-height: 100vh;
             display: flex;
@@ -37,21 +33,12 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            border-bottom: 2px solid var(--border);
+            border-bottom: 2px solid #8b5a2b;
         }
 
-        .logo {
-            font-size: 18px;
-            font-weight: 800;
-            color: #d4a574;
-            letter-spacing: 2px;
-        }
+        .logo { font-size: 18px; font-weight: 800; color: #d4a574; letter-spacing: 2px; }
 
-        .nav-links {
-            display: flex;
-            gap: 8px;
-            margin-left: auto;
-        }
+        .nav-links { display: flex; gap: 8px; margin-left: auto; }
 
         .nav-link {
             padding: 6px 12px;
@@ -62,11 +49,10 @@
             text-decoration: none;
             font-size: 13px;
         }
-
         .nav-link:hover { background: rgba(255,255,255,0.2); }
         .nav-link.active { background: var(--accent); color: #fff; }
 
-        /* Main content */
+        /* Main */
         .main-content {
             flex: 1;
             display: flex;
@@ -76,77 +62,56 @@
             background: linear-gradient(180deg, #2a1a0f 0%, #1a100a 100%);
         }
 
-        /* Hardware Device Container */
-        .device-container {
-            position: relative;
-            width: 800px;
-            height: 580px;
-        }
+        /* Device - 200x140mm scaled (~3.5x) */
+        .device-container { position: relative; width: 720px; height: 520px; }
 
-        /* The Enclosure - 250x180mm scaled */
         .enclosure {
             position: absolute;
-            top: 20px;
-            left: 50px;
+            top: 10px;
+            left: 10px;
             width: 700px;
-            height: 504px;
+            height: 490px;
             background: linear-gradient(165deg, #2a2a2a 0%, #1a1a1a 40%, #0f0f0f 100%);
-            border-radius: 16px;
-            box-shadow:
-                0 20px 60px rgba(0,0,0,0.5),
-                0 0 0 2px #3a3a3a,
-                inset 0 1px 0 rgba(255,255,255,0.08);
+            border-radius: 14px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 2px #3a3a3a, inset 0 1px 0 rgba(255,255,255,0.08);
         }
 
-        /* Decorative border */
         .enclosure::before {
             content: '';
             position: absolute;
-            top: 6px; left: 6px; right: 6px; bottom: 6px;
-            border: 1px solid rgba(139, 90, 43, 0.25);
-            border-radius: 12px;
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border: 1px solid rgba(139, 90, 43, 0.2);
+            border-radius: 10px;
             pointer-events: none;
         }
 
-        /* Artwork on enclosure */
-        .artwork-overlay {
+        /* Artwork */
+        .artwork {
             position: absolute;
-            top: 160px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
-            opacity: 0.08;
+            top: 200px; left: 10px; right: 10px; bottom: 10px;
+            opacity: 0.06;
             background-image: url('https://media.rhizome.org/blog/8979/Chombart-de-Lauwe.jpg');
             background-size: cover;
-            background-position: center;
             filter: invert(1) brightness(1.5);
-            border-radius: 10px;
+            border-radius: 8px;
             z-index: 0;
             pointer-events: none;
         }
 
         /* Panel backgrounds */
-        .panel-bg {
-            position: absolute;
-            border-radius: 6px;
-            z-index: 1;
-        }
+        .panel-bg { position: absolute; border-radius: 6px; z-index: 1; }
+        .panel-pads { top: 210px; left: 15px; width: 340px; height: 180px; background: var(--pastel-gray); border: 1px solid #c0c0c0; }
+        .panel-ctrl { top: 210px; right: 15px; width: 180px; height: 180px; background: var(--pastel-gray); border: 1px solid #c0c0c0; }
+        .panel-transport { bottom: 15px; left: 15px; width: 150px; height: 45px; background: var(--pastel-gray); border: 1px solid #c0c0c0; }
+        .panel-scenes { bottom: 15px; right: 15px; width: 160px; height: 45px; background: var(--pastel-gray); border: 1px solid #c0c0c0; }
 
-        .panel-mixer { top: 165px; left: 15px; width: 90px; height: 280px; background: var(--pastel-blue); border: 1px solid #a9cce3; }
-        .panel-pads { top: 165px; left: 115px; width: 300px; height: 200px; background: var(--pastel-gray); border: 1px solid #c0c0c0; }
-        .panel-ctrl { top: 165px; right: 15px; width: 220px; height: 160px; background: var(--pastel-gray); border: 1px solid #c0c0c0; }
-        .panel-fx { top: 335px; right: 15px; width: 220px; height: 50px; background: var(--pastel-violet); border: 1px solid #c9a0dc; }
-        .panel-scenes { bottom: 15px; left: 115px; width: 300px; height: 45px; background: var(--pastel-gray); border: 1px solid #c0c0c0; }
-
-        /* 7" Display (1024x600 scaled) */
+        /* 5" Display (800x480 scaled) */
         .display {
             position: absolute;
-            top: 12px;
-            left: 12px;
-            right: 12px;
-            height: 140px;
+            top: 10px; left: 10px; right: 10px;
+            height: 190px;
             background: #0a0a0a;
-            border-radius: 8px;
+            border-radius: 6px;
             border: 2px solid #333;
             overflow: hidden;
             z-index: 2;
@@ -156,130 +121,147 @@
             width: 100%;
             height: 100%;
             background: #111;
-            padding: 8px;
+            padding: 6px;
             display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 8px;
+            grid-template-columns: 1fr 100px 90px;
+            gap: 6px;
         }
 
-        /* Sequencer display */
-        .seq-display {
+        /* Sequencer in display */
+        .seq-panel {
             background: #0d0d0d;
             border-radius: 4px;
-            padding: 6px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
         }
 
         .seq-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
-        .seq-title {
-            color: #27ae60;
-            font-size: 11px;
-            font-weight: 700;
-        }
+        .seq-title { color: #27ae60; font-size: 10px; font-weight: 700; }
+        .seq-info { display: flex; gap: 10px; }
+        .seq-info span { color: #666; font-size: 9px; }
+        .seq-info .val { color: #27ae60; }
 
-        .seq-info {
-            display: flex;
-            gap: 12px;
-        }
-
-        .seq-info span {
-            color: #888;
-            font-size: 10px;
-        }
-
-        .seq-info .value {
-            color: #27ae60;
-            font-weight: 600;
-        }
-
-        /* Sequencer grid */
         .seq-grid {
             display: grid;
-            grid-template-columns: 30px repeat(16, 1fr);
+            grid-template-columns: 24px repeat(16, 1fr);
             grid-template-rows: repeat(8, 1fr);
-            gap: 2px;
-            height: calc(100% - 24px);
+            gap: 1px;
+            flex: 1;
         }
 
-        .track-label {
+        .track-label { display: flex; align-items: center; justify-content: center; color: #555; font-size: 7px; font-weight: 600; }
+        .step { background: #1a1a1a; border-radius: 1px; cursor: pointer; }
+        .step:hover { background: #252525; }
+        .step.on { background: #27ae60; }
+        .step.playing { box-shadow: inset 0 0 0 1px #fff; }
+
+        /* Touch Mixer in display */
+        .mixer-panel {
+            background: #0d0d0d;
+            border-radius: 4px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mixer-title { color: var(--blue-text); font-size: 9px; font-weight: 700; margin-bottom: 4px; background: var(--pastel-blue); padding: 2px 4px; border-radius: 2px; text-align: center; }
+
+        .mixer-faders {
+            display: flex;
+            justify-content: space-around;
+            flex: 1;
+            padding-top: 4px;
+        }
+
+        .touch-fader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .fader-track {
+            width: 10px;
+            height: 100px;
+            background: linear-gradient(180deg, #27ae60 0%, #1a5276 50%, #0d0d0d 100%);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .fader-level {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #27ae60;
+            border-radius: 3px;
+            transition: height 0.1s;
+        }
+
+        .fader-label { font-size: 7px; color: #888; }
+
+        /* Status panel in display */
+        .status-panel {
+            background: #0d0d0d;
+            border-radius: 4px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .status-item { text-align: center; padding: 3px; background: #080808; border-radius: 2px; }
+        .status-label { font-size: 7px; color: #555; }
+        .status-value { font-size: 12px; color: #27ae60; font-weight: 700; font-family: monospace; }
+        .status-value.rec { color: #e94560; }
+
+        /* Pattern/Scene buttons in display */
+        .btn-row { display: flex; gap: 3px; margin-top: 4px; }
+        .display-btn {
+            flex: 1;
+            height: 18px;
+            background: #222;
+            border: 1px solid #333;
+            border-radius: 2px;
+            color: #666;
+            font-size: 8px;
+            font-weight: 700;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #666;
-            font-size: 8px;
-            font-weight: 600;
         }
-
-        .step {
-            background: #1a1a1a;
-            border-radius: 2px;
-            cursor: pointer;
-            transition: all 0.1s;
-        }
-
-        .step:hover { background: #2a2a2a; }
-        .step.on { background: #27ae60; }
-        .step.playing { box-shadow: 0 0 8px #27ae60; }
-
-        /* Status display */
-        .status-display {
-            width: 100px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .status-item {
-            background: #0d0d0d;
-            border-radius: 4px;
-            padding: 6px;
-            text-align: center;
-        }
-
-        .status-label {
-            color: #555;
-            font-size: 8px;
-            margin-bottom: 2px;
-        }
-
-        .status-value {
-            color: #27ae60;
-            font-size: 14px;
-            font-weight: 700;
-            font-family: 'Courier New', monospace;
-        }
-
-        .status-value.recording { color: #e94560; }
+        .display-btn:hover { background: #2a2a2a; }
+        .display-btn.active { background: #27ae60; color: #fff; border-color: #27ae60; }
 
         /* Section labels */
         .section-label {
             position: absolute;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 700;
             letter-spacing: 1px;
             z-index: 3;
         }
+        .label-pads { top: 215px; left: 25px; color: var(--gray-text); }
+        .label-ctrl { top: 215px; right: 25px; color: var(--gray-text); width: 160px; text-align: center; }
 
-        .label-mixer { top: 170px; left: 25px; color: var(--blue-text); }
-        .label-pads { top: 170px; left: 125px; color: var(--gray-text); }
-        .label-ctrl { top: 170px; right: 25px; color: var(--gray-text); width: 200px; text-align: center; }
-
-        /* Touch Pads (MPR121 - 8 pads) */
+        /* 8 Touch Pads */
         .pads-container {
             position: absolute;
-            top: 190px;
-            left: 125px;
+            top: 235px; left: 25px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(2, 1fr);
             gap: 8px;
-            width: 280px;
-            height: 120px;
+            width: 320px;
+            height: 140px;
             z-index: 2;
         }
 
@@ -294,110 +276,57 @@
             font-size: 14px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.1s;
-            position: relative;
             user-select: none;
+            position: relative;
         }
 
-        .pad:hover {
-            background: linear-gradient(145deg, #5a5a5a 0%, #3a3a3a 100%);
-            transform: scale(1.02);
-        }
-
+        .pad:hover { background: linear-gradient(145deg, #5a5a5a 0%, #3a3a3a 100%); }
         .pad:active, .pad.active {
             background: linear-gradient(145deg, #27ae60 0%, #1e8449 100%);
             border-color: #27ae60;
             color: #fff;
-            transform: scale(0.98);
         }
 
         .pad::before {
             content: '';
             position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 6px;
-            height: 6px;
+            top: 4px; right: 4px;
+            width: 6px; height: 6px;
             border-radius: 50%;
             background: #333;
         }
+        .pad.active::before { background: #fff; box-shadow: 0 0 6px #fff; }
 
-        .pad.active::before {
-            background: #fff;
-            box-shadow: 0 0 8px #fff;
-        }
-
-        /* Pattern buttons */
-        .pattern-btns {
-            position: absolute;
-            top: 320px;
-            left: 125px;
-            display: flex;
-            gap: 5px;
-            z-index: 2;
-        }
-
-        .pattern-btn {
-            width: 30px;
-            height: 24px;
-            background: #d5d8dc;
-            border: 2px solid #aeb6bf;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gray-text);
-            font-size: 10px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .pattern-btn:hover { background: #bdc3c7; }
-        .pattern-btn.active {
-            background: #27ae60;
-            border-color: #27ae60;
-            color: #fff;
-        }
-
-        /* Encoders (8x rotary) */
+        /* 4 Encoders */
         .encoders-container {
             position: absolute;
-            top: 185px;
-            right: 25px;
+            top: 235px; right: 25px;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            gap: 8px 12px;
-            width: 200px;
-            height: 130px;
+            gap: 10px;
+            width: 160px;
+            height: 150px;
             z-index: 2;
         }
 
-        .encoder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-        }
+        .encoder { display: flex; flex-direction: column; align-items: center; gap: 3px; }
 
         .encoder-knob {
-            width: 36px;
-            height: 36px;
+            width: 44px; height: 44px;
             background: linear-gradient(145deg, #666 0%, #444 100%);
             border-radius: 50%;
             border: 2px solid #333;
             position: relative;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
         }
 
         .encoder-knob::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 14px;
-            height: 14px;
+            top: 50%; left: 50%;
+            width: 18px; height: 18px;
             background: linear-gradient(145deg, #555 0%, #333 100%);
             border-radius: 50%;
             transform: translate(-50%, -50%);
@@ -406,117 +335,47 @@
         .encoder-knob::after {
             content: '';
             position: absolute;
-            top: 4px;
-            left: 50%;
-            width: 2px;
-            height: 8px;
+            top: 5px; left: 50%;
+            width: 3px; height: 10px;
             background: var(--accent);
-            border-radius: 1px;
+            border-radius: 2px;
             transform: translateX(-50%);
-            transform-origin: center 14px;
         }
 
-        .encoder-label {
-            font-size: 8px;
-            color: var(--gray-text);
-            font-weight: 600;
-        }
+        .encoder-label { font-size: 9px; color: var(--gray-text); font-weight: 600; }
+        .encoder-value { font-size: 8px; color: #666; font-family: monospace; }
 
-        .encoder-value {
-            font-size: 7px;
-            color: #666;
-            font-family: 'Courier New', monospace;
-        }
-
-        /* FX Buttons */
-        .fx-container {
+        /* 4 RGB LEDs */
+        .leds-container {
             position: absolute;
-            top: 342px;
-            right: 25px;
+            top: 400px; right: 35px;
             display: flex;
-            gap: 6px;
+            gap: 12px;
             z-index: 2;
         }
 
-        .fx-btn {
-            width: 46px;
-            height: 32px;
-            background: #d7bde2;
-            border: 2px solid #af7ac5;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--violet-text);
-            font-size: 9px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .fx-btn:hover { background: #c39bd3; }
-        .fx-btn:active, .fx-btn.active {
-            background: #8e44ad;
-            color: #fff;
-        }
-
-        /* Mixer Faders */
-        .mixer-container {
-            position: absolute;
-            top: 190px;
-            left: 22px;
-            display: flex;
-            gap: 5px;
-            z-index: 2;
-        }
-
-        .fader {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .fader-track {
-            width: 8px;
-            height: 100px;
-            background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
-            border-radius: 4px;
+        .led {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #222;
             border: 1px solid #444;
-            position: relative;
-            cursor: pointer;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
         }
-
-        .fader-knob {
-            position: absolute;
-            left: -3px;
-            width: 14px;
-            height: 20px;
-            background: linear-gradient(180deg, #666 0%, #444 100%);
-            border-radius: 3px;
-            border: 1px solid #888;
-            bottom: 60%;
-            cursor: grab;
-        }
-
-        .fader-label {
-            font-size: 7px;
-            color: var(--blue-text);
-            font-weight: 600;
-        }
+        .led.on-green { background: #27ae60; box-shadow: 0 0 8px #27ae60; }
+        .led.on-red { background: #e94560; box-shadow: 0 0 8px #e94560; }
+        .led.on-blue { background: #3498db; box-shadow: 0 0 8px #3498db; }
 
         /* Transport */
         .transport-container {
             position: absolute;
-            bottom: 22px;
-            left: 22px;
+            bottom: 22px; left: 25px;
             display: flex;
-            gap: 8px;
+            gap: 10px;
             z-index: 2;
         }
 
         .transport-btn {
-            width: 36px;
-            height: 36px;
+            width: 38px; height: 38px;
             background: linear-gradient(145deg, #4a4a4a 0%, #2a2a2a 100%);
             border-radius: 50%;
             border: 2px solid #555;
@@ -532,27 +391,20 @@
         .transport-btn.play.active { background: #27ae60; color: #fff; border-color: #27ae60; }
         .transport-btn.rec.active { background: #e94560; color: #fff; border-color: #e94560; }
 
-        /* Scene Buttons */
+        /* Scenes */
         .scenes-container {
             position: absolute;
-            bottom: 22px;
-            left: 125px;
+            bottom: 22px; right: 25px;
             display: flex;
             gap: 6px;
             align-items: center;
             z-index: 2;
         }
 
-        .scenes-label {
-            font-size: 9px;
-            color: var(--gray-text);
-            font-weight: 700;
-            margin-right: 4px;
-        }
+        .scenes-label { font-size: 8px; color: var(--gray-text); font-weight: 700; margin-right: 4px; }
 
         .scene-btn {
-            width: 28px;
-            height: 28px;
+            width: 30px; height: 30px;
             background: #d5d8dc;
             border: 2px solid #aeb6bf;
             border-radius: 5px;
@@ -564,57 +416,22 @@
             font-weight: 700;
             cursor: pointer;
         }
-
         .scene-btn:hover { background: #bdc3c7; }
-        .scene-btn.active {
-            background: #27ae60;
-            border-color: #27ae60;
-            color: #fff;
-        }
+        .scene-btn.active { background: #27ae60; border-color: #27ae60; color: #fff; }
 
-        /* GPS indicator */
-        .gps-indicator {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 50px;
-            height: 50px;
-            background: #0a0a0a;
-            border-radius: 50%;
-            border: 2px solid #2a4a2a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 3;
-        }
-
-        .gps-dot {
-            width: 8px;
-            height: 8px;
-            background: #27ae60;
-            border-radius: 50%;
-            animation: gps-pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes gps-pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.7; }
-        }
-
-        /* I/O Ports */
+        /* I/O */
         .io-ports {
             position: absolute;
-            right: -30px;
+            right: -25px;
             top: 50%;
             transform: translateY(-50%);
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .io-port {
-            width: 20px;
-            height: 20px;
+            width: 16px; height: 16px;
             background: #0a0a0a;
             border-radius: 50%;
             border: 2px solid #444;
@@ -630,8 +447,7 @@
             color: #888;
             font-size: 11px;
         }
-
-        .info-item span { color: #27ae60; font-weight: 600; }
+        .info-bar span { color: #27ae60; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -648,37 +464,68 @@
     <main class="main-content">
         <div class="device-container">
             <div class="enclosure">
-                <!-- Artwork overlay -->
-                <div class="artwork-overlay"></div>
+                <div class="artwork"></div>
 
-                <!-- Pastel panel backgrounds -->
-                <div class="panel-bg panel-mixer"></div>
+                <!-- Panel backgrounds -->
                 <div class="panel-bg panel-pads"></div>
                 <div class="panel-bg panel-ctrl"></div>
-                <div class="panel-bg panel-fx"></div>
+                <div class="panel-bg panel-transport"></div>
                 <div class="panel-bg panel-scenes"></div>
 
-                <!-- 7" Touch Display -->
+                <!-- 5" Touch Display -->
                 <div class="display">
                     <div class="display-content">
-                        <div class="seq-display">
+                        <!-- Sequencer -->
+                        <div class="seq-panel">
                             <div class="seq-header">
                                 <span class="seq-title">SEQUENCER</span>
                                 <div class="seq-info">
-                                    <span>PTN: <span class="value" id="currentPattern">A</span></span>
-                                    <span>LEN: <span class="value">16</span></span>
-                                    <span>SWG: <span class="value">0%</span></span>
+                                    <span>PTN:<span class="val" id="ptnDisplay">A</span></span>
+                                    <span>BPM:<span class="val" id="bpmVal">120</span></span>
                                 </div>
                             </div>
-                            <div class="seq-grid" id="seqGrid">
-                                <!-- Track labels and steps will be generated by JS -->
+                            <div class="seq-grid" id="seqGrid"></div>
+                            <div class="btn-row" id="patternBtns">
+                                <div class="display-btn active" data-ptn="0">A</div>
+                                <div class="display-btn" data-ptn="1">B</div>
+                                <div class="display-btn" data-ptn="2">C</div>
+                                <div class="display-btn" data-ptn="3">D</div>
+                                <div class="display-btn" data-ptn="4">E</div>
+                                <div class="display-btn" data-ptn="5">F</div>
+                                <div class="display-btn" data-ptn="6">G</div>
+                                <div class="display-btn" data-ptn="7">H</div>
                             </div>
                         </div>
-                        <div class="status-display">
-                            <div class="status-item">
-                                <div class="status-label">BPM</div>
-                                <div class="status-value" id="bpmDisplay">120</div>
+
+                        <!-- Touch Mixer -->
+                        <div class="mixer-panel">
+                            <div class="mixer-title">MIXER</div>
+                            <div class="mixer-faders">
+                                <div class="touch-fader" data-ch="mic">
+                                    <div class="fader-track"><div class="fader-level" style="height:70%"></div></div>
+                                    <span class="fader-label">MIC</span>
+                                </div>
+                                <div class="touch-fader" data-ch="smp">
+                                    <div class="fader-track"><div class="fader-level" style="height:80%"></div></div>
+                                    <span class="fader-label">SMP</span>
+                                </div>
+                                <div class="touch-fader" data-ch="syn">
+                                    <div class="fader-track"><div class="fader-level" style="height:75%"></div></div>
+                                    <span class="fader-label">SYN</span>
+                                </div>
+                                <div class="touch-fader" data-ch="rad">
+                                    <div class="fader-track"><div class="fader-level" style="height:60%"></div></div>
+                                    <span class="fader-label">RAD</span>
+                                </div>
+                                <div class="touch-fader" data-ch="out">
+                                    <div class="fader-track"><div class="fader-level" style="height:85%"></div></div>
+                                    <span class="fader-label">OUT</span>
+                                </div>
                             </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="status-panel">
                             <div class="status-item">
                                 <div class="status-label">TIME</div>
                                 <div class="status-value" id="timeDisplay">00:00</div>
@@ -687,21 +534,25 @@
                                 <div class="status-label">STATUS</div>
                                 <div class="status-value" id="statusDisplay">STOP</div>
                             </div>
+                            <div class="status-item">
+                                <div class="status-label">GPS</div>
+                                <div class="status-value" style="font-size:8px;">40.71°N</div>
+                            </div>
+                            <div class="btn-row">
+                                <div class="display-btn active" data-scene="0">A</div>
+                                <div class="display-btn" data-scene="1">B</div>
+                                <div class="display-btn" data-scene="2">C</div>
+                                <div class="display-btn" data-scene="3">D</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- GPS indicator -->
-                <div class="gps-indicator">
-                    <div class="gps-dot"></div>
-                </div>
-
-                <!-- Section labels -->
-                <span class="section-label label-mixer">MIXER</span>
+                <!-- Labels -->
                 <span class="section-label label-pads">PADS</span>
                 <span class="section-label label-ctrl">CTRL</span>
 
-                <!-- Touch Pads (8 pads via MPR121) -->
+                <!-- 8 Touch Pads -->
                 <div class="pads-container" id="padsContainer">
                     <div class="pad" data-pad="0">1</div>
                     <div class="pad" data-pad="1">2</div>
@@ -713,20 +564,8 @@
                     <div class="pad" data-pad="7">8</div>
                 </div>
 
-                <!-- Pattern buttons -->
-                <div class="pattern-btns" id="patternBtns">
-                    <div class="pattern-btn active" data-pattern="0">A</div>
-                    <div class="pattern-btn" data-pattern="1">B</div>
-                    <div class="pattern-btn" data-pattern="2">C</div>
-                    <div class="pattern-btn" data-pattern="3">D</div>
-                    <div class="pattern-btn" data-pattern="4">E</div>
-                    <div class="pattern-btn" data-pattern="5">F</div>
-                    <div class="pattern-btn" data-pattern="6">G</div>
-                    <div class="pattern-btn" data-pattern="7">H</div>
-                </div>
-
-                <!-- Encoders (8x rotary) -->
-                <div class="encoders-container" id="encodersContainer">
+                <!-- 4 Encoders -->
+                <div class="encoders-container">
                     <div class="encoder" data-param="volume">
                         <div class="encoder-knob" data-value="80"></div>
                         <span class="encoder-label">VOL</span>
@@ -742,74 +581,30 @@
                         <span class="encoder-label">FILT</span>
                         <span class="encoder-value">100</span>
                     </div>
-                    <div class="encoder" data-param="resonance">
+                    <div class="encoder" data-param="fx">
                         <div class="encoder-knob" data-value="0"></div>
-                        <span class="encoder-label">RES</span>
+                        <span class="encoder-label">FX</span>
                         <span class="encoder-value">0</span>
                     </div>
-                    <div class="encoder" data-param="attack">
-                        <div class="encoder-knob" data-value="10"></div>
-                        <span class="encoder-label">ATK</span>
-                        <span class="encoder-value">10</span>
-                    </div>
-                    <div class="encoder" data-param="decay">
-                        <div class="encoder-knob" data-value="50"></div>
-                        <span class="encoder-label">DEC</span>
-                        <span class="encoder-value">50</span>
-                    </div>
-                    <div class="encoder" data-param="sustain">
-                        <div class="encoder-knob" data-value="70"></div>
-                        <span class="encoder-label">SUS</span>
-                        <span class="encoder-value">70</span>
-                    </div>
-                    <div class="encoder" data-param="release">
-                        <div class="encoder-knob" data-value="30"></div>
-                        <span class="encoder-label">REL</span>
-                        <span class="encoder-value">30</span>
-                    </div>
                 </div>
 
-                <!-- FX Buttons -->
-                <div class="fx-container" id="fxContainer">
-                    <div class="fx-btn" data-fx="stutter">STT</div>
-                    <div class="fx-btn" data-fx="reverse">REV</div>
-                    <div class="fx-btn" data-fx="filter">FLT</div>
-                    <div class="fx-btn" data-fx="tape">TPE</div>
+                <!-- 4 RGB LEDs -->
+                <div class="leds-container">
+                    <div class="led on-green" id="led1"></div>
+                    <div class="led" id="led2"></div>
+                    <div class="led" id="led3"></div>
+                    <div class="led" id="led4"></div>
                 </div>
 
-                <!-- Mixer Faders -->
-                <div class="mixer-container" id="mixerContainer">
-                    <div class="fader" data-channel="mic">
-                        <div class="fader-track"><div class="fader-knob" style="bottom: 70%"></div></div>
-                        <span class="fader-label">MIC</span>
-                    </div>
-                    <div class="fader" data-channel="smp">
-                        <div class="fader-track"><div class="fader-knob" style="bottom: 80%"></div></div>
-                        <span class="fader-label">SMP</span>
-                    </div>
-                    <div class="fader" data-channel="syn">
-                        <div class="fader-track"><div class="fader-knob" style="bottom: 75%"></div></div>
-                        <span class="fader-label">SYN</span>
-                    </div>
-                    <div class="fader" data-channel="rad">
-                        <div class="fader-track"><div class="fader-knob" style="bottom: 60%"></div></div>
-                        <span class="fader-label">RAD</span>
-                    </div>
-                    <div class="fader" data-channel="out">
-                        <div class="fader-track"><div class="fader-knob" style="bottom: 85%"></div></div>
-                        <span class="fader-label">OUT</span>
-                    </div>
-                </div>
-
-                <!-- Transport -->
-                <div class="transport-container" id="transportContainer">
+                <!-- Transport (3 buttons) -->
+                <div class="transport-container">
                     <div class="transport-btn play" data-action="play">&#9654;</div>
                     <div class="transport-btn stop" data-action="stop">&#9632;</div>
                     <div class="transport-btn rec" data-action="rec">&#9679;</div>
                 </div>
 
-                <!-- Scene Buttons -->
-                <div class="scenes-container" id="scenesContainer">
+                <!-- Scene buttons -->
+                <div class="scenes-container">
                     <span class="scenes-label">SCENE</span>
                     <div class="scene-btn active" data-scene="0">A</div>
                     <div class="scene-btn" data-scene="1">B</div>
@@ -823,25 +618,19 @@
                 <div class="io-port" title="Audio Out"></div>
                 <div class="io-port" title="Headphones"></div>
                 <div class="io-port" title="Mic In"></div>
-                <div class="io-port" title="USB"></div>
             </div>
         </div>
     </main>
 
     <div class="info-bar">
-        <div class="info-item">Enclosure: <span>250×180×50mm</span></div>
-        <div class="info-item">Display: <span>7" IPS Touch</span></div>
-        <div class="info-item">Pads: <span>MPR121 (8ch)</span></div>
-        <div class="info-item">Encoders: <span>8× Rotary</span></div>
-        <div class="info-item">CPU: <span>Teensy 4.1</span></div>
+        <div>Enclosure: <span>200×140×45mm</span></div>
+        <div>Display: <span>5" Touch</span></div>
+        <div>Pads: <span>8× MPR121</span></div>
+        <div>Encoders: <span>4× Rotary</span></div>
+        <div>Cost: <span>~$280</span></div>
     </div>
 
-    <!-- Audio Engine -->
-    <script src="js/audio-engine.js"></script>
-    <script src="js/sampler.js"></script>
-
     <script>
-        // Initialize audio context
         let audioCtx = null;
         let isPlaying = false;
         let isRecording = false;
@@ -850,309 +639,164 @@
         let bpm = 120;
         let stepInterval = null;
 
-        // Sequencer data (8 tracks x 16 steps x 8 patterns)
-        const patterns = Array(8).fill(null).map(() =>
-            Array(8).fill(null).map(() =>
-                Array(16).fill(false)
-            )
-        );
-
-        // Track names
+        const patterns = Array(8).fill(null).map(() => Array(8).fill(null).map(() => Array(16).fill(false)));
         const tracks = ['BD', 'SD', 'HH', 'PC', 'S1', 'S2', 'S3', 'S4'];
 
-        // Initialize sequencer grid
         function initSeqGrid() {
             const grid = document.getElementById('seqGrid');
             grid.innerHTML = '';
-
-            tracks.forEach((track, trackIdx) => {
-                // Track label
+            tracks.forEach((track, ti) => {
                 const label = document.createElement('div');
                 label.className = 'track-label';
                 label.textContent = track;
                 grid.appendChild(label);
-
-                // Steps
-                for (let step = 0; step < 16; step++) {
-                    const stepEl = document.createElement('div');
-                    stepEl.className = 'step';
-                    stepEl.dataset.track = trackIdx;
-                    stepEl.dataset.step = step;
-
-                    if (patterns[currentPattern][trackIdx][step]) {
-                        stepEl.classList.add('on');
-                    }
-
-                    stepEl.addEventListener('click', () => toggleStep(trackIdx, step));
-                    grid.appendChild(stepEl);
+                for (let s = 0; s < 16; s++) {
+                    const step = document.createElement('div');
+                    step.className = 'step' + (patterns[currentPattern][ti][s] ? ' on' : '');
+                    step.dataset.track = ti;
+                    step.dataset.step = s;
+                    step.onclick = () => { patterns[currentPattern][ti][s] = !patterns[currentPattern][ti][s]; step.classList.toggle('on'); };
+                    grid.appendChild(step);
                 }
             });
         }
 
-        // Toggle step
-        function toggleStep(track, step) {
-            patterns[currentPattern][track][step] = !patterns[currentPattern][track][step];
-            updateStepDisplay(track, step);
-        }
-
-        // Update step display
-        function updateStepDisplay(track, step) {
-            const stepEl = document.querySelector(`.step[data-track="${track}"][data-step="${step}"]`);
-            if (stepEl) {
-                stepEl.classList.toggle('on', patterns[currentPattern][track][step]);
-            }
-        }
-
-        // Update playing step highlight
-        function updatePlayingStep() {
-            document.querySelectorAll('.step').forEach(el => el.classList.remove('playing'));
-            if (isPlaying) {
-                document.querySelectorAll(`.step[data-step="${currentStep}"]`).forEach(el => {
-                    el.classList.add('playing');
-                });
-            }
-        }
-
-        // Play step sounds
         function playStep() {
-            if (!audioCtx) return;
-
-            tracks.forEach((track, trackIdx) => {
-                if (patterns[currentPattern][trackIdx][currentStep]) {
-                    playSound(trackIdx);
-                }
-            });
-
-            updatePlayingStep();
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('playing'));
+            document.querySelectorAll(`.step[data-step="${currentStep}"]`).forEach(el => el.classList.add('playing'));
+            tracks.forEach((_, ti) => { if (patterns[currentPattern][ti][currentStep]) playSound(ti); });
             currentStep = (currentStep + 1) % 16;
+
+            // LED animation
+            document.querySelectorAll('.led').forEach((l,i) => l.className = 'led' + (i === currentStep % 4 ? ' on-green' : ''));
         }
 
-        // Simple sound synthesis
-        function playSound(trackIdx) {
+        function playSound(ti) {
             if (!audioCtx) return;
-
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-
-            // Different sounds for different tracks
             const freqs = [60, 200, 800, 400, 300, 350, 250, 450];
-            const types = ['sine', 'triangle', 'square', 'sawtooth', 'sine', 'triangle', 'square', 'sawtooth'];
-
-            osc.type = types[trackIdx];
-            osc.frequency.setValueAtTime(freqs[trackIdx], audioCtx.currentTime);
-
+            osc.type = ['sine', 'triangle', 'square', 'sawtooth'][ti % 4];
+            osc.frequency.setValueAtTime(freqs[ti], audioCtx.currentTime);
             gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
+            osc.connect(gain).connect(audioCtx.destination);
             osc.start();
             osc.stop(audioCtx.currentTime + 0.2);
         }
 
-        // Transport controls
-        function startPlayback() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-
+        function startPlay() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             isPlaying = true;
             currentStep = 0;
             document.querySelector('.transport-btn.play').classList.add('active');
             document.getElementById('statusDisplay').textContent = 'PLAY';
-
-            const stepTime = (60 / bpm) * 1000 / 4; // 16th notes
-            stepInterval = setInterval(playStep, stepTime);
+            stepInterval = setInterval(playStep, (60 / bpm) * 1000 / 4);
         }
 
-        function stopPlayback() {
+        function stopPlay() {
             isPlaying = false;
             clearInterval(stepInterval);
-            currentStep = 0;
             document.querySelector('.transport-btn.play').classList.remove('active');
             document.getElementById('statusDisplay').textContent = 'STOP';
-            updatePlayingStep();
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('playing'));
+            document.querySelectorAll('.led').forEach((l,i) => l.className = 'led' + (i === 0 ? ' on-green' : ''));
         }
 
-        function toggleRecording() {
+        // Pads
+        document.querySelectorAll('.pad').forEach(pad => {
+            const trigger = () => {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                pad.classList.add('active');
+                playSound(parseInt(pad.dataset.pad));
+                if (isRecording && isPlaying) {
+                    patterns[currentPattern][parseInt(pad.dataset.pad)][currentStep] = true;
+                    document.querySelector(`.step[data-track="${pad.dataset.pad}"][data-step="${currentStep}"]`)?.classList.add('on');
+                }
+            };
+            pad.onmousedown = trigger;
+            pad.onmouseup = () => pad.classList.remove('active');
+            pad.onmouseleave = () => pad.classList.remove('active');
+        });
+
+        // Keyboard 1-8
+        document.onkeydown = e => {
+            const k = parseInt(e.key);
+            if (k >= 1 && k <= 8) {
+                const pad = document.querySelector(`.pad[data-pad="${k-1}"]`);
+                if (pad && !pad.classList.contains('active')) { pad.classList.add('active'); if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); playSound(k-1); }
+            }
+            if (e.code === 'Space') { e.preventDefault(); isPlaying ? stopPlay() : startPlay(); }
+        };
+        document.onkeyup = e => { const k = parseInt(e.key); if (k >= 1 && k <= 8) document.querySelector(`.pad[data-pad="${k-1}"]`)?.classList.remove('active'); };
+
+        // Transport
+        document.querySelector('.transport-btn.play').onclick = () => isPlaying ? stopPlay() : startPlay();
+        document.querySelector('.transport-btn.stop').onclick = stopPlay;
+        document.querySelector('.transport-btn.rec').onclick = () => {
             isRecording = !isRecording;
             document.querySelector('.transport-btn.rec').classList.toggle('active', isRecording);
             document.getElementById('statusDisplay').textContent = isRecording ? 'REC' : (isPlaying ? 'PLAY' : 'STOP');
-            document.getElementById('statusDisplay').classList.toggle('recording', isRecording);
-        }
+            document.getElementById('statusDisplay').classList.toggle('rec', isRecording);
+        };
 
-        // Pad interactions
-        document.querySelectorAll('.pad').forEach(pad => {
-            pad.addEventListener('mousedown', (e) => {
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                const padIdx = parseInt(pad.dataset.pad);
-                pad.classList.add('active');
-                playSound(padIdx);
-
-                // If recording, add to current step
-                if (isRecording && isPlaying) {
-                    patterns[currentPattern][padIdx][currentStep] = true;
-                    updateStepDisplay(padIdx, currentStep);
-                }
-            });
-
-            pad.addEventListener('mouseup', () => pad.classList.remove('active'));
-            pad.addEventListener('mouseleave', () => pad.classList.remove('active'));
-        });
-
-        // Keyboard pad triggers (1-8)
-        document.addEventListener('keydown', (e) => {
-            const key = parseInt(e.key);
-            if (key >= 1 && key <= 8) {
-                const pad = document.querySelector(`.pad[data-pad="${key - 1}"]`);
-                if (pad && !pad.classList.contains('active')) {
-                    pad.classList.add('active');
-                    if (!audioCtx) {
-                        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    }
-                    playSound(key - 1);
-                }
-            }
-            if (e.code === 'Space') {
-                e.preventDefault();
-                isPlaying ? stopPlayback() : startPlayback();
-            }
-        });
-
-        document.addEventListener('keyup', (e) => {
-            const key = parseInt(e.key);
-            if (key >= 1 && key <= 8) {
-                const pad = document.querySelector(`.pad[data-pad="${key - 1}"]`);
-                if (pad) pad.classList.remove('active');
-            }
-        });
-
-        // Pattern selection
-        document.querySelectorAll('.pattern-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.pattern-btn').forEach(b => b.classList.remove('active'));
+        // Pattern buttons
+        document.querySelectorAll('[data-ptn]').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('[data-ptn]').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                currentPattern = parseInt(btn.dataset.pattern);
-                document.getElementById('currentPattern').textContent = btn.textContent;
+                currentPattern = parseInt(btn.dataset.ptn);
+                document.getElementById('ptnDisplay').textContent = btn.textContent;
                 initSeqGrid();
-            });
+            };
         });
 
-        // Scene selection
-        document.querySelectorAll('.scene-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.scene-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
+        // Scene buttons (both display and physical)
+        document.querySelectorAll('[data-scene]').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('[data-scene]').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll(`[data-scene="${btn.dataset.scene}"]`).forEach(b => b.classList.add('active'));
+            };
         });
 
-        // Transport buttons
-        document.querySelector('.transport-btn.play').addEventListener('click', () => {
-            isPlaying ? stopPlayback() : startPlayback();
+        // Touch mixer faders
+        document.querySelectorAll('.fader-track').forEach(track => {
+            track.onclick = e => {
+                const rect = track.getBoundingClientRect();
+                const pct = Math.max(0, Math.min(100, ((rect.bottom - e.clientY) / rect.height) * 100));
+                track.querySelector('.fader-level').style.height = pct + '%';
+            };
         });
 
-        document.querySelector('.transport-btn.stop').addEventListener('click', stopPlayback);
-        document.querySelector('.transport-btn.rec').addEventListener('click', toggleRecording);
-
-        // FX buttons (hold to activate)
-        document.querySelectorAll('.fx-btn').forEach(btn => {
-            btn.addEventListener('mousedown', () => btn.classList.add('active'));
-            btn.addEventListener('mouseup', () => btn.classList.remove('active'));
-            btn.addEventListener('mouseleave', () => btn.classList.remove('active'));
-        });
-
-        // Encoder rotation (drag up/down)
+        // Encoders
         document.querySelectorAll('.encoder-knob').forEach(knob => {
-            let startY = 0;
-            let startValue = 0;
-
-            knob.addEventListener('mousedown', (e) => {
+            let startY, startVal;
+            knob.onmousedown = e => {
                 startY = e.clientY;
-                startValue = parseInt(knob.dataset.value) || 50;
-
-                const onMove = (e) => {
-                    const delta = startY - e.clientY;
-                    let newValue = Math.max(0, Math.min(100, startValue + delta));
-                    knob.dataset.value = newValue;
-
-                    // Update rotation
-                    const rotation = (newValue / 100) * 270 - 135;
-                    knob.style.setProperty('--rotation', `${rotation}deg`);
-
-                    // Update value display
-                    const encoder = knob.closest('.encoder');
-                    const valueEl = encoder.querySelector('.encoder-value');
-                    const param = encoder.dataset.param;
-
-                    if (param === 'pan') {
-                        valueEl.textContent = newValue < 45 ? 'L' : newValue > 55 ? 'R' : 'C';
-                    } else {
-                        valueEl.textContent = Math.round(newValue);
-                    }
+                startVal = parseInt(knob.dataset.value) || 50;
+                const move = e => {
+                    const v = Math.max(0, Math.min(100, startVal + (startY - e.clientY)));
+                    knob.dataset.value = v;
+                    const enc = knob.closest('.encoder');
+                    const valEl = enc.querySelector('.encoder-value');
+                    valEl.textContent = enc.dataset.param === 'pan' ? (v < 45 ? 'L' : v > 55 ? 'R' : 'C') : Math.round(v);
                 };
-
-                const onUp = () => {
-                    document.removeEventListener('mousemove', onMove);
-                    document.removeEventListener('mouseup', onUp);
-                };
-
-                document.addEventListener('mousemove', onMove);
-                document.addEventListener('mouseup', onUp);
-            });
+                const up = () => { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); };
+                document.addEventListener('mousemove', move);
+                document.addEventListener('mouseup', up);
+            };
         });
 
-        // Fader drag
-        document.querySelectorAll('.fader-knob').forEach(knob => {
-            knob.addEventListener('mousedown', (e) => {
-                const track = knob.closest('.fader-track');
-                const trackRect = track.getBoundingClientRect();
-
-                const onMove = (e) => {
-                    const relY = trackRect.bottom - e.clientY;
-                    const percent = Math.max(0, Math.min(100, (relY / trackRect.height) * 100));
-                    knob.style.bottom = `${percent}%`;
-                };
-
-                const onUp = () => {
-                    document.removeEventListener('mousemove', onMove);
-                    document.removeEventListener('mouseup', onUp);
-                };
-
-                document.addEventListener('mousemove', onMove);
-                document.addEventListener('mouseup', onUp);
-            });
-        });
-
-        // Update time display
-        function updateTime() {
+        // Time
+        setInterval(() => {
             const now = new Date();
-            document.getElementById('timeDisplay').textContent =
-                now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
+            document.getElementById('timeDisplay').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        }, 1000);
 
-        // Initialize
-        initSeqGrid();
-
-        // Add some default pattern
-        patterns[0][0][0] = true;
-        patterns[0][0][4] = true;
-        patterns[0][0][8] = true;
-        patterns[0][0][12] = true;
-        patterns[0][1][4] = true;
-        patterns[0][1][12] = true;
-        patterns[0][2][0] = true;
-        patterns[0][2][2] = true;
-        patterns[0][2][4] = true;
-        patterns[0][2][6] = true;
-        patterns[0][2][8] = true;
-        patterns[0][2][10] = true;
-        patterns[0][2][12] = true;
-        patterns[0][2][14] = true;
+        // Init with default pattern
+        patterns[0][0][0] = patterns[0][0][4] = patterns[0][0][8] = patterns[0][0][12] = true;
+        patterns[0][1][4] = patterns[0][1][12] = true;
+        patterns[0][2][0] = patterns[0][2][2] = patterns[0][2][4] = patterns[0][2][6] = patterns[0][2][8] = patterns[0][2][10] = patterns[0][2][12] = patterns[0][2][14] = true;
         initSeqGrid();
     </script>
 </body>
