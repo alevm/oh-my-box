@@ -387,20 +387,77 @@
             color: #888;
         }
 
-        /* ==================== SP-404 STYLE ARTWORK ON ENCLOSURE ==================== */
-        .sp404-art {
+        /* ==================== PASTEL PANEL BACKGROUNDS (matches webapp) ==================== */
+        .hw-panel-bg {
             position: absolute;
+            border-radius: 8px;
+            z-index: 1;
+        }
+
+        /* Mixer panel - Pastel Blue (matches webapp) */
+        .panel-mixer-bg {
             top: 190px;
             left: 20px;
+            width: 100px;
+            bottom: 70px;
+            background: #d6eaf8;
+            border: 1px solid #a9cce3;
+        }
+
+        /* Pads panel - Pastel Gray (matches webapp) */
+        .panel-pads-bg {
+            top: 190px;
+            left: 130px;
+            width: 340px;
+            height: 220px;
+            background: #e8e8e8;
+            border: 1px solid #c0c0c0;
+        }
+
+        /* CTRL/Encoders panel - Pastel Gray (matches webapp) */
+        .panel-ctrl-bg {
+            top: 190px;
             right: 20px;
+            width: 240px;
+            height: 170px;
+            background: #e8e8e8;
+            border: 1px solid #c0c0c0;
+        }
+
+        /* FX panel - Pastel Violet (matches webapp) */
+        .panel-fx-bg {
+            top: 370px;
+            right: 20px;
+            width: 240px;
+            height: 50px;
+            background: #e8daef;
+            border: 1px solid #c9a0dc;
+        }
+
+        /* Scenes panel - Pastel Gray (matches webapp) */
+        .panel-scenes-bg {
             bottom: 20px;
+            right: 20px;
+            width: 180px;
+            height: 40px;
+            background: #e8e8e8;
+            border: 1px solid #c0c0c0;
+        }
+
+        /* ==================== ARTWORK ON ENCLOSURE EDGES ONLY ==================== */
+        .sp404-art {
+            position: absolute;
+            top: 185px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
             pointer-events: none;
-            opacity: 0.4;
+            opacity: 0.12;
             background-image: url('https://media.rhizome.org/blog/8979/Chombart-de-Lauwe.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            filter: invert(1) brightness(2) contrast(1.2);
+            filter: invert(1) brightness(1.5);
             border-radius: 12px;
             z-index: 0;
         }
@@ -414,14 +471,15 @@
         /* Touch Pads - CENTER COLUMN (matches webapp PADS panel) */
         .pads-area {
             position: absolute;
-            top: 200px;
-            left: 140px;
+            top: 205px;
+            left: 145px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(2, 1fr);
             gap: 10px;
-            width: 320px;
-            height: 150px;
+            width: 310px;
+            height: 140px;
+            z-index: 2;
         }
 
         .hw-pad {
@@ -469,13 +527,14 @@
         .encoders-area {
             position: absolute;
             top: 200px;
-            right: 24px;
+            right: 30px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            gap: 12px 16px;
-            width: 260px;
+            gap: 10px 14px;
+            width: 220px;
             height: 150px;
+            z-index: 2;
         }
 
         .hw-encoder {
@@ -531,10 +590,11 @@
         /* Pattern Buttons - CENTER (below pads, matches webapp SEQ patterns) */
         .pattern-area {
             position: absolute;
-            top: 360px;
-            left: 140px;
+            top: 355px;
+            left: 145px;
             display: flex;
             gap: 6px;
+            z-index: 2;
         }
 
         .hw-pattern-btn {
@@ -563,23 +623,25 @@
             position: absolute;
             font-size: 9px;
             font-weight: 700;
-            color: #555;
+            color: #1a5276;
             letter-spacing: 1px;
             text-transform: uppercase;
+            z-index: 3;
         }
 
-        .label-mixer { top: 185px; left: 24px; }
-        .label-pads { top: 185px; left: 140px; }
-        .label-ctrl { top: 185px; right: 24px; width: 260px; text-align: center; }
+        .label-mixer { top: 195px; left: 30px; color: #1a5276; }
+        .label-pads { top: 195px; left: 145px; color: #2c3e50; }
+        .label-ctrl { top: 195px; right: 30px; width: 220px; text-align: center; color: #2c3e50; }
 
-        /* FX Punch Buttons Area */
+        /* FX Punch Buttons Area - Pastel Violet (matches webapp) */
         .fx-area {
             position: absolute;
-            top: 360px;
-            right: 24px;
+            top: 375px;
+            right: 30px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            z-index: 2;
         }
 
         .fx-btns {
@@ -590,32 +652,33 @@
         .hw-fx-btn {
             width: 50px;
             height: 32px;
-            background: linear-gradient(145deg, #4a3a5a 0%, #2a1a3a 100%);
+            background: #d7bde2;
             border-radius: 6px;
-            border: 2px solid #5a4a6a;
+            border: 2px solid #af7ac5;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #9b59b6;
+            color: #4a235a;
             font-size: 10px;
             font-weight: 700;
             cursor: pointer;
         }
 
         .hw-fx-btn:hover {
-            background: linear-gradient(145deg, #5a4a6a 0%, #3a2a4a 100%);
-            color: #bb79d6;
+            background: #8e44ad;
+            color: #fff;
         }
 
         /* ==================== HARDWARE MIXER FADERS - LEFT COLUMN (matches webapp MIXER panel) ==================== */
         .mixer-area {
             position: absolute;
-            top: 200px;
-            left: 24px;
+            top: 215px;
+            left: 28px;
             display: flex;
             flex-direction: row;
-            gap: 8px;
+            gap: 6px;
             align-items: flex-start;
+            z-index: 2;
         }
 
         .hw-fader {
@@ -655,7 +718,7 @@
 
         .fader-label {
             font-size: 8px;
-            color: #777;
+            color: #1a5276;
             font-weight: 600;
             letter-spacing: 0.5px;
         }
@@ -663,33 +726,34 @@
         /* ==================== HARDWARE SCENE BUTTONS - RIGHT BOTTOM (matches webapp SCENES panel) ==================== */
         .scenes-area {
             position: absolute;
-            bottom: 24px;
-            right: 24px;
+            bottom: 25px;
+            right: 30px;
             display: flex;
-            gap: 8px;
+            gap: 6px;
             align-items: center;
+            z-index: 2;
         }
 
         .scenes-label {
             font-size: 9px;
-            color: #555;
+            color: #2c3e50;
             font-weight: 700;
             letter-spacing: 1px;
             margin-right: 4px;
         }
 
         .hw-scene-btn {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(145deg, #3a3a3a 0%, #252525 100%);
+            width: 32px;
+            height: 32px;
+            background: #d5d8dc;
             border-radius: 6px;
-            border: 2px solid #444;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            border: 2px solid #aeb6bf;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #666;
-            font-size: 14px;
+            color: #2c3e50;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
             position: relative;
@@ -698,24 +762,25 @@
         .hw-scene-btn::before {
             content: '';
             position: absolute;
-            top: 4px;
+            top: 3px;
             left: 50%;
             transform: translateX(-50%);
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
-            background: #333;
-            border: 1px solid #444;
+            background: #bbb;
+            border: 1px solid #999;
         }
 
         .hw-scene-btn.active {
-            background: linear-gradient(145deg, #4a4a4a 0%, #333 100%);
-            border-color: #e94560;
+            background: #27ae60;
+            border-color: #27ae60;
+            color: #fff;
         }
 
         .hw-scene-btn.active::before {
-            background: #e94560;
-            box-shadow: 0 0 8px #e94560;
+            background: #fff;
+            box-shadow: 0 0 6px #fff;
         }
 
         /* Transport Buttons - CENTER BOTTOM */
@@ -725,8 +790,9 @@
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
+            z-index: 2;
         }
 
         .hw-btn {
@@ -1122,6 +1188,13 @@
                             </div>
                             <span class="gps-label">GPS</span>
                         </div>
+
+                        <!-- Pastel Panel Backgrounds (matches webapp colors) -->
+                        <div class="hw-panel-bg panel-mixer-bg"></div>
+                        <div class="hw-panel-bg panel-pads-bg"></div>
+                        <div class="hw-panel-bg panel-ctrl-bg"></div>
+                        <div class="hw-panel-bg panel-fx-bg"></div>
+                        <div class="hw-panel-bg panel-scenes-bg"></div>
 
                         <!-- Section Labels -->
                         <span class="section-label label-mixer">MIXER</span>
