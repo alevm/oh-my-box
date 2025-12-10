@@ -394,22 +394,12 @@
             z-index: 1;
         }
 
-        /* Mixer panel - Pastel Blue (matches webapp) */
-        .panel-mixer-bg {
-            top: 190px;
-            left: 20px;
-            width: 100px;
-            bottom: 70px;
-            background: #d6eaf8;
-            border: 1px solid #a9cce3;
-        }
-
         /* Pads panel - Pastel Gray (matches webapp) */
         .panel-pads-bg {
             top: 190px;
-            left: 130px;
-            width: 340px;
-            height: 220px;
+            left: 25px;
+            width: 380px;
+            height: 240px;
             background: #e8e8e8;
             border: 1px solid #c0c0c0;
         }
@@ -417,29 +407,9 @@
         /* CTRL/Encoders panel - Pastel Gray (matches webapp) */
         .panel-ctrl-bg {
             top: 190px;
-            right: 20px;
-            width: 240px;
-            height: 170px;
-            background: #e8e8e8;
-            border: 1px solid #c0c0c0;
-        }
-
-        /* FX panel - Pastel Violet (matches webapp) */
-        .panel-fx-bg {
-            top: 370px;
-            right: 20px;
-            width: 240px;
-            height: 50px;
-            background: #e8daef;
-            border: 1px solid #c9a0dc;
-        }
-
-        /* Scenes panel - Pastel Gray (matches webapp) */
-        .panel-scenes-bg {
-            bottom: 20px;
-            right: 20px;
-            width: 180px;
-            height: 40px;
+            right: 25px;
+            width: 160px;
+            height: 200px;
             background: #e8e8e8;
             border: 1px solid #c0c0c0;
         }
@@ -468,17 +438,17 @@
 
         /* ==================== PHYSICAL CONTROLS ==================== */
 
-        /* Touch Pads - CENTER COLUMN (matches webapp PADS panel) */
+        /* Touch Pads - LEFT SIDE (matches webapp PADS panel) */
         .pads-area {
             position: absolute;
-            top: 205px;
-            left: 145px;
+            top: 215px;
+            left: 35px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            gap: 10px;
-            width: 310px;
-            height: 140px;
+            gap: 12px;
+            width: 360px;
+            height: 160px;
             z-index: 2;
         }
 
@@ -526,12 +496,12 @@
         /* Encoders - RIGHT COLUMN (4x context-sensitive) */
         .encoders-area {
             position: absolute;
-            top: 200px;
-            right: 30px;
+            top: 210px;
+            right: 35px;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            gap: 12px;
+            gap: 14px;
             width: 140px;
             height: 150px;
             z-index: 2;
@@ -629,8 +599,7 @@
             z-index: 3;
         }
 
-        .label-mixer { top: 195px; left: 30px; color: #1a5276; }
-        .label-pads { top: 195px; left: 145px; color: #2c3e50; }
+        .label-pads { top: 195px; left: 35px; color: #2c3e50; }
         .label-ctrl { top: 195px; right: 30px; width: 220px; text-align: center; color: #2c3e50; }
 
         /* FX Punch Buttons Area - Pastel Violet (matches webapp) */
@@ -837,6 +806,30 @@
         .hw-transport.rec {
             background: linear-gradient(145deg, #e74c3c 0%, #c0392b 100%);
             color: #fff;
+        }
+
+        /* RGB Status LEDs (BOM: 4x WS2812) */
+        .leds-area {
+            position: absolute;
+            top: 365px;
+            right: 45px;
+            display: flex;
+            gap: 10px;
+            z-index: 2;
+        }
+
+        .hw-led {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #222;
+            border: 1px solid #444;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .hw-led.on {
+            background: #27ae60;
+            box-shadow: 0 0 8px #27ae60;
         }
 
         /* ==================== FINE LINE SCHEMATICS ==================== */
@@ -1191,14 +1184,10 @@
                         </div>
 
                         <!-- Pastel Panel Backgrounds (matches webapp colors) -->
-                        <div class="hw-panel-bg panel-mixer-bg"></div>
                         <div class="hw-panel-bg panel-pads-bg"></div>
                         <div class="hw-panel-bg panel-ctrl-bg"></div>
-                        <div class="hw-panel-bg panel-fx-bg"></div>
-                        <div class="hw-panel-bg panel-scenes-bg"></div>
 
                         <!-- Section Labels -->
-                        <span class="section-label label-mixer">MIXER</span>
                         <span class="section-label label-pads">PADS</span>
                         <span class="section-label label-ctrl">CTRL</span>
 
@@ -1214,18 +1203,6 @@
                             <div class="hw-pad">8</div>
                         </div>
 
-                        <!-- Pattern Buttons - CENTER (below pads) -->
-                        <div class="pattern-area">
-                            <div class="hw-pattern-btn active">A</div>
-                            <div class="hw-pattern-btn">B</div>
-                            <div class="hw-pattern-btn">C</div>
-                            <div class="hw-pattern-btn">D</div>
-                            <div class="hw-pattern-btn">E</div>
-                            <div class="hw-pattern-btn">F</div>
-                            <div class="hw-pattern-btn">G</div>
-                            <div class="hw-pattern-btn">H</div>
-                        </div>
-
                         <!-- Encoders - RIGHT COLUMN (4x context-sensitive) -->
                         <div class="encoders-area">
                             <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">VOL</span></div>
@@ -1234,57 +1211,19 @@
                             <div class="hw-encoder"><div class="encoder-knob"></div><span class="encoder-label">FX</span></div>
                         </div>
 
-                        <!-- FX Punch Buttons (matches webapp FX panel) -->
-                        <div class="fx-area">
-                            <span class="section-label" style="position:static; margin-bottom:4px;">FX</span>
-                            <div class="fx-btns">
-                                <div class="hw-fx-btn">STT</div>
-                                <div class="hw-fx-btn">REV</div>
-                                <div class="hw-fx-btn">FLT</div>
-                                <div class="hw-fx-btn">TPE</div>
-                            </div>
+                        <!-- 4 RGB Status LEDs -->
+                        <div class="leds-area">
+                            <div class="hw-led on"></div>
+                            <div class="hw-led"></div>
+                            <div class="hw-led"></div>
+                            <div class="hw-led"></div>
                         </div>
 
-                        <!-- Hardware Mixer Faders -->
-                        <div class="mixer-area">
-                            <div class="hw-fader">
-                                <div class="fader-track"><div class="fader-knob"></div></div>
-                                <span class="fader-label">MIC</span>
-                            </div>
-                            <div class="hw-fader">
-                                <div class="fader-track"><div class="fader-knob"></div></div>
-                                <span class="fader-label">SMP</span>
-                            </div>
-                            <div class="hw-fader">
-                                <div class="fader-track"><div class="fader-knob"></div></div>
-                                <span class="fader-label">SYN</span>
-                            </div>
-                            <div class="hw-fader">
-                                <div class="fader-track"><div class="fader-knob"></div></div>
-                                <span class="fader-label">RAD</span>
-                            </div>
-                            <div class="hw-fader">
-                                <div class="fader-track"><div class="fader-knob"></div></div>
-                                <span class="fader-label">OUT</span>
-                            </div>
-                        </div>
-
-                        <!-- Transport -->
+                        <!-- Transport (3 buttons only - matches BOM) -->
                         <div class="transport-area">
-                            <div class="hw-btn">MODE</div>
-                            <div class="hw-btn">SHIFT</div>
                             <div class="hw-transport play">&#9654;</div>
                             <div class="hw-transport stop">&#9632;</div>
                             <div class="hw-transport rec">&#9679;</div>
-                        </div>
-
-                        <!-- Hardware Scene Buttons -->
-                        <div class="scenes-area">
-                            <span class="scenes-label">SCENE</span>
-                            <div class="hw-scene-btn active">A</div>
-                            <div class="hw-scene-btn">B</div>
-                            <div class="hw-scene-btn">C</div>
-                            <div class="hw-scene-btn">D</div>
                         </div>
 
                         <!-- SP-404 Style Artwork Overlay -->
