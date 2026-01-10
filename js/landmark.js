@@ -226,6 +226,10 @@ class Landmark {
 
         // Start playback
         this.log('Starting playback...');
+
+        // Full audio chain debug
+        this.debugAudioChain();
+
         if (window.sequencer) {
             // isPlaying is a METHOD, not a property
             const playing = typeof window.sequencer.isPlaying === 'function'
@@ -235,7 +239,9 @@ class Landmark {
             this.log('Sequencer state before play', {
                 isPlaying: playing,
                 tempo: window.sequencer.tempo,
-                patternSteps: this.countActiveSteps()
+                patternSteps: this.countActiveSteps(),
+                trackSources: window.sequencer.trackSources,
+                trackMutes: window.sequencer.trackMutes
             });
 
             if (!playing) {
@@ -244,6 +250,15 @@ class Landmark {
                 const playBtn = document.getElementById('btnPlay');
                 if (playBtn) playBtn.classList.add('active');
                 this.log('Playback started');
+
+                // Test direct sample trigger
+                this.log('Testing direct sample trigger...');
+                setTimeout(() => {
+                    if (window.sampler) {
+                        this.log('Triggering test sample on pad 0');
+                        window.sampler.trigger(0);
+                    }
+                }, 500);
             } else {
                 this.log('Sequencer was already playing');
             }
@@ -418,6 +433,88 @@ class Landmark {
             }
         }
         return count;
+    }
+
+    // Debug the entire audio chain
+    debugAudioChain() {
+        this.log('=== AUDIO CHAIN DEBUG ===');
+
+        // 1. Audio Engine
+        if (window.audioEngine) {
+            this.log('AudioEngine:', {
+                exists: true,
+                initialized: window.audioEngine.initialized,
+                contextExists: !!window.audioEngine.ctx,
+                contextState: window.audioEngine.ctx?.state,
+                masterGainExists: !!window.audioEngine.masterGain,
+                masterGainValue: window.audioEngine.masterGain?.gain?.value
+            });
+
+            // Check channels
+            if (window.audioEngine.channels) {
+                for (const [name, ch] of Object.entries(window.audioEngine.channels)) {
+                    this.log(`Channel "${name}":`, {
+                        gainExists: !!ch.gain,
+                        level: ch.level,
+                        muted: ch.muted,
+                        gainValue: ch.gain?.gain?.value
+                    });
+                }
+            }
+        } else {
+            this.error('AudioEngine not found!');
+        }
+
+        // 2. Sampler
+        if (window.sampler) {
+            this.log('Sampler:', {
+                exists: true,
+                initialized: window.sampler.initialized,
+                samplesLoaded: window.sampler.samples?.size || 0,
+                currentBank: window.sampler.currentBank
+            });
+
+            // List loaded samples
+            if (window.sampler.samples) {
+                const sampleInfo = [];
+                window.sampler.samples.forEach((buffer, idx) => {
+                    sampleInfo.push({
+                        pad: idx,
+                        duration: buffer?.duration,
+                        channels: buffer?.numberOfChannels
+                    });
+                });
+                this.log('Loaded samples:', sampleInfo);
+            }
+        } else {
+            this.error('Sampler not found!');
+        }
+
+        // 3. Sequencer
+        if (window.sequencer) {
+            this.log('Sequencer:', {
+                exists: true,
+                playing: window.sequencer.playing,
+                tempo: window.sequencer.tempo,
+                currentStep: window.sequencer.currentStep,
+                tracks: window.sequencer.tracks,
+                steps: window.sequencer.steps
+            });
+        } else {
+            this.error('Sequencer not found!');
+        }
+
+        // 4. App
+        if (window.app) {
+            this.log('App:', {
+                exists: true,
+                initialized: window.app.initialized
+            });
+        } else {
+            this.error('App not found!');
+        }
+
+        this.log('=== END AUDIO CHAIN DEBUG ===');
     }
 
     // Add slight randomization for human feel
