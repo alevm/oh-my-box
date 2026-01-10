@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="screen-orientation" content="landscape">
     <title>Oh My Box</title>
-    <link rel="stylesheet" href="css/style.css?v=245">
+    <link rel="stylesheet" href="css/style.css?v=246">
 </head>
 <body>
     <!-- Full-page map background -->
@@ -40,7 +40,7 @@
             </div>
             <div class="time-box" id="timeDisplay" title="Current time">00:00</div>
             <button id="btnAdmin" class="admin-btn" title="Open settings panel">⚙</button>
-            <div class="version">v2.4.5 <span class="build-time">2026-01-10 23:29</span></div>
+            <div class="version">v2.4.6 <span class="build-time">2026-01-10 23:31</span></div>
         </header>
 
         <!-- Main Device Area - 12 Equal Tiles (4x3) -->
@@ -468,14 +468,9 @@
                     <span class="panel-title">REC</span>
                     <span id="recCount" title="Total number of saved recordings">0</span>
                 </div>
-                <div class="rec-last" id="recLast" title="Most recent recording">
-                    <span class="rec-map-icon" title="Recording location marker">📍</span>
-                    <span class="rec-last-name">No recordings</span>
-                    <span class="rec-last-time">--:--</span>
-                </div>
+                <div class="rec-list" id="recList"></div>
                 <div class="rec-actions">
                     <button id="recListBtn" class="rec-list-btn" title="View list of all saved recordings">LIST</button>
-                    <button id="aiGenerate" class="ai-btn" title="Generate AI-assisted music from recordings">AI GEN</button>
                 </div>
             </div>
         </main>
