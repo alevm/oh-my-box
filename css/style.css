@@ -1071,3 +1071,310 @@ html, body {
     font-size: 10px;
     color: var(--text-light);
 }
+
+/* ===== BOOT SCREEN ===== */
+.boot-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: boot-fade-in 0.5s ease-out;
+}
+
+@keyframes boot-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.boot-screen.boot-exit {
+    animation: boot-fade-out 0.4s ease-out forwards;
+}
+
+@keyframes boot-fade-out {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(1.05); }
+}
+
+.boot-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    max-width: 900px;
+    padding: 40px;
+}
+
+.boot-header {
+    text-align: center;
+}
+
+.boot-logo {
+    font-size: 48px;
+    font-weight: 800;
+    color: #e94560;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 30px rgba(233, 69, 96, 0.5);
+}
+
+.boot-subtitle {
+    font-size: 16px;
+    color: #a0a0a0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* GPS Status */
+.boot-gps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 32px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    min-width: 280px;
+}
+
+.gps-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gps-icon {
+    font-size: 24px;
+    animation: gps-pulse 1.5s infinite;
+}
+
+@keyframes gps-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.boot-gps.gps-ready .gps-icon {
+    animation: none;
+    color: #27ae60;
+}
+
+.boot-gps.gps-error .gps-icon {
+    animation: none;
+    color: #e74c3c;
+}
+
+.gps-text {
+    font-size: 14px;
+    color: #ccc;
+}
+
+.boot-gps.gps-ready .gps-text {
+    color: #27ae60;
+}
+
+.gps-coords {
+    font-size: 13px;
+    color: #888;
+    font-family: monospace;
+    letter-spacing: 1px;
+}
+
+/* Mode Cards */
+.boot-modes {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.mode-card {
+    width: 240px;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.mode-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(233, 69, 96, 0.5);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.mode-card:active {
+    transform: translateY(0);
+}
+
+.mode-card.gps-enabled {
+    border-color: rgba(39, 174, 96, 0.5);
+}
+
+.mode-card.gps-enabled:hover {
+    border-color: #27ae60;
+    box-shadow: 0 12px 40px rgba(39, 174, 96, 0.2);
+}
+
+.mode-card.no-gps {
+    opacity: 0.7;
+}
+
+.mode-card.no-gps::after {
+    content: '(GPS unavailable - using defaults)';
+    display: block;
+    font-size: 10px;
+    color: #f39c12;
+    margin-top: 8px;
+}
+
+.mode-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.mode-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+}
+
+.mode-desc {
+    font-size: 13px;
+    color: #a0a0a0;
+    line-height: 1.5;
+}
+
+.mode-desc em {
+    color: #e94560;
+    font-style: normal;
+    font-weight: 600;
+}
+
+/* Landmark mode special styling */
+.mode-card[data-mode="landmark"] .mode-icon { color: #e94560; }
+.mode-card[data-mode="landmark"]:hover { border-color: #e94560; }
+
+/* Interactive mode special styling */
+.mode-card[data-mode="interactive"] .mode-icon { color: #3498db; }
+.mode-card[data-mode="interactive"]:hover { border-color: #3498db; }
+
+/* Hybrid mode special styling */
+.mode-card[data-mode="hybrid"] .mode-icon { color: #9b59b6; }
+.mode-card[data-mode="hybrid"]:hover { border-color: #9b59b6; }
+
+/* Resume button */
+.boot-resume {
+    margin-top: 8px;
+}
+
+.boot-resume.hidden {
+    display: none;
+}
+
+.resume-btn {
+    padding: 12px 32px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #ccc;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.resume-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #d4a574;
+    color: #fff;
+}
+
+/* Boot footer */
+.boot-footer {
+    display: flex;
+    gap: 24px;
+    font-size: 12px;
+    color: #666;
+}
+
+.boot-version {
+    font-family: monospace;
+}
+
+.boot-time {
+    font-family: monospace;
+}
+
+/* Mode Indicator (shown after boot) */
+.mode-indicator {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid #e94560;
+    border-radius: 12px;
+    padding: 16px 32px;
+    text-align: center;
+    animation: mode-slide-in 0.4s ease-out;
+}
+
+@keyframes mode-slide-in {
+    from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.mode-indicator.fade-out {
+    animation: mode-fade-out 0.5s ease-out forwards;
+}
+
+@keyframes mode-fade-out {
+    to { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
+
+.mode-indicator-title {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    color: #e94560;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+}
+
+.mode-indicator-desc {
+    font-size: 12px;
+    color: #aaa;
+}
+
+/* Boot screen mobile responsive */
+@media (max-width: 768px) {
+    .boot-container {
+        padding: 20px;
+    }
+
+    .boot-logo {
+        font-size: 32px;
+    }
+
+    .boot-modes {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .mode-card {
+        width: 100%;
+        max-width: 300px;
+    }
+}

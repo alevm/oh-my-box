@@ -570,6 +570,49 @@
     <script src="js/scenes.js"></script>
     <script src="js/arrangement.js"></script>
     <script src="js/ai-composer.js"></script>
+    <script src="js/boot-manager.js"></script>
     <script src="js/app.js"></script>
+    <script>
+        // Boot sequence: Show mode selection, then initialize app
+        (async function() {
+            // Hide main app initially
+            document.getElementById('app').style.opacity = '0';
+
+            // Wait for boot mode selection
+            const modeData = await window.bootManager.init();
+
+            // Show app
+            document.getElementById('app').style.opacity = '1';
+            document.getElementById('app').style.transition = 'opacity 0.3s ease';
+
+            // Initialize audio on first user interaction (required by browsers)
+            const initAudio = async () => {
+                await window.app.init();
+
+                // Execute the selected mode
+                await window.bootManager.executeMode(modeData);
+
+                // Auto-save session periodically
+                setInterval(() => window.bootManager.saveSession(), 30000);
+
+                // Save on page unload
+                window.addEventListener('beforeunload', () => window.bootManager.saveSession());
+
+                document.removeEventListener('click', initAudio);
+                document.removeEventListener('touchstart', initAudio);
+                document.removeEventListener('keydown', initAudio);
+            };
+
+            // For landmark/hybrid modes, we can init immediately since user clicked
+            if (modeData.mode === 'landmark' || modeData.mode === 'hybrid' || modeData.mode === 'resume') {
+                await initAudio();
+            } else {
+                // For interactive mode, wait for user interaction to init audio
+                document.addEventListener('click', initAudio, { once: true });
+                document.addEventListener('touchstart', initAudio, { once: true });
+                document.addEventListener('keydown', initAudio, { once: true });
+            }
+        })();
+    </script>
 </body>
 </html>
