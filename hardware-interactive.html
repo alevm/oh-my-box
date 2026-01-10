@@ -692,6 +692,11 @@
         .mode-btn:hover { background: #333; }
         .mode-btn.active { background: #e94560; border-color: #e94560; color: #fff; }
         .mode-btn.ai.active { background: #9b59b6; border-color: #9b59b6; }
+        .mode-btn.landmark { font-size: 10px; }
+        .mode-btn.landmark.active { background: #e94560; border-color: #e94560; animation: landmark-blink 0.5s infinite; }
+        @keyframes landmark-blink { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+        .transport-btn.rec.ready { background: #e94560; border-color: #e94560; color: #fff; animation: rec-blink 0.5s infinite; }
+        @keyframes rec-blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         /* Radio indicator */
         .radio-indicator {
@@ -704,143 +709,6 @@
         }
         .radio-indicator.active { display: block; }
         .radio-indicator .station { color: #fff; font-weight: 600; }
-
-        /* ==========================================
-           BOOT SCREEN (on device display)
-           ========================================== */
-        .boot-display {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0f3460 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            padding: 10px;
-        }
-
-        .boot-display.hidden {
-            display: none;
-        }
-
-        .boot-display .boot-logo {
-            font-size: 20px;
-            font-weight: 800;
-            color: #e94560;
-            letter-spacing: 3px;
-            margin-bottom: 4px;
-            text-shadow: 0 0 15px rgba(233, 69, 96, 0.5);
-        }
-
-        .boot-display .boot-subtitle {
-            font-size: 8px;
-            color: #888;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .boot-display .boot-gps-status {
-            font-size: 9px;
-            color: #27ae60;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .boot-display .boot-gps-status .gps-dot {
-            width: 6px;
-            height: 6px;
-            background: #27ae60;
-            border-radius: 50%;
-            animation: gps-blink 1s infinite;
-        }
-
-        @keyframes gps-blink {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
-        .boot-display .boot-modes {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 8px;
-        }
-
-        .boot-display .boot-mode {
-            width: 100px;
-            padding: 8px 4px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 6px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-
-        .boot-display .boot-mode:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(233, 69, 96, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .boot-display .boot-mode .mode-icon {
-            font-size: 18px;
-            margin-bottom: 3px;
-        }
-
-        .boot-display .boot-mode .mode-name {
-            font-size: 8px;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: 0.5px;
-        }
-
-        .boot-display .boot-mode .mode-hint {
-            font-size: 6px;
-            color: #888;
-            margin-top: 2px;
-        }
-
-        .boot-display .boot-mode[data-mode="landmark"] { border-color: rgba(233, 69, 96, 0.3); }
-        .boot-display .boot-mode[data-mode="landmark"]:hover { border-color: #e94560; }
-        .boot-display .boot-mode[data-mode="landmark"] .mode-icon { color: #e94560; }
-
-        .boot-display .boot-mode[data-mode="interactive"] { border-color: rgba(52, 152, 219, 0.3); }
-        .boot-display .boot-mode[data-mode="interactive"]:hover { border-color: #3498db; }
-        .boot-display .boot-mode[data-mode="interactive"] .mode-icon { color: #3498db; }
-
-        .boot-display .boot-mode[data-mode="hybrid"] { border-color: rgba(155, 89, 182, 0.3); }
-        .boot-display .boot-mode[data-mode="hybrid"]:hover { border-color: #9b59b6; }
-        .boot-display .boot-mode[data-mode="hybrid"] .mode-icon { color: #9b59b6; }
-
-        .boot-display .boot-footer {
-            font-size: 7px;
-            color: #555;
-            font-family: monospace;
-        }
-
-        /* Mode indicator after boot */
-        .mode-badge {
-            position: absolute;
-            top: 6px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 2px 8px;
-            background: #e94560;
-            border-radius: 8px;
-            font-size: 7px;
-            font-weight: 700;
-            color: #fff;
-            z-index: 5;
-            display: none;
-        }
-
-        .mode-badge.active { display: block; }
-        .mode-badge.landmark { background: #e94560; }
-        .mode-badge.interactive { background: #3498db; }
-        .mode-badge.hybrid { background: #9b59b6; }
 
         /* Track source indicators on grid */
         .track-label.synth { color: #9b59b6 !important; }
@@ -954,42 +822,11 @@
 
                 <!-- 5" Touch Display -->
                 <div class="display">
-                    <!-- Boot Screen -->
-                    <div class="boot-display" id="bootDisplay">
-                        <div class="boot-logo">OH MY BOX</div>
-                        <div class="boot-subtitle">SONIC CAPTURE DEVICE</div>
-                        <div class="boot-gps-status" id="bootGpsStatus">
-                            <div class="gps-dot"></div>
-                            <span id="bootGpsText">Acquiring GPS...</span>
-                        </div>
-                        <div class="boot-modes">
-                            <div class="boot-mode" data-mode="landmark">
-                                <div class="mode-icon">&#128247;</div>
-                                <div class="mode-name">LANDMARK</div>
-                                <div class="mode-hint">AI captures this place</div>
-                            </div>
-                            <div class="boot-mode" data-mode="interactive">
-                                <div class="mode-icon">&#127929;</div>
-                                <div class="mode-name">INTERACTIVE</div>
-                                <div class="mode-hint">Create from scratch</div>
-                            </div>
-                            <div class="boot-mode" data-mode="hybrid">
-                                <div class="mode-icon">&#127899;</div>
-                                <div class="mode-name">HYBRID</div>
-                                <div class="mode-hint">AI seeds, you remix</div>
-                            </div>
-                        </div>
-                        <div class="boot-footer">v2.0.0</div>
-                    </div>
-
-                    <!-- Mode Badge (shown after boot) -->
-                    <div class="mode-badge" id="modeBadge">LANDMARK</div>
-
                     <!-- Menu Button -->
                     <div class="menu-btn" id="menuBtn">
                         <span></span><span></span><span></span>
                     </div>
-                    <div class="display-content" id="displayContent">
+                    <div class="display-content">
                         <!-- Sequencer -->
                         <div class="seq-panel">
                             <div class="seq-header">
@@ -1120,10 +957,11 @@
                     <button class="src-btn mic" data-src="mic">MIC</button>
                 </div>
 
-                <!-- Mode Panel (FX/AI) -->
+                <!-- Mode Panel (FX/AI/LANDMARK) -->
                 <div class="mode-panel">
                     <button class="mode-btn fx" data-mode="fx">FX</button>
                     <button class="mode-btn ai" data-mode="ai">AI</button>
+                    <button class="mode-btn landmark" id="landmarkBtn" data-mode="landmark">📍</button>
                 </div>
 
                 <!-- Radio Status Indicator -->
@@ -2220,96 +2058,55 @@
         }, 1000);
 
         // ==========================================
-        // BOOT FLOW SYSTEM
+        // LANDMARK FEATURE
         // ==========================================
 
-        let selectedBootMode = null;
         let gpsData = null;
+        let landmarkActive = false;
 
-        function initBootFlow() {
-            // Hide display content initially
-            document.getElementById('displayContent').style.display = 'none';
-            document.getElementById('menuBtn').style.display = 'none';
+        // Pre-fetch GPS in background
+        function acquireGPS() {
+            if (!navigator.geolocation) return;
 
-            // Try to get GPS
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        gpsData = {
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude,
-                            accuracy: position.coords.accuracy
-                        };
-                        const lat = position.coords.latitude.toFixed(2);
-                        const lon = position.coords.longitude.toFixed(2);
-                        document.getElementById('bootGpsText').textContent = `${lat}°N, ${lon}°E`;
-                        document.getElementById('bootGpsStatus').querySelector('.gps-dot').style.animation = 'none';
-                        document.getElementById('bootGpsStatus').querySelector('.gps-dot').style.background = '#27ae60';
-                    },
-                    (error) => {
-                        document.getElementById('bootGpsText').textContent = 'GPS unavailable';
-                        document.getElementById('bootGpsStatus').querySelector('.gps-dot').style.background = '#e74c3c';
-                        document.getElementById('bootGpsStatus').querySelector('.gps-dot').style.animation = 'none';
-                    },
-                    { enableHighAccuracy: true, timeout: 5000 }
-                );
-            } else {
-                document.getElementById('bootGpsText').textContent = 'GPS not supported';
-            }
-
-            // Attach mode selection handlers
-            document.querySelectorAll('.boot-mode').forEach(btn => {
-                btn.onclick = async () => {
-                    selectedBootMode = btn.dataset.mode;
-                    await executeBootMode(selectedBootMode);
-                };
-            });
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    gpsData = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        accuracy: position.coords.accuracy
+                    };
+                    console.log('GPS acquired:', gpsData);
+                },
+                (error) => {
+                    console.warn('GPS error:', error.message);
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+            );
         }
 
-        async function executeBootMode(mode) {
-            // Initialize audio system
-            await initAudioSystem();
+        async function triggerLandmark() {
+            if (landmarkActive) return;
+            landmarkActive = true;
 
-            // Hide boot screen, show display content
-            document.getElementById('bootDisplay').classList.add('hidden');
-            document.getElementById('displayContent').style.display = 'grid';
-            document.getElementById('menuBtn').style.display = 'flex';
+            const landmarkBtn = document.getElementById('landmarkBtn');
+            const recBtn = document.querySelector('.transport-btn.rec');
 
-            // Show mode badge
-            const badge = document.getElementById('modeBadge');
-            badge.textContent = mode.toUpperCase();
-            badge.className = 'mode-badge active ' + mode;
+            // Visual feedback
+            landmarkBtn.classList.add('active');
 
-            // Execute mode-specific logic
-            switch (mode) {
-                case 'landmark':
-                    await executeLandmarkMode();
-                    break;
-                case 'interactive':
-                    await executeInteractiveMode();
-                    break;
-                case 'hybrid':
-                    await executeHybridMode();
-                    break;
+            // Ensure audio is initialized
+            if (!window.audioEngine) {
+                await initAudioSystem();
             }
 
-            // Hide badge after 3 seconds
-            setTimeout(() => {
-                badge.classList.remove('active');
-            }, 3000);
-        }
-
-        async function executeLandmarkMode() {
-            console.log('Executing LANDMARK mode');
-
-            // AI generates full arrangement based on GPS/time
+            // Update AI composer with GPS context
             if (window.aiComposer) {
                 if (gpsData) {
                     window.aiComposer.context.gps = gpsData;
                 }
                 window.aiComposer.updateContext();
 
-                // Generate patterns for all 8 tracks
+                // Generate patterns based on location/time
                 const vibe = window.aiComposer.getContext()?.vibe || 'calm';
                 window.aiComposer.generateRhythm(vibe, 70, 60);
             }
@@ -2317,75 +2114,51 @@
             // Refresh the grid
             initSeqGrid();
 
-            // Auto-start playback
-            setTimeout(() => {
+            // Start playback
+            if (!isPlaying) {
                 startPlay();
-                // Enable recording mode for capture
-                isRecording = true;
-                document.querySelector('.transport-btn.rec').classList.add('active');
-                updateStatusDisplay('REC');
-            }, 500);
-
-            // Set LEDs to landmark color (red)
-            document.querySelectorAll('.led').forEach(l => l.className = 'led on-red');
-        }
-
-        async function executeInteractiveMode() {
-            console.log('Executing INTERACTIVE mode');
-
-            // Clear all patterns - blank slate
-            for (let p = 0; p < 8; p++) {
-                for (let t = 0; t < 8; t++) {
-                    for (let s = 0; s < 16; s++) {
-                        patterns[p][t][s].active = false;
-                        patterns[p][t][s].pLocks = {};
-                    }
-                }
             }
 
-            // Refresh the grid
-            initSeqGrid();
+            // Make record button blink - ready to capture
+            recBtn.classList.add('ready');
 
-            // Set LEDs to blue
-            document.querySelectorAll('.led').forEach(l => l.className = 'led on-blue');
+            // Set LEDs to landmark color
+            document.querySelectorAll('.led').forEach(l => l.className = 'led on-red');
+
+            // Stop button pulse after a moment
+            setTimeout(() => {
+                landmarkBtn.classList.remove('active');
+                landmarkActive = false;
+            }, 2000);
         }
 
-        async function executeHybridMode() {
-            console.log('Executing HYBRID mode');
-
-            // First, do landmark generation
-            await executeLandmarkMode();
-
-            // Then enable live DUB mode for immediate override
-            isRecording = true;
-            document.querySelector('.transport-btn.rec').classList.add('active');
-
-            // Update status to show hybrid mode
-            updateStatusDisplay('DUB');
-
-            // Set LEDs to purple (hybrid of red + blue)
-            document.querySelectorAll('.led').forEach((l, i) => {
-                l.className = 'led ' + (i % 2 === 0 ? 'on-red' : 'on-blue');
-            });
-        }
+        // Attach landmark button handler
+        document.getElementById('landmarkBtn').onclick = triggerLandmark;
 
         // ==========================================
         // INITIALIZATION
         // ==========================================
 
-        // Default pattern (only loaded if skipping boot or for preview)
+        // Default pattern
         patterns[0][0][0].active = patterns[0][0][4].active = patterns[0][0][8].active = patterns[0][0][12].active = true;
         patterns[0][1][4].active = patterns[0][1][12].active = true;
         for (let i = 0; i < 16; i += 2) patterns[0][2][i].active = true;
 
-        // Initialize grid (will be refreshed after boot)
+        // Initialize grid
         initSeqGrid();
         selectTrack(0);
 
-        // Start boot flow
-        initBootFlow();
+        // Start GPS acquisition in background
+        acquireGPS();
 
-        console.log('Hardware Interactive loaded - select a mode to begin');
+        // Auto-init audio on first user interaction
+        document.addEventListener('click', async () => {
+            if (!window.audioEngine) {
+                await initAudioSystem();
+            }
+        }, { once: true });
+
+        console.log('Hardware Interactive loaded - click LANDMARK (📍) to capture sonic snapshot');
     </script>
 </body>
 </html>
