@@ -52,58 +52,94 @@ class Landmark {
 
     // Ensure audio system is fully initialized before playing
     async ensureAudioInitialized() {
-        this.log('Checking audio initialization...');
+        this.log('=== AUDIO INIT CHECK ===');
 
-        // Check if app exists and is initialized
-        if (window.app && window.app.initialized) {
-            this.log('App already initialized');
-            return true;
-        }
-
-        // Check if audio engine exists and has context
-        if (window.audioEngine && window.audioEngine.context) {
-            this.log('Audio engine exists, checking context state', {
-                state: window.audioEngine.context.state
-            });
-
-            // Resume if suspended (browser autoplay policy)
-            if (window.audioEngine.context.state === 'suspended') {
-                this.log('Resuming suspended audio context...');
-                await window.audioEngine.context.resume();
-                this.log('Audio context resumed');
-            }
-        }
-
-        // If app exists but not initialized, initialize it
+        // Step 1: Check if app exists and initialize if needed
         if (window.app && !window.app.initialized) {
-            this.log('Initializing app...');
+            this.log('App not initialized, calling app.init()...');
             try {
                 await window.app.init();
                 this.log('App initialization complete');
             } catch (e) {
                 this.error('App initialization failed', e);
             }
+        } else if (window.app && window.app.initialized) {
+            this.log('App already initialized');
+        } else {
+            this.error('window.app not found!');
+        }
+
+        // Step 2: Ensure audio engine is initialized
+        if (!window.audioEngine) {
+            this.error('window.audioEngine not found!');
+            return false;
+        }
+
+        if (!window.audioEngine.initialized) {
+            this.log('AudioEngine not initialized, calling init...');
+            await window.audioEngine.init();
+        }
+
+        // Step 3: Check audio context - use ctx property (that's what audioEngine uses)
+        const ctx = window.audioEngine.ctx || window.audioEngine.context;
+        if (!ctx) {
+            this.error('AudioContext not created!');
+            return false;
+        }
+
+        this.log('AudioContext state:', ctx.state);
+
+        // Resume if suspended (browser autoplay policy - requires user gesture)
+        if (ctx.state === 'suspended') {
+            this.log('Resuming suspended AudioContext...');
+            try {
+                await ctx.resume();
+                this.log('AudioContext resumed, new state:', ctx.state);
+            } catch (e) {
+                this.error('Failed to resume AudioContext', e);
+            }
+        }
+
+        // Step 4: Ensure sampler is initialized
+        if (!window.sampler) {
+            this.error('window.sampler not found!');
+            return false;
+        }
+
+        if (!window.sampler.initialized) {
+            this.log('Sampler not initialized, calling init...');
+            await window.sampler.init();
+        }
+
+        this.log('Sampler samples count:', window.sampler.samples?.size || 0);
+
+        // Step 5: Initialize sequencer if needed
+        if (window.sequencer && !window.sequencer.playing) {
+            window.sequencer.init();
         }
 
         // Wait a moment for everything to settle
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        // Verify audio is working
-        const audioOk = window.audioEngine &&
-                        window.audioEngine.context &&
-                        window.audioEngine.context.state === 'running';
+        // Final status check
+        const status = {
+            appInit: window.app?.initialized || false,
+            audioEngineInit: window.audioEngine?.initialized || false,
+            contextState: ctx?.state,
+            masterGainValue: window.audioEngine?.masterGain?.gain?.value,
+            samplerInit: window.sampler?.initialized || false,
+            samplesLoaded: window.sampler?.samples?.size || 0,
+            sequencerReady: !!window.sequencer
+        };
 
-        this.log('Audio initialization check complete', {
-            audioEngineExists: !!window.audioEngine,
-            contextExists: !!window.audioEngine?.context,
-            contextState: window.audioEngine?.context?.state,
-            samplerExists: !!window.sampler,
-            sequencerExists: !!window.sequencer,
-            audioOk
-        });
+        this.log('=== AUDIO STATUS ===', status);
+
+        const audioOk = status.contextState === 'running' &&
+                        status.samplerInit &&
+                        status.samplesLoaded > 0;
 
         if (!audioOk) {
-            this.error('Audio system not ready!');
+            this.error('Audio system not fully ready!', status);
         }
 
         return audioOk;
@@ -249,16 +285,24 @@ class Landmark {
                 window.sequencer.play();
                 const playBtn = document.getElementById('btnPlay');
                 if (playBtn) playBtn.classList.add('active');
-                this.log('Playback started');
+                this.log('Playback started, sequencer.playing =', window.sequencer.playing);
 
-                // Test direct sample trigger
-                this.log('Testing direct sample trigger...');
+                // Test 1: Direct sample trigger via sampler
+                this.log('Test 1: Direct sample trigger via sampler...');
                 setTimeout(() => {
-                    if (window.sampler) {
+                    if (window.sampler && window.sampler.initialized) {
                         this.log('Triggering test sample on pad 0');
                         window.sampler.trigger(0);
+                    } else {
+                        this.error('Sampler not ready for test trigger!');
                     }
-                }, 500);
+                }, 300);
+
+                // Test 2: Direct oscillator test to verify audio output works
+                this.log('Test 2: Direct oscillator beep test...');
+                setTimeout(() => {
+                    this.playTestBeep();
+                }, 600);
             } else {
                 this.log('Sequencer was already playing');
             }
@@ -318,7 +362,7 @@ class Landmark {
 
         // Clear existing pattern
         this.log('Clearing existing pattern...');
-        seq.clearAll();
+        seq.clearAllTracks();
 
         // Determine character based on time
         let character;
@@ -405,11 +449,14 @@ class Landmark {
 
         // Update the UI grid
         this.log('Updating UI grid...');
-        if (window.app && window.app.updateSeqGrid) {
-            window.app.updateSeqGrid();
-            this.log('UI grid updated');
+        if (window.app && window.app.updateOctSteps) {
+            window.app.updateOctSteps();
+            this.log('UI grid updated via updateOctSteps');
+        } else if (window.app && window.app.rebuildSequencerUI) {
+            window.app.rebuildSequencerUI();
+            this.log('UI grid rebuilt');
         } else {
-            this.log('window.app.updateSeqGrid not available');
+            this.log('UI update methods not available');
         }
 
         const totalSteps = this.countActiveSteps();
@@ -435,29 +482,62 @@ class Landmark {
         return count;
     }
 
+    // Play a test beep directly through AudioContext to verify output works
+    playTestBeep() {
+        this.log('Playing test beep...');
+
+        const ctx = window.audioEngine?.ctx;
+        if (!ctx) {
+            this.error('No AudioContext for test beep!');
+            return;
+        }
+
+        try {
+            // Create a simple beep oscillator
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.value = 440; // A4 note
+
+            gain.gain.value = 0.3;
+            gain.gain.setTargetAtTime(0, ctx.currentTime + 0.1, 0.05);
+
+            // Connect directly to destination (bypasses mixer)
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.15);
+
+            this.log('Test beep triggered successfully at', ctx.currentTime);
+        } catch (e) {
+            this.error('Test beep failed:', e);
+        }
+    }
+
     // Debug the entire audio chain
     debugAudioChain() {
         this.log('=== AUDIO CHAIN DEBUG ===');
 
         // 1. Audio Engine
         if (window.audioEngine) {
+            const ctx = window.audioEngine.ctx;
             this.log('AudioEngine:', {
-                exists: true,
                 initialized: window.audioEngine.initialized,
-                contextExists: !!window.audioEngine.ctx,
-                contextState: window.audioEngine.ctx?.state,
-                masterGainExists: !!window.audioEngine.masterGain,
-                masterGainValue: window.audioEngine.masterGain?.gain?.value
+                contextState: ctx?.state,
+                sampleRate: ctx?.sampleRate,
+                masterGainValue: window.audioEngine.masterGain?.gain?.value,
+                destinationChannels: ctx?.destination?.channelCount
             });
 
             // Check channels
             if (window.audioEngine.channels) {
                 for (const [name, ch] of Object.entries(window.audioEngine.channels)) {
                     this.log(`Channel "${name}":`, {
-                        gainExists: !!ch.gain,
+                        gainValue: ch.gain?.gain?.value,
                         level: ch.level,
-                        muted: ch.muted,
-                        gainValue: ch.gain?.gain?.value
+                        muted: ch.muted
                     });
                 }
             }
@@ -468,23 +548,24 @@ class Landmark {
         // 2. Sampler
         if (window.sampler) {
             this.log('Sampler:', {
-                exists: true,
                 initialized: window.sampler.initialized,
                 samplesLoaded: window.sampler.samples?.size || 0,
                 currentBank: window.sampler.currentBank
             });
 
-            // List loaded samples
-            if (window.sampler.samples) {
+            // List loaded samples with more detail
+            if (window.sampler.samples && window.sampler.samples.size > 0) {
                 const sampleInfo = [];
                 window.sampler.samples.forEach((buffer, idx) => {
                     sampleInfo.push({
                         pad: idx,
-                        duration: buffer?.duration,
-                        channels: buffer?.numberOfChannels
+                        duration: buffer?.duration?.toFixed(2) + 's',
+                        sampleRate: buffer?.sampleRate
                     });
                 });
                 this.log('Loaded samples:', sampleInfo);
+            } else {
+                this.error('NO SAMPLES LOADED!');
             }
         } else {
             this.error('Sampler not found!');
@@ -492,13 +573,20 @@ class Landmark {
 
         // 3. Sequencer
         if (window.sequencer) {
+            // Count active steps
+            let activeSteps = 0;
+            for (let t = 0; t < 8; t++) {
+                for (let s = 0; s < 16; s++) {
+                    if (window.sequencer.pattern[t]?.[s]?.active) activeSteps++;
+                }
+            }
+
             this.log('Sequencer:', {
-                exists: true,
                 playing: window.sequencer.playing,
                 tempo: window.sequencer.tempo,
                 currentStep: window.sequencer.currentStep,
-                tracks: window.sequencer.tracks,
-                steps: window.sequencer.steps
+                activeSteps: activeSteps,
+                trackMutes: window.sequencer.trackMutes
             });
         } else {
             this.error('Sequencer not found!');
@@ -507,8 +595,8 @@ class Landmark {
         // 4. App
         if (window.app) {
             this.log('App:', {
-                exists: true,
-                initialized: window.app.initialized
+                initialized: window.app.initialized,
+                selectedTrack: window.app.selectedTrack
             });
         } else {
             this.error('App not found!');
