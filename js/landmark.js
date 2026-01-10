@@ -50,6 +50,65 @@ class Landmark {
         this.log('Landmark feature initialized');
     }
 
+    // Ensure audio system is fully initialized before playing
+    async ensureAudioInitialized() {
+        this.log('Checking audio initialization...');
+
+        // Check if app exists and is initialized
+        if (window.app && window.app.initialized) {
+            this.log('App already initialized');
+            return true;
+        }
+
+        // Check if audio engine exists and has context
+        if (window.audioEngine && window.audioEngine.context) {
+            this.log('Audio engine exists, checking context state', {
+                state: window.audioEngine.context.state
+            });
+
+            // Resume if suspended (browser autoplay policy)
+            if (window.audioEngine.context.state === 'suspended') {
+                this.log('Resuming suspended audio context...');
+                await window.audioEngine.context.resume();
+                this.log('Audio context resumed');
+            }
+        }
+
+        // If app exists but not initialized, initialize it
+        if (window.app && !window.app.initialized) {
+            this.log('Initializing app...');
+            try {
+                await window.app.init();
+                this.log('App initialization complete');
+            } catch (e) {
+                this.error('App initialization failed', e);
+            }
+        }
+
+        // Wait a moment for everything to settle
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // Verify audio is working
+        const audioOk = window.audioEngine &&
+                        window.audioEngine.context &&
+                        window.audioEngine.context.state === 'running';
+
+        this.log('Audio initialization check complete', {
+            audioEngineExists: !!window.audioEngine,
+            contextExists: !!window.audioEngine?.context,
+            contextState: window.audioEngine?.context?.state,
+            samplerExists: !!window.sampler,
+            sequencerExists: !!window.sequencer,
+            audioOk
+        });
+
+        if (!audioOk) {
+            this.error('Audio system not ready!');
+        }
+
+        return audioOk;
+    }
+
     acquireGPS() {
         this.log('Attempting GPS acquisition...');
 
@@ -138,6 +197,9 @@ class Landmark {
             this.log('Button visual feedback activated');
         }
 
+        // CRITICAL: Ensure audio system is initialized
+        await this.ensureAudioInitialized();
+
         // Ensure we have GPS
         if (!this.gpsData) {
             this.log('No GPS data, attempting acquisition...');
@@ -165,13 +227,19 @@ class Landmark {
         // Start playback
         this.log('Starting playback...');
         if (window.sequencer) {
+            // isPlaying is a METHOD, not a property
+            const playing = typeof window.sequencer.isPlaying === 'function'
+                ? window.sequencer.isPlaying()
+                : window.sequencer.playing;
+
             this.log('Sequencer state before play', {
-                isPlaying: window.sequencer.isPlaying,
+                isPlaying: playing,
                 tempo: window.sequencer.tempo,
                 patternSteps: this.countActiveSteps()
             });
 
-            if (!window.sequencer.isPlaying) {
+            if (!playing) {
+                this.log('Calling sequencer.play()...');
                 window.sequencer.play();
                 const playBtn = document.getElementById('btnPlay');
                 if (playBtn) playBtn.classList.add('active');
