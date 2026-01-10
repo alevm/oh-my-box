@@ -918,15 +918,15 @@ html, body {
 
 /* ===== DEBUG PANEL ===== */
 .debug-panel {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     height: 150px;
-    background: rgba(0, 0, 0, 0.95);
-    border-top: 2px solid var(--accent);
-    z-index: 1000;
-    display: flex;
+    background: #000 !important;
+    border-top: 3px solid #f00 !important;
+    z-index: 99999 !important;
+    display: flex !important;
     flex-direction: column;
     font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
 }
