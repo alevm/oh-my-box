@@ -10,25 +10,63 @@ class Landmark {
         this.log('Landmark module constructed');
     }
 
-    // Extensive logging helper
+    // Extensive logging helper - outputs to both console and debug panel
     log(message, data = null) {
         const timestamp = new Date().toISOString().split('T')[1].slice(0, 12);
         const prefix = `[LANDMARK ${timestamp}]`;
+
+        // Console output
         if (data) {
             console.log(prefix, message, data);
         } else {
             console.log(prefix, message);
         }
+
+        // Visual debug panel output
+        this.appendToDebugPanel(timestamp, message, data, 'log');
     }
 
     error(message, err = null) {
         const timestamp = new Date().toISOString().split('T')[1].slice(0, 12);
         const prefix = `[LANDMARK ERROR ${timestamp}]`;
+
+        // Console output
         if (err) {
             console.error(prefix, message, err);
         } else {
             console.error(prefix, message);
         }
+
+        // Visual debug panel output
+        this.appendToDebugPanel(timestamp, message, err, 'error');
+    }
+
+    // Append message to the visual debug panel
+    appendToDebugPanel(timestamp, message, data, type = 'log') {
+        const logEl = document.getElementById('debugLog');
+        if (!logEl) return;
+
+        const entry = document.createElement('div');
+        entry.className = 'log-entry' + (type === 'error' ? ' error' : '');
+
+        let text = message;
+        if (data !== null && data !== undefined) {
+            if (typeof data === 'object') {
+                try {
+                    text += ' ' + JSON.stringify(data);
+                } catch (e) {
+                    text += ' [Object]';
+                }
+            } else {
+                text += ' ' + data;
+            }
+        }
+
+        entry.innerHTML = `<span class="timestamp">${timestamp}</span>${text}`;
+        logEl.appendChild(entry);
+
+        // Auto-scroll to bottom
+        logEl.scrollTop = logEl.scrollHeight;
     }
 
     init() {
@@ -41,6 +79,24 @@ class Landmark {
             this.log('Landmark button found and handler attached');
         } else {
             this.error('Landmark button not found in DOM');
+        }
+
+        // Set up debug panel controls
+        const debugClear = document.getElementById('debugClear');
+        const debugClose = document.getElementById('debugClose');
+        const debugPanel = document.getElementById('debugPanel');
+
+        if (debugClear) {
+            debugClear.addEventListener('click', () => {
+                const logEl = document.getElementById('debugLog');
+                if (logEl) logEl.innerHTML = '';
+            });
+        }
+
+        if (debugClose) {
+            debugClose.addEventListener('click', () => {
+                if (debugPanel) debugPanel.classList.add('hidden');
+            });
         }
 
         // Pre-fetch GPS in background
