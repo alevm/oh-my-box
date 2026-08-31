@@ -87,3 +87,6 @@ See [INTENT.md](INTENT.md) for the philosophy behind this instrument.
 ## Theoretical Background
 
 The soundscape taxonomy and compositional approach are grounded in the work of Schafer, Westerkamp, and Truax. See [docs/theoretical-basis.md](docs/theoretical-basis.md) for the full lineage and taxonomy mapping.
+
+
+<!-- Security scan triggered at 2026-08-31 17:21:38 -->
